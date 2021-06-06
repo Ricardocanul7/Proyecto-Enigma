@@ -15,8 +15,11 @@ INTEGRANTES:
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-/**Teclas de direccion o navegacion*/
+/** Teclas de direccion o navegacion "DEPRACATED - REMOVE WHEN NO REFERENCES LEFT ON MAIN CODE"
+ * Replaced by enum KeyboardKeys below.
+*/
 #define arriba 72
 #define abajo 80
 #define izquierda 75
@@ -28,51 +31,81 @@ INTEGRANTES:
 FILE *doc; /** doc es la variable usada para el archivo txt que se guardara en el proceso de cifrado*/
 
 /* Screens */
-void main_menu();						/**Diseño del Menu interactivo de inicio del programa*/
-void screen_border();					/**Diseño del Marco del programa*/
-void login_screen();					/** recuadro de usuario y logotipo de ENIGMA*/
+void main_menu();		   /**Diseño del Menu interactivo de inicio del programa*/
+void draw_screen_border(); /**Diseño del Marco del programa*/
+void draw_login_form();	   /** recuadro de usuario y logotipo de ENIGMA*/
+void login_screen();
 int encryption_type_option_screen();
 int decryption_type_option_screen();
-void message_input_screen();
-int insert_text();						/**Estructura para ingresar datos de cadena para cada tipo de encriptado... no sera funcion*/
-void about_screen();			 		/** Info+Animacion de la seccion Acerca de */
+void draw_message_input_form();
+int insert_text();	 /**Estructura para ingresar datos de cadena para cada tipo de encriptado... no sera funcion*/
+void about_screen(); /** Info+Animacion de la seccion Acerca de */
 
 /* Animations */
-void loading_animation();	 			/** Animacion de Cargando(CIFRANDO) */
-void decryption_animation(); 			/** Animacion Descifrado */
+void loading_animation();	 /** Animacion de Cargando(CIFRANDO) */
+void decryption_animation(); /** Animacion Descifrado */
 void bye_animation();
 
 /* Actions */
-int authentication(); 					/**Compara el usuario que se ingresa del teclado con el de la constante*/
-int open_file();						/** abrir texto para descifrar */
+int authentication(); /**Compara el usuario que se ingresa del teclado con el de la constante*/
+int open_file();	  /** abrir texto para descifrar */
 
 /** Algoritmos De Cifrado **************/
-int simple_encryption();			/***/
-int run_length_encryption();		/***/
-int xor_encryption();				/***/
-int vigerene_encryption();			/***/
+int simple_encryption();	 /***/
+int run_length_encryption(); /***/
+int xor_encryption();		 /***/
+int vigerene_encryption();	 /***/
 /***************************************/
 
 /** Algoritmos De Descifrado ***********/
-int simple_decryption();			/***/
-int run_length_decryption();		/***/
-int xor_decryption();				/***/
-int vigerene_decryption();	 		/***/
+int simple_decryption();	 /***/
+int run_length_decryption(); /***/
+int xor_decryption();		 /***/
+int vigerene_decryption();	 /***/
 /***************************************/
 
 /** ICONOS *********************************/
-void padlock_close_icon();				/***/
-void padlock_open_icon();				/***/
-void about_icon();						/***/
-void exit_icon();						/***/
+void padlock_close_icon(); /***/
+void padlock_open_icon();  /***/
+void about_icon();		   /***/
+void exit_icon();		   /***/
 /*******************************************/
+
+/* Enums */
+enum EncryptionTypes
+{
+	SIMPLE = 1,
+	XOR = 2,
+	VIGERENE = 3,
+	RUN_LENGTH = 4
+} EncryptionTypes;
+
+enum KeyboardKeys
+{
+	KEY_UP = 72,
+	KEY_DOWN = 80,
+	KEY_LEFT = 75,
+	KEY_RIGHT = 77,
+	KEY_ENTER = 13,
+	KEY_SPACE = 32,
+	KEY_ESC = 27,
+} KeyboardKeys;
+
+enum MenuOptions
+{
+	ENCRYPTION,
+	DECRYPTION,
+	ABOUT,
+	EXIT
+} MenuOptions;
 
 void set_color_and_background(int ForgC, int BackC)
 {
 	WORD wColor = ((BackC & 0x0F) << 4) + (ForgC & 0x0F);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), wColor);
 }
-int *gotoxy(int x, int y)	 /** funcion para acceder a coordenadas del plano */
+
+int *gotoxy(int x, int y) /** funcion para acceder a coordenadas del plano */
 {
 	HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD dwPos;
@@ -94,256 +127,16 @@ void uppercase_to_lowercase(char cadena[])
 	}
 }
 
-int main()
+void main()
 {
-	int compara_cadena; /**variable para saber si las cadenas coinciden = 0 si es diferente != 0 */
-	int x = 5, y = 8;	/**Coordenadas iniciales X y Y del plano */
-	int Salir = 0, tipo, regresar;
-	char c; /** valores capturados por teclas de navegacion */
+	login_screen(); /* Login loop until password is correct */
 
-	/*******************Ingresar Usuario*******************************************/
-	do
-	{								  /**Menu de inicio USUARIO*/
-		set_color_and_background(50, 0); /**(COLOR TEXT,COLOR BACKGROUND) */
-		screen_border();
-		login_screen();
-		compara_cadena = authentication();
-		if (compara_cadena != 0)
-		{
-			gotoxy(32, 10);
-			set_color_and_background(4, 0);
-			printf("�Incorrecto!");
-			Sleep(300); /**tiempo que aparecera "�Incorrecto!" en pantalla*/
-		}
-
-		system("cls"); /** limpia pantalla cada bucle para poder ingresar usuario nuevo*/
-	} while (compara_cadena != 0);
-	printf("\a");
-
-	/*******************Paso a Menu de Usuario**************************************/
-
-	do
-	{
-		system("cls");
-
-		/*********************************************************/
-		/** Se imprime Un dibujo representando la opcion marcada */
-		if (y == 8)
-		{
-			padlock_close_icon();
-		}
-		if (y == 11)
-		{
-			padlock_open_icon();
-		}
-		if (y == 14)
-		{
-			set_color_and_background(9, 0); /**Color Azul*/
-			about_icon();
-		}
-		if (y == 17)
-		{
-			set_color_and_background(4, 0); /**Color Rojo*/
-			exit_icon();
-		}
-		/*********************************************************/
-		set_color_and_background(50, 0); /** establecer color de nuevo porque acabo de limpiar la pantalla*/
-		screen_border();
-		gotoxy(10, 8);
-		printf("Encriptar");
-		gotoxy(17, 11);
-		printf("Desencriptar");
-		gotoxy(24, 14);
-		printf("Acerca de");
-		gotoxy(31, 17);
-		printf("Salir");
-		gotoxy(x, y);
-		printf("-->");
-
-		c = getch();
-		if (c == -32)
-		{
-			c = getch();
-		}
-		if (c == abajo)
-		{
-			if (y < 17)
-			{
-				y += 3;
-				x += 7;
-			}
-			else
-			{
-				y = 8;
-				x = 5;
-			}
-		}
-		if (c == arriba)
-		{
-			if (y > 8)
-			{
-				y -= 3;
-				x -= 7;
-			}
-			else
-			{
-				y = 17;
-				x = 26;
-			}
-		}
-		if (c == enter)
-		{
-			set_color_and_background(50, 0); /** establecer color Verde de nuevo porque acabo de limpiar la pantalla*/
-			if (y == 8)
-			{ /** Cifrar */
-				system("cls");
-				gotoxy(13, 13);
-				/**printf("Aqui va la cuncion de Encriptar");*/ /** aqui va la funcion de Encriptar*/
-				tipo = encryption_type_option_screen();							/** tipo seria del 1 al 4          */
-				system("cls");
-				switch (tipo)
-				{
-				case 1:
-					message_input_screen();
-					regresar = simple_encryption(); /** Funcion de cifrado inverso*/
-					if (regresar == 1)
-					{
-						break;
-					}
-					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
-					getch();
-					break;
-				case 2:
-					message_input_screen();
-					regresar = xor_encryption(); /** Funcion de cifrado XOR*/
-					if (regresar == 1)
-					{
-						break;
-					}
-					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
-					getch();
-					break;
-				case 3:
-					message_input_screen();
-					regresar = vigerene_encryption(); /** funcion de cifrado vigerene*/
-					if (regresar == 1)
-					{
-						break;
-					}
-					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
-					getch();
-					break;
-				case 4:
-					message_input_screen();
-					regresar = run_length_encryption(); /** funcion de cifrado run length*/
-					if (regresar == 1)
-					{
-						break;
-					}
-					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
-					getch();
-					break;
-				case 5:
-					break;
-				default:
-					printf("Error");
-				}
-			}
-			if (y == 11)
-			{ /** Descifrar */
-				system("cls");
-				gotoxy(13, 13);
-				/**printf("Aqui va funcion de Desencriptar");  **Aqui va funcion de Desencriptar*/
-				tipo = decryption_type_option_screen(); /** tipo seria del 1 al 4          */
-				system("cls");
-				switch (tipo)
-				{
-				case 1:
-					/** Funcion de cifrado simple*/
-					decryption_animation();
-					system("cls");
-					regresar = simple_decryption();
-					if (regresar == 1)
-					{
-						printf("\n\nPresione una tecla para salir");
-						getch();
-						break;
-					}
-					printf("\n\nPresione una tecla para salir");
-					getch();
-					break;
-				case 2:
-					/** Funcion de cifrado XOR*/
-
-					regresar = xor_decryption();
-					if (regresar == 1)
-					{
-						break;
-					}
-					printf("\n\nPresione una tecla para salir");
-					getch();
-					break;
-				case 3:
-					/** funcion de cifrado vigerene*/
-
-					regresar = vigerene_decryption();
-					if (regresar == 1)
-					{
-						break;
-					}
-					printf("\n\nPresione una tecla para salir");
-					getch();
-					break;
-				case 4:
-					/** funcion de cifrado run length*/
-					decryption_animation();
-					system("cls");
-					regresar = run_length_decryption();
-					if (regresar == 1)
-					{
-						printf("\n\nPresione una tecla para salir");
-						getch();
-						break;
-					}
-					printf("\n\nPresione una tecla para salir");
-					getch();
-					break;
-				case 5:
-					break;
-				default:
-					printf("Error");
-				}
-			}
-
-			if (y == 14)
-			{
-				system("cls");
-				/**gotoxy(13,13);
-				printf("Aqui va la funcion de Acerca de.");   ** Aqui va funcion de Acerca de*/
-				about_screen(); /** Animacion e Informacion de los desarrolladores */
-				getch();
-			}
-			if (y == 17)
-			{
-				system("cls");
-				bye_animation();
-				/**gotoxy(35,12);
-				printf("Bye Bye!");                          ** aqui no va nada. es la salida*/
-				Salir = 1;
-			}
-		}
-
-	} while (Salir == 0);
-
-	/** Espera un segundo antes de Salir *
-	Sleep(1000);*/
-
-	return 0;
+	main_menu(); /* Run main menu id login loop finished */
 }
 
-void login_screen()
-{ /** recuadro donde se escribira el nombre de usuario junto a logo de enigma */
-	int x, y;
+void draw_login_form()
+{
+	COORD coord;
 
 	/** esquinas de recuadro de usuario*/
 	gotoxy(29, 8);
@@ -355,39 +148,38 @@ void login_screen()
 	gotoxy(50, 11);
 	printf("\xBC");
 
-	/**user box*/
-
-	y = 8;
+	/** draw user input box*/
+	coord.Y = 8;
 	do
 	{ /**left side of user box*/
-		y++;
-		gotoxy(29, y);
+		coord.Y++;
+		gotoxy(29, coord.Y);
 		printf("\xBA");
-	} while (y != 10);
+	} while (coord.Y != 10);
 
-	y = 8;
+	coord.Y = 8;
 	do
 	{ /**right side of user box*/
-		y++;
-		gotoxy(50, y);
+		coord.Y++;
+		gotoxy(50, coord.Y);
 		printf("\xBA");
-	} while (y != 10);
+	} while (coord.Y != 10);
 
-	x = 29;
+	coord.X = 29;
 	do
 	{ /**the bottom of the user box*/
-		x++;
-		gotoxy(x, 11);
+		coord.X++;
+		gotoxy(coord.X, 11);
 		printf("\xCD");
-	} while (x != 49);
+	} while (coord.X != 49);
 
-	x = 29;
+	coord.X = 29;
 	do
 	{ /**the top of user box*/
-		x++;
-		gotoxy(x, 8);
+		coord.X++;
+		gotoxy(coord.X, 8);
 		printf("\xCD");
-	} while (x != 49);
+	} while (coord.X != 49);
 
 	gotoxy(24, 2); /**Title Enigma at the top*/
 	printf("  ___       _                    \n");
@@ -410,26 +202,47 @@ void login_screen()
 	gotoxy(32, 10); /** coordenadas para ingresar texto*/
 }
 
-int authentication()
-{ /** comparar contrase�a de usuario para acceder al menu */
-
-	char c1[5];			 /**ENTRADA DE USUARIO*/
-	char c2[5] = "FMAT"; /**USUARIO DEL PROGRAMA*/
-	int x;
+int authentication() /** comparar contraseña de usuario para acceder al menu */
+{
+	char input_password[5];			  /**ENTRADA DE USUARIO*/
+	char static_password[5] = "FMAT"; /**USUARIO DEL PROGRAMA*/
 
 	set_color_and_background(7, 0);
-	fgets(c1, 5, stdin);
+	fgets(input_password, 5, stdin);
 
-	x = strcmp(c1, c2); /**Comparar String si son iguales devuelve 0*/
-
-	return x;
+	return strcmp(input_password, static_password); /**Comparar String si son iguales devuelve 0*/
 }
 
-void screen_border()
+void login_screen()
 {
-	int x, y;
+	const int IS_LOGGED = 0;
+	int auth_response;
 
-	/**Bordes*/
+	do
+	{
+		set_color_and_background(50, 0);
+		draw_screen_border();
+		draw_login_form();
+		auth_response = authentication();
+		if (auth_response != IS_LOGGED)
+		{
+			gotoxy(32, 10);
+			set_color_and_background(4, 0);
+			printf("¡Incorrecto!");
+			Sleep(300); /**tiempo que aparecera "¡Incorrecto!" en pantalla*/
+		}
+
+		system("cls"); /** limpia pantalla cada bucle para poder ingresar usuario nuevo*/
+	} while (auth_response != IS_LOGGED);
+	printf("\a");
+}
+
+void draw_screen_border()
+{
+	COORD coord;
+
+	/** Dibujar esquinas */
+
 	gotoxy(1, 1);
 	printf("\xC9");
 	gotoxy(1, 24);
@@ -441,69 +254,287 @@ void screen_border()
 
 	/** Dibujo del Marco o Dorde*/
 
-	x = 1;
+	coord.X = 1;
 	do
 	{ /**lado superior*/
-		x++;
-		gotoxy(x, 1);
+		coord.X++;
+		gotoxy(coord.X, 1);
 		printf("\xCD");
-	} while (x != 76);
+	} while (coord.X != 76);
 
-	x = 1;
+	coord.X = 1;
 	do
 	{ /**lado inferior*/
-		x++;
-		gotoxy(x, 24);
+		coord.X++;
+		gotoxy(coord.X, 24);
 		printf("\xCD");
-	} while (x != 76);
+	} while (coord.X != 76);
 
-	y = 1;
+	coord.Y = 1;
 	do
 	{ /** lado derecho*/
-		y++;
-		gotoxy(77, y);
+		coord.Y++;
+		gotoxy(77, coord.Y);
 		printf("\xBA");
-	} while (y != 23);
+	} while (coord.Y != 23);
 
-	y = 1;
+	coord.Y = 1;
 	do
 	{ /** lado izquierdo*/
-		y++;
-		gotoxy(1, y);
+		coord.Y++;
+		gotoxy(1, coord.Y);
 		printf("\xBA");
-	} while (y != 23);
+	} while (coord.Y != 23);
 }
 
-void message_input_screen()
+void main_menu()
 {
-	int x, y;
+	/**Coordenadas iniciales X y Y del plano */
+	COORD coord;
+	coord.X = 5;
+	coord.Y = 8;
 
-	screen_border();
+	int encryption_type;
+	bool exit = false;
+	bool go_back = false;
+	int menu_index = 0;
+	char pressed_key; /** valores capturados por teclas de navegacion */
 
-	for (x = 2; x < 77; x++)
-	{ /**Sombreado Superior*/
-		for (y = 2; y < 8; y++)
+	do
+	{
+		system("cls");
+
+		/*********************************************************/
+		/** Se imprime Un dibujo representando la opcion marcada */
+		if (coord.Y == 8)
 		{
-			gotoxy(x, y);
+			padlock_close_icon();
+		}
+		if (coord.Y == 11)
+		{
+			padlock_open_icon();
+		}
+		if (coord.Y == 14)
+		{
+			set_color_and_background(9, 0); /**Color Azul*/
+			about_icon();
+		}
+		if (coord.Y == 17)
+		{
+			set_color_and_background(4, 0); /**Color Rojo*/
+			exit_icon();
+		}
+		/*********************************************************/
+		set_color_and_background(50, 0); /** establecer color de nuevo porque acabo de limpiar la pantalla*/
+		draw_screen_border();
+		gotoxy(10, 8);
+		printf("Encriptar");
+		gotoxy(17, 11);
+		printf("Desencriptar");
+		gotoxy(24, 14);
+		printf("Acerca de");
+		gotoxy(31, 17);
+		printf("Salir");
+		gotoxy(coord.X, coord.Y);
+		printf("-->");
+
+		pressed_key = getch();
+		if (pressed_key == -32)
+		{
+			pressed_key = getch();
+		}
+		if (pressed_key == KEY_DOWN)
+		{
+			if (coord.Y < 17)
+			{
+				coord.Y += 3;
+				coord.X += 7;
+				menu_index++;
+			}
+			else
+			{
+				coord.Y = 8;
+				coord.X = 5;
+				menu_index = 0;
+			}
+		}
+		if (pressed_key == KEY_UP)
+		{
+			if (coord.Y > 8)
+			{
+				coord.Y -= 3;
+				coord.X -= 7;
+				menu_index--;
+			}
+			else
+			{
+				coord.Y = 17;
+				coord.X = 26;
+				menu_index = 3;
+			}
+		}
+		if (pressed_key == KEY_ENTER)
+		{
+			set_color_and_background(50, 0); /** establecer color Verde de nuevo porque acabo de limpiar la pantalla*/
+			if (menu_index == ENCRYPTION)	 /** Cifrar */
+			{
+				system("cls");
+				gotoxy(13, 13);
+				encryption_type = encryption_type_option_screen(); /** tipo seria del 1 al 4  */
+				system("cls");
+				switch (encryption_type)
+				{
+				case SIMPLE:
+					draw_message_input_form();
+					go_back = simple_encryption();
+					if (go_back == true)
+					{
+						break;
+					}
+					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
+					getch();
+					break;
+				case XOR:
+					draw_message_input_form();
+					go_back = xor_encryption();
+					if (go_back == true)
+					{
+						break;
+					}
+					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
+					getch();
+					break;
+				case VIGERENE:
+					draw_message_input_form();
+					go_back = vigerene_encryption();
+					if (go_back == true)
+					{
+						break;
+					}
+					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
+					getch();
+					break;
+				case RUN_LENGTH:
+					draw_message_input_form();
+					go_back = run_length_encryption();
+					if (go_back == true)
+					{
+						break;
+					}
+					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
+					getch();
+					break;
+				case 5:
+					break;
+				default:
+					printf("Error");
+				}
+			}
+			if (menu_index == DECRYPTION) /** Descifrar */
+			{
+				system("cls");
+				gotoxy(13, 13);
+				encryption_type = decryption_type_option_screen(); /** tipo seria del 1 al 4          */
+				system("cls");
+				switch (encryption_type)
+				{
+				case SIMPLE:
+					decryption_animation();
+					system("cls");
+					go_back = simple_decryption();
+					if (go_back == true)
+					{
+						printf("\n\nPresione una tecla para salir");
+						getch();
+						break;
+					}
+					printf("\n\nPresione una tecla para salir");
+					getch();
+					break;
+				case XOR:
+					go_back = xor_decryption();
+					if (go_back == true)
+					{
+						break;
+					}
+					printf("\n\nPresione una tecla para salir");
+					getch();
+					break;
+				case VIGERENE:
+					go_back = vigerene_decryption();
+					if (go_back == true)
+					{
+						break;
+					}
+					printf("\n\nPresione una tecla para salir");
+					getch();
+					break;
+				case RUN_LENGTH:
+					decryption_animation();
+					system("cls");
+					go_back = run_length_decryption();
+					if (go_back == true)
+					{
+						printf("\n\nPresione una tecla para salir");
+						getch();
+						break;
+					}
+					printf("\n\nPresione una tecla para salir");
+					getch();
+					break;
+				case 5:
+					break;
+				default:
+					printf("Error");
+				}
+			}
+			if (menu_index == ABOUT) /** Acerca de  */
+			{
+				system("cls");
+				about_screen(); /** Animacion e Informacion de los desarrolladores */
+				getch();
+			}
+			if (menu_index == EXIT) /** Salir  */
+			{
+				system("cls");
+				bye_animation();
+				exit = true;
+			}
+		}
+
+	} while (exit == false);
+}
+
+void draw_message_input_form()
+{
+	COORD coord;
+
+	draw_screen_border();
+
+	for (coord.X = 2; coord.X < 77; coord.X++)
+	{ /**Sombreado Superior*/
+		for (coord.Y = 2; coord.Y < 8; coord.Y++)
+		{
+			gotoxy(coord.X, coord.Y);
 			printf("\xB1");
 		}
 	}
 
-	for (y = 8; y < 24; y++)
+	for (coord.Y = 8; coord.Y < 24; coord.Y++)
 	{
-		gotoxy(2, y);
+		gotoxy(2, coord.Y);
 		printf("\xB1");
 	}
 
-	for (y = 8; y < 24; y++)
+	for (coord.Y = 8; coord.Y < 24; coord.Y++)
 	{
-		gotoxy(76, y);
+		gotoxy(76, coord.Y);
 		printf("\xB1");
 	}
 
-	for (x = 2; x < 76; x++)
+	for (coord.X = 2; coord.X < 76; coord.X++)
 	{
-		gotoxy(x, 23);
+		gotoxy(coord.X, 23);
 		printf("\xB1"); /**Base de dise�o*/
 	}
 	gotoxy(3, 5);
@@ -513,6 +544,7 @@ void message_input_screen()
 	gotoxy(3, 7);
 	printf("         ");
 }
+
 int insert_text()
 { /**Funcion Para leer texto dentro del recuadro de MENSAJE(Esta funcion no se usa, solo es un prototipo para recibir texto en cada funcion de cifrado)*/
 	char cadena[910], ch, numcaracters, Regresar_Menu = 0;
@@ -570,15 +602,20 @@ int insert_text()
 
 	return Regresar_Menu;
 }
+
 int encryption_type_option_screen()
 {
-	char c;
-	int x = 20, y = 8, aux = 0, opcion;
+	COORD coord;
+	coord.X = 20;
+	coord.Y = 8;
+
+	char pressed_key;
+	int aux = 0, option;
 
 	do
 	{
 		system("cls");
-		screen_border();
+		draw_screen_border();
 		gotoxy(26, 4);
 		printf("* SELECCIONA TIPO DE CIFRADO *");
 		gotoxy(24, 8);
@@ -591,87 +628,93 @@ int encryption_type_option_screen()
 		printf("4.-RUN LENGTH");
 		gotoxy(45, 13);
 		printf("  (COMPRESOR)");
-		gotoxy(x, y);
+
+		gotoxy(coord.X, coord.Y);
 		printf("-->");
-		c = getch();
-		/**if(c == -32){
-		c = getch();
-	}*/
-		if (c == abajo)
-		{ /** TECLAS   */
-			if (y < 12)
+
+		pressed_key = getch();
+		if (pressed_key == KEY_DOWN)
+		{
+			if (coord.Y < 12)
 			{
-				y += 4;
+				coord.Y += 4;
 			}
 			else
 			{
-				y = 8;
+				coord.Y = 8;
 			}
 		}
-		if (c == arriba)
-		{ /** DE       */
-			if (y > 8)
+
+		if (pressed_key == KEY_UP)
+		{
+			if (coord.Y > 8)
 			{
-				y -= 4;
+				coord.Y -= 4;
 			}
 			else
 			{
-				y = 12;
+				coord.Y = 12;
 			}
 		}
-		if ((c == derecha) || (c == izquierda))
-		{ /** DIRECCION */
-			if (x < 41)
+
+		if ((pressed_key == KEY_RIGHT) || (pressed_key == KEY_LEFT))
+		{
+			if (coord.X < 41)
 			{
-				x += 21;
+				coord.X += 21;
 			}
 			else
 			{
-				x = 20;
+				coord.X = 20;
 			}
 		}
-		if (c == ESC)
+
+		if (pressed_key == KEY_ESC)
 		{ /** si presiona la tecla ESC pasa valor 5 y regresa a menu */
-			opcion = 5;
+			option = 5;
 			aux = 1; /** como queremos regresar a menu aux = 1 es la condicion para salir del while */
 		}
 
-		if (c == enter)
+		if (pressed_key == KEY_ENTER)
 		{ /** Lo que pasaria en cada caso  */
 			aux = 1;
-			if ((x == 20) && (y == 8))
+
+			if ((coord.X == 20) && (coord.Y == 8))
 			{ /** si se presiona la tecla enter*/
-				opcion = 1;
+				option = SIMPLE;
 			}
-			if ((x == 20) && (y == 12))
+
+			if ((coord.X == 20) && (coord.Y == 12))
 			{
-				opcion = 2;
+				option = XOR;
 			}
-			if ((x == 41) && (y == 8))
+
+			if ((coord.X == 41) && (coord.Y == 8))
 			{
-				opcion = 3;
+				option = VIGERENE;
 			}
-			if ((x == 41) && (y == 12))
+
+			if ((coord.X == 41) && (coord.Y == 12))
 			{
-				opcion = 4;
+				option = RUN_LENGTH;
 			}
 		}
 	} while (aux != 1);
 
-	return opcion;
+	return option;
 }
 
 void loading_animation()
 {
-	int cargando;
-	int x, y;
+	int loading;
+	COORD coord;
 
 	gotoxy(30, 8);
 	printf("Cifrando mensaje...");
 	gotoxy(40, 23);
 	printf("Generando archivo mensaje.txt");
 
-	screen_border();
+	draw_screen_border();
 	/** esquinas de recuadro de usuario*/
 	gotoxy(29, 9);
 	printf("\xC9");
@@ -684,46 +727,46 @@ void loading_animation()
 
 	/**box*/
 
-	y = 9;
+	coord.Y = 9;
 	do
 	{ /**left side of box*/
-		y++;
-		gotoxy(29, y);
+		coord.Y++;
+		gotoxy(29, coord.Y);
 		printf("\xBA");
-	} while (y != 11);
+	} while (coord.Y != 11);
 
-	y = 9;
+	coord.Y = 9;
 	do
 	{ /**right side of box*/
-		y++;
-		gotoxy(50, y);
+		coord.Y++;
+		gotoxy(50, coord.Y);
 		printf("\xBA");
-	} while (y != 11);
+	} while (coord.Y != 11);
 
-	x = 29;
+	coord.X = 29;
 	do
 	{ /**the bottom of the box*/
-		x++;
-		gotoxy(x, 12);
+		coord.X++;
+		gotoxy(coord.X, 12);
 		printf("\xCD");
-	} while (x != 49);
+	} while (coord.X != 49);
 
-	x = 29;
+	coord.X = 29;
 	do
 	{ /**the top of box*/
-		x++;
-		gotoxy(x, 9);
+		coord.X++;
+		gotoxy(coord.X, 9);
 		printf("\xCD");
-	} while (x != 49);
+	} while (coord.X != 49);
 
 	/** Cargano Animacion*/
 
-	for (cargando = 30; cargando < 50; cargando++)
+	for (loading = 30; loading < 50; loading++)
 	{
 
-		gotoxy(cargando, 10);
+		gotoxy(loading, 10);
 		printf("\xDB");
-		gotoxy(cargando, 11);
+		gotoxy(loading, 11);
 		printf("\xDB");
 		Sleep(100);
 	}
@@ -767,8 +810,8 @@ void about_screen()
 }
 
 void padlock_close_icon()
-{ /** ICON */
-	int x, y;
+{
+	COORD coord;
 
 	int keydraw[][9] = {/** Cada numero representa un valor en ASCII*/
 						{32, 220, 223, 223, 223, 220, 32, 32},
@@ -777,12 +820,12 @@ void padlock_close_icon()
 						{219, 219, 32, 32, 32, 219, 219, 32},
 						{219, 219, 219, 220, 219, 219, 219, 32}};
 
-	for (y = 0; y < 5; y++)
+	for (coord.Y = 0; coord.Y < 5; coord.Y++)
 	{ /**saltos del linea o coordenas Y*/
-		gotoxy(60, 10 + y);
-		for (x = 0; x < 9; x++)
+		gotoxy(60, 10 + coord.Y);
+		for (coord.X = 0; coord.X < 9; coord.X++)
 		{ /**Coordendas X*/
-			if (y < 2)
+			if (coord.Y < 2)
 			{
 				set_color_and_background(6, 0);
 			}
@@ -790,8 +833,8 @@ void padlock_close_icon()
 			{
 				set_color_and_background(3, 0);
 			}
-			printf("%c", keydraw[y][x]);
-			if (x == 8)
+			printf("%c", keydraw[coord.Y][coord.X]);
+			if (coord.X == 8)
 			{ /** si llega al ultimo lugar brinca para seguir dibujando en Y++ */
 				printf("\n");
 			}
@@ -800,8 +843,8 @@ void padlock_close_icon()
 }
 
 void padlock_open_icon()
-{ /** ICON */
-	int x, y;
+{
+	COORD coord;
 
 	int keydraw[][9] = {/** Cada numero representa un valor en ASCII*/
 						{32, 32, 32, 32, 32, 220, 223, 223, 220},
@@ -812,12 +855,12 @@ void padlock_open_icon()
 
 	};
 
-	for (y = 0; y < 5; y++)
+	for (coord.Y = 0; coord.Y < 5; coord.Y++)
 	{ /**saltos del linea o coordenas Y*/
-		gotoxy(60, 10 + y);
-		for (x = 0; x < 9; x++)
+		gotoxy(60, 10 + coord.Y);
+		for (coord.X = 0; coord.X < 9; coord.X++)
 		{ /**Coordendas X*/
-			if (y < 2)
+			if (coord.Y < 2)
 			{
 				set_color_and_background(6, 0);
 			}
@@ -825,8 +868,8 @@ void padlock_open_icon()
 			{
 				set_color_and_background(2, 0);
 			}
-			printf("%c", keydraw[y][x]);
-			if (x == 8)
+			printf("%c", keydraw[coord.Y][coord.X]);
+			if (coord.X == 8)
 			{ /** si llega al ultimo lugar brinca para seguir dibujando en Y++ */
 				printf("\n");
 			}
@@ -835,8 +878,8 @@ void padlock_open_icon()
 }
 
 void about_icon()
-{ /** ICON */
-	int x, y;
+{
+	COORD coord;
 
 	int keydraw[][9] = {
 		/** Cada numero representa un valor en ASCII*/
@@ -850,13 +893,13 @@ void about_icon()
 
 	};
 
-	for (y = 0; y < 7; y++)
+	for (coord.Y = 0; coord.Y < 7; coord.Y++)
 	{ /**saltos del linea o coordenas Y*/
-		gotoxy(60, 9 + y);
-		for (x = 0; x < 9; x++)
+		gotoxy(60, 9 + coord.Y);
+		for (coord.X = 0; coord.X < 9; coord.X++)
 		{ /**Coordendas X*/
-			printf("%c", keydraw[y][x]);
-			if (x == 8)
+			printf("%c", keydraw[coord.Y][coord.X]);
+			if (coord.X == 8)
 			{ /** si llega al ultimo lugar brinca para seguir dibujando en Y++ */
 				printf("\n");
 			}
@@ -865,8 +908,8 @@ void about_icon()
 }
 
 void exit_icon()
-{ /** ICON */
-	int x, y;
+{
+	COORD coord;
 
 	int keydraw[][9] = {
 		/** Cada numero representa un valor en ASCII*/
@@ -881,13 +924,13 @@ void exit_icon()
 
 	gotoxy(62, 9);
 	printf("EXIT");
-	for (y = 0; y < 7; y++)
+	for (coord.Y = 0; coord.Y < 7; coord.Y++)
 	{ /**saltos del linea o coordenas Y*/
-		gotoxy(60, 10 + y);
-		for (x = 0; x < 9; x++)
+		gotoxy(60, 10 + coord.Y);
+		for (coord.X = 0; coord.X < 9; coord.X++)
 		{ /**Coordendas X*/
-			printf("%c", keydraw[y][x]);
-			if (x == 8)
+			printf("%c", keydraw[coord.Y][coord.X]);
+			if (coord.X == 8)
 			{ /** si llega al ultimo lugar brinca para seguir dibujando en Y++ */
 				printf("\n");
 			}
@@ -897,13 +940,17 @@ void exit_icon()
 
 int decryption_type_option_screen()
 { /** Menu de seleccion de descifrado */
-	char c;
-	int x = 20, y = 8, aux = 0, opcion;
+	COORD coord;
+	coord.X = 20;
+	coord.Y = 8;
+
+	char pressed_key;
+	int aux = 0, option;
 
 	do
 	{
 		system("cls");
-		screen_border();
+		draw_screen_border();
 		gotoxy(26, 4);
 		printf("* SELECCIONA TIPO DE DESCIFRADO *");
 		gotoxy(24, 8);
@@ -916,74 +963,73 @@ int decryption_type_option_screen()
 		printf("4.-RUN LENGTH");
 		gotoxy(45, 13);
 		printf("  (DESCOMPRESOR)");
-		gotoxy(x, y);
+
+		gotoxy(coord.X, coord.Y);
 		printf("-->");
-		c = getch();
-		/**if(c == -32){
-		c = getch();
-		}*/
-		if (c == abajo)
+
+		pressed_key = getch();
+		if (pressed_key == KEY_DOWN)
 		{ /** TECLAS   */
-			if (y < 12)
+			if (coord.Y < 12)
 			{
-				y += 4;
+				coord.Y += 4;
 			}
 			else
 			{
-				y = 8;
+				coord.Y = 8;
 			}
 		}
-		if (c == arriba)
+		if (pressed_key == KEY_UP)
 		{ /** DE       */
-			if (y > 8)
+			if (coord.Y > 8)
 			{
-				y -= 4;
+				coord.Y -= 4;
 			}
 			else
 			{
-				y = 12;
+				coord.Y = 12;
 			}
 		}
-		if ((c == derecha) || (c == izquierda))
+		if ((pressed_key == KEY_RIGHT) || (pressed_key == KEY_LEFT))
 		{ /** DIRECCION */
-			if (x < 41)
+			if (coord.X < 41)
 			{
-				x += 21;
+				coord.X += 21;
 			}
 			else
 			{
-				x = 20;
+				coord.X = 20;
 			}
 		}
-		if (c == ESC)
+		if (pressed_key == KEY_ESC)
 		{ /** si presiona la tecla ESC pasa valor 5 y regresa a menu */
-			opcion = 5;
+			option = 5;
 			aux = 1; /** como queremos regresar a menu aux = 1 es la condicion para salir del while */
 		}
 
-		if (c == enter)
+		if (pressed_key == KEY_ENTER)
 		{ /** Lo que pasaria en cada caso  */
 			aux = 1;
-			if ((x == 20) && (y == 8))
+			if ((coord.X == 20) && (coord.Y == 8))
 			{ /** si se presiona la tecla enter*/
-				opcion = 1;
+				option = SIMPLE;
 			}
-			if ((x == 20) && (y == 12))
+			if ((coord.X == 20) && (coord.Y == 12))
 			{
-				opcion = 2;
+				option = XOR;
 			}
-			if ((x == 41) && (y == 8))
+			if ((coord.X == 41) && (coord.Y == 8))
 			{
-				opcion = 3;
+				option = VIGERENE;
 			}
-			if ((x == 41) && (y == 12))
+			if ((coord.X == 41) && (coord.Y == 12))
 			{
-				opcion = 4;
+				option = RUN_LENGTH;
 			}
 		}
 	} while (aux != 1);
 
-	return opcion;
+	return option;
 }
 
 void decryption_animation()
@@ -996,7 +1042,7 @@ void decryption_animation()
 	gotoxy(48, 22);
 	printf("Leyendo mensaje.txt...");
 
-	screen_border();
+	draw_screen_border();
 	/** esquinas de recuadro de usuario*/
 	gotoxy(29, 9);
 	printf("\xC9");
