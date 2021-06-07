@@ -38,7 +38,7 @@ void login_screen();
 int encryption_type_option_screen();
 int decryption_type_option_screen();
 void draw_message_input_form();
-int insert_text();	 /**Estructura para ingresar datos de cadena para cada tipo de encriptado... no sera funcion*/
+char* input_text();	 /**Estructura para ingresar datos de cadena para cada tipo de encriptado... no sera funcion*/
 void about_screen(); /** Info+Animacion de la seccion Acerca de */
 
 /* Animations */
@@ -47,29 +47,35 @@ void decryption_animation(); /** Animacion Descifrado */
 void bye_animation();
 
 /* Actions */
-int authentication(); /**Compara el usuario que se ingresa del teclado con el de la constante*/
-int open_file();	  /** abrir texto para descifrar */
+int authentication(); 		/**Compara el usuario que se ingresa del teclado con el de la constante*/
+int open_file();	  		/** abrir texto para descifrar */
+bool save_text_to_file(char str[]);
+
+/* Utils */
+void set_color_and_background(int ForgC, int BackC);
+int *gotoxy(int x, int y);
+void string_to_uppercase(char cadena[]);
 
 /** Algoritmos De Cifrado **************/
-int simple_encryption();	 /***/
-int run_length_encryption(); /***/
-int xor_encryption();		 /***/
-int vigerene_encryption();	 /***/
+int simple_encryption();	 		/***/
+int run_length_encryption(); 		/***/
+int xor_encryption();		 		/***/
+int vigerene_encryption();	 		/***/
 /***************************************/
 
 /** Algoritmos De Descifrado ***********/
-int simple_decryption();	 /***/
-int run_length_decryption(); /***/
-int xor_decryption();		 /***/
-int vigerene_decryption();	 /***/
+int simple_decryption();	 		/***/
+int run_length_decryption(); 		/***/
+int xor_decryption();		 		/***/
+int vigerene_decryption();	 		/***/
 /***************************************/
 
-/** ICONOS *********************************/
-void padlock_close_icon(); /***/
-void padlock_open_icon();  /***/
-void about_icon();		   /***/
-void exit_icon();		   /***/
-/*******************************************/
+/** ICONOS *****************************/
+void padlock_close_icon(); 			/***/
+void padlock_open_icon();  			/***/
+void about_icon();		   			/***/
+void exit_icon();		   			/***/
+/***************************************/
 
 /* Enums */
 enum EncryptionTypes
@@ -115,15 +121,13 @@ int *gotoxy(int x, int y) /** funcion para acceder a coordenadas del plano */
 	return 0;
 }
 
-void uppercase_to_lowercase(char cadena[])
+void string_to_uppercase(char cadena[])
 {
-	int cambiar = 32, i; /** lA DISTANCIA DE LAS MINUSCULAS A MAYUSCULAS ES 32*/
-	for (i = 0; i < 910; i++)
+	int i;
+	int str_length = strlen(cadena);
+	for (i = 0; i < str_length; i++)
 	{
-		if (cadena[i] > 96 && cadena[i] < 123)
-		{
-			cadena[i] = cadena[i] - cambiar;
-		}
+		cadena[i] = toupper(cadena[i]);
 	}
 }
 
@@ -545,62 +549,72 @@ void draw_message_input_form()
 	printf("         ");
 }
 
-int insert_text()
-{ /**Funcion Para leer texto dentro del recuadro de MENSAJE(Esta funcion no se usa, solo es un prototipo para recibir texto en cada funcion de cifrado)*/
-	char cadena[910], ch, numcaracters, Regresar_Menu = 0;
-	int i = 0, y = 9, x = 3;
+char* input_text()	 /**Funcion Para leer texto dentro del recuadro de MENSAJE(Esta funcion no se usa, solo es un prototipo para recibir texto en cada funcion de cifrado)*/
+{
+	char *text_field = malloc(sizeof(char) * 910);
+	char pressed_key, back_to_menu = 0;
+	int string_length;
+	int i = 0;
+	COORD coord = {.X = 3, .Y = 9};
 
-	while (ch != 13) /** Termina si el usuario presiona enter*/
+	while (pressed_key != KEY_ENTER)			/** Termina si el usuario presiona enter*/
 	{
-		if ((ch == 8) && (y >= 9))
-		{					  /** 8 es la tecla DEL */
-			i = i - 2;		  /** al retroceder i se resta 2 para retroceder 1 lugar ya que al final se aumento i una vez mas*/
-			cadena[i] = '\0'; /** al retroceder ingresa un valor null en el numero de matriz[i]*/
-			x = x - 2;		  /** la coordenada igual retrocede para poder escribir en una coordenada anterior*/
-			if (x < 3)
+		if ((pressed_key == 8) && (coord.Y >= 9))
+		{					  					/** 8 es la tecla DEL */
+			i = i - 2;		  					/** al retroceder i se resta 2 para retroceder 1 lugar ya que al final se aumento i una vez mas*/
+			text_field[i] = '\0'; 				/** al retroceder ingresa un valor null en el numero de matriz[i]*/
+			coord.X = coord.X - 2;				/** la coordenada igual retrocede para poder escribir en una coordenada anterior*/
+			if (coord.X < 3)
 			{
-				y--;	/**si la COORD x es menor a 3, y subira a la ultima linea*/
-				x = 72; /**al subir Y, x tiene que ubicarse al final de la linea*/
+				coord.Y--;						/**si la COORD x es menor a 3, y subira a la ultima linea*/
+				coord.X = 72;					/**al subir Y, x tiene que ubicarse al final de la linea*/
 			}
 		}
-		x++; /** se aumenta COORD x cada ciclo para simular que se escribe una cadena*/
-		if (x == 74)
+		coord.X++;								/** se aumenta COORD x cada ciclo para simular que se escribe una cadena*/
+		if (coord.X == 74)
 		{
-			printf("\n"); /** si COORD x llega a 74, este brinca una linea para continuar escribiendo y no borre el marco dibujado*/
-			y++;		  /** COORD y aumenta 1 por lo tanto brinca a la linea de abajo */
-			x = 4;		  /** al estar en la linea de abajo x regresa a su valor inicial para esribir de izq a derecha*/
+			printf("\n"); 						/** si COORD x llega a 74, este brinca una linea para continuar escribiendo y no borre el marco dibujado*/
+			coord.Y++;		  					/** COORD y aumenta 1 por lo tanto brinca a la linea de abajo */
+			coord.X = 4;						/** al estar en la linea de abajo x regresa a su valor inicial para esribir de izq a derecha*/
 		}
 		if (i == 910)
-		{				  /** determina si ya llego al limite de caracteres para la matriz*/
-			printf("\a"); /** se genera un sonido en caso de llegar al limite de caracteres*/
-			ch = 13;	  /** se genera un ENTER automatico para continuar con el programa*/
+		{										/** determina si ya llego al limite de caracteres para la matriz*/
+			printf("\a");						/** se genera un sonido en caso de llegar al limite de caracteres*/
+			pressed_key = KEY_ENTER;			/** se genera un ENTER automatico para continuar con el programa*/
 		}
 		else
 		{
-			gotoxy(x, y); /** Funcion para ubicar en el plano la impresion de cada caracter*/
-			ch = getch(); /** entrada de caracteres*/
-			if (ch == ESC)
+			gotoxy(coord.X, coord.Y);			/** Funcion para ubicar en el plano la impresion de cada caracter*/
+			pressed_key = getch(); 				/** entrada de caracteres*/
+			if (pressed_key == KEY_ESC)
 			{
-				return 1;
+				return "";						/** Return empty value to indicate that the operation has been aborted and handle go back to the menu */
 			}
-			printf("%c", ch); /** mostrar el caracter que acaba de ser tecleado*/
-			cadena[i] = ch;
-			i++; /** contador para asignar caracter a cada matriz*/
+			printf("%c", pressed_key);			/** mostrar el caracter que acaba de ser tecleado*/
+			text_field[i] = pressed_key;		/** agrega caracter a cadena de texto  */
+			i++;								/** contador para asignar caracter a cada matriz*/
 		}
 	}
 
-	cadena[i] = '\0'; /** inserta un valor NULL al final*/
-	numcaracters = strlen(cadena);
+	text_field[i] = '\0'; 						/** inserta un valor NULL al final*/
+	string_length = strlen(text_field);
 
 	system("cls");								/**limpia la pantalla para imprimir desde el principio de la terminal*/
-	printf("\n %d Caracteres\n", numcaracters); /** PRUEBA DE NUMERO DE CARACTERES*/
+	// printf("\n %d Caracteres\n", string_length); /** PRUEBA DE NUMERO DE CARACTERES*/
 
+	return text_field;
+}
+
+bool save_text_to_file(char str[]){
 	doc = fopen("mensaje.txt", "w");
-	fprintf(doc, "%s", cadena); /** PRUEBA IMPRIME TODO LOS CARACTERES ALMACENADOS */
+	int success = fprintf(doc, "%s", str); 			/** PRUEBA IMPRIME TODO LOS CARACTERES ALMACENADOS */
 	fflush(doc);
 	fclose(doc);
 
-	return Regresar_Menu;
+	if(success >= 0){
+		return true;
+	}
+	return false;
 }
 
 int encryption_type_option_screen()
@@ -781,9 +795,9 @@ void loading_animation()
 
 void about_screen()
 {
-	int transicion;
+	int transition;
 
-	for (transicion = 16; transicion > 0; transicion--)
+	for (transition = 16; transition > 0; transition--)
 	{
 
 		gotoxy(24, 8); /**Titulo de Enigma en el centro de la pantalla*/
@@ -797,10 +811,10 @@ void about_screen()
 		gotoxy(24, 12);
 		printf("              <___:              \n");
 
-		gotoxy(0, transicion);
+		gotoxy(0, transition);
 		printf("EnigmaProject fue realizado por:\n\n -Arias Morales Marvin\n\n -Canul Flota Ricardo.\n\n -Cordova Villamil Jorge\n\n -Pool Alvarado Marco");
 		Sleep(300);
-		if (transicion > 1)
+		if (transition > 1)
 		{
 			system("cls");
 		}
@@ -1034,8 +1048,8 @@ int decryption_type_option_screen()
 
 void decryption_animation()
 {
-	int cargando;
-	int x, y;
+	int loading;
+	COORD coord;
 
 	gotoxy(30, 8);
 	printf("Descifrando mensaje...");
@@ -1055,45 +1069,45 @@ void decryption_animation()
 
 	/**box*/
 
-	y = 9;
+	coord.Y = 9;
 	do
 	{ /**left side of box*/
-		y++;
-		gotoxy(29, y);
+		coord.Y++;
+		gotoxy(29, coord.Y);
 		printf("\xBA");
-	} while (y != 11);
+	} while (coord.Y != 11);
 
-	y = 9;
+	coord.Y = 9;
 	do
 	{ /**right side of box*/
-		y++;
-		gotoxy(50, y);
+		coord.Y++;
+		gotoxy(50, coord.Y);
 		printf("\xBA");
-	} while (y != 11);
+	} while (coord.Y != 11);
 
-	x = 29;
+	coord.X = 29;
 	do
 	{ /**the bottom of the box*/
-		x++;
-		gotoxy(x, 12);
+		coord.X++;
+		gotoxy(coord.X, 12);
 		printf("\xCD");
-	} while (x != 49);
+	} while (coord.X != 49);
 
-	x = 29;
+	coord.X = 29;
 	do
 	{ /**the top of box*/
-		x++;
-		gotoxy(x, 9);
+		coord.X++;
+		gotoxy(coord.X, 9);
 		printf("\xCD");
-	} while (x != 49);
+	} while (coord.X != 49);
 
 	/** Cargando Animacion*/
 
-	for (cargando = 30; cargando < 50; cargando++)
+	for (loading = 30; loading < 50; loading++)
 	{
-		gotoxy(cargando, 10);
+		gotoxy(loading, 10);
 		printf("\xDB");
-		gotoxy(cargando, 11);
+		gotoxy(loading, 11);
 		printf("\xDB");
 		Sleep(100);
 	}
@@ -1102,62 +1116,18 @@ void decryption_animation()
 }
 
 int simple_encryption()
-{ /** Algoritmo de Cifrado Simple*/
-	char cadena[910], ch, ichar;
+{
+	char ch, ichar;
 	int i = 0, y = 9, x = 3;
 	int cifrar[910];
 	char cifrar_char[910];
 
-	while (ch != 13) /** Termina si el usuario presiona enter*/
-	{
-		if ((ch == 8) && (y >= 9))
-		{					  /** 8 es la tecla DEL */
-			i = i - 2;		  /** al retroceder i se resta 2 para retroceder 1 lugar ya que al final se aumento i una vez mas*/
-			cadena[i] = '\0'; /** al retroceder ingresa un valor null en el numero de matriz[i]*/
-			x = x - 2;		  /** la coordenada igual retrocede para poder escribir en una coordenada anterior*/
-			if (x < 3)
-			{
-				y--;	/**si la COORD x es menor a 3, y subira a la ultima linea*/
-				x = 72; /**al subir Y, x tiene que ubicarse al final de la linea*/
-			}
-		}
-		x++; /** se aumenta COORD x cada ciclo para simular que se escribe una cadena*/
-		if (x == 74)
-		{
-			printf("\n"); /** si COORD x llega a 74, este brinca una linea para continuar escribiendo y no borre el marco dibujado*/
-			y++;		  /** COORD y aumenta 1 por lo tanto brinca a la linea de abajo */
-			x = 4;		  /** al estar en la linea de abajo x regresa a su valor inicial para esribir de izq a derecha*/
-		}
-		if (i == 910)
-		{				  /** determina si ya llego al limite de caracteres para la matriz*/
-			printf("\a"); /** se genera un sonido en caso de llegar al limite de caracteres*/
-			ch = 13;	  /** se genera un ENTER automatico para continuar con el programa*/
-		}
-		else
-		{
-			gotoxy(x, y); /** Funcion para ubicar en el plano la impresion de cada caracter*/
-			ch = getch(); /** entrada de caracteres*/
-			if (ch == ESC)
-			{
-				return 1;
-				/**ch = 13;*/
-			}
-			printf("%c", ch); /** mostrar el caracter que acaba de ser tecleado*/
-			cadena[i] = ch;
-			i++; /** contador para asignar caracter a cada matriz*/
-		}
+	/** Read text*/
+	char *cadena = input_text();
+	if(cadena && !cadena[0]){
+		return 1;				/** Return key to cancel and go back to menu */
 	}
-	/**if(i == 1){
-		** como solo dio una vuelta el while quiere decir que se presiono ESC no hace nada y sale */
-	/** entonces regresa al menu principal*
-		Regresar_Menu = 1;
-	}
-	else{*/
-	cadena[i] = '\0'; /** inserta un valor NULL al final*/
 	ichar = strlen(cadena) - 2;
-
-	system("cls"); /**limpia la pantalla para imprimir desde el principio de la terminal*/
-	/**printf("\n %d Caracteres\n",ichar);     ** PRUEBA DE NUMERO DE CARACTERES*/
 
 	/***************************************************************************************************/
 	/***** Algoritmo de Cifrado Simple */
@@ -1183,17 +1153,16 @@ int simple_encryption()
 		printf("%c", cifrar_char[i]);
 	}
 
-	doc = fopen("mensaje.txt", "w");
-	fprintf(doc, "%s", cifrar_char); /** PRUEBA IMPRIME TODO LOS CARACTERES ALMACENADOS y los manda al ARCHIVO TXT */
-	fflush(doc);
-	fclose(doc);
-	/**}*/
+	if(!save_text_to_file(cifrar_char)){
+		printf("Error saving message.txt file");
+	}
+
 	return 0;
 }
 
 int run_length_encryption()
 {
-	char cadena[910], ch, ichar;
+	char ch, ichar;
 	int i = 0, y = 9, x = 3;
 
 	/**variables de algoritmo run length*/
@@ -1201,56 +1170,12 @@ int run_length_encryption()
 	char Cifrado[910], caracter; /***/
 	/************************************/
 
-	while (ch != enter) /** Termina si el usuario presiona enter*/
-	{
-		if ((ch == 8) && (y >= 9))
-		{					  /** 8 es la tecla DEL */
-			i = i - 2;		  /** al retroceder i se resta 2 para retroceder 1 lugar ya que al final se aumento i una vez mas*/
-			cadena[i] = '\0'; /** al retroceder ingresa un valor null en el numero de matriz[i]*/
-			x = x - 2;		  /** la coordenada igual retrocede para poder escribir en una coordenada anterior*/
-			if (x < 3)
-			{
-				y--;	/**si la COORD x es menor a 3, y subira a la ultima linea*/
-				x = 72; /**al subir Y, x tiene que ubicarse al final de la linea*/
-			}
-		}
-		x++; /** se aumenta COORD x cada ciclo para simular que se escribe una cadena*/
-		if (x == 74)
-		{
-			printf("\n"); /** si COORD x llega a 74, este brinca una linea para continuar escribiendo y no borre el marco dibujado*/
-			y++;		  /** COORD y aumenta 1 por lo tanto brinca a la linea de abajo */
-			x = 4;		  /** al estar en la linea de abajo x regresa a su valor inicial para esribir de izq a derecha*/
-		}
-		if (i == 910)
-		{				  /** determina si ya llego al limite de caracteres para la matriz*/
-			printf("\a"); /** se genera un sonido en caso de llegar al limite de caracteres*/
-			ch = 13;	  /** se genera un ENTER automatico para continuar con el programa*/
-		}
-		else
-		{
-			gotoxy(x, y); /** Funcion para ubicar en el plano la impresion de cada caracter*/
-			ch = getch(); /** entrada de caracteres*/
-			if (ch == ESC)
-			{
-				return 1;
-				/**ch = 13;*/
-			}
-			printf("%c", ch); /** mostrar el caracter que acaba de ser tecleado*/
-			cadena[i] = ch;
-			i++; /** contador para asignar caracter a cada matriz*/
-		}
+	/** Read text*/
+	char *cadena = input_text();
+	if(cadena && !cadena[0]){
+		return 1;				/** Return key to cancel and go back to menu */
 	}
-	/**if(i == 1){
-		** como solo dio una vuelta el while quiere decir que se presiono ESC no hace nada y sale */
-	/** entonces regresa al menu principal*
-		Regresar_Menu = 1;
-	}
-	else{*/
-	cadena[i] = '\0'; /** inserta un valor NULL al final*/
 	ichar = strlen(cadena) - 1;
-
-	system("cls"); /**limpia la pantalla para imprimir desde el principio de la terminal*/
-	/**printf("\n %d Caracteres\n",ichar);     ** PRUEBA DE NUMERO DE CARACTERES*/
 
 	/***************************************************************************************************/
 	/***** Algoritmo de Cifrado Run Length *************************************************************/
@@ -1299,11 +1224,9 @@ int run_length_encryption()
 		printf("%c", Cifrado[i]);
 	}
 
-	doc = fopen("mensaje.txt", "w");
-	fprintf(doc, "%s", Cifrado); /** PRUEBA IMPRIME TODO LOS CARACTERES ALMACENADOS y los manda al ARCHIVO TXT */
-	fflush(doc);
-	fclose(doc);
-	/**}*/
+	if(!save_text_to_file(Cifrado)){
+		printf("Error saving message.txt");
+	}
 	return 0;
 }
 
@@ -1401,7 +1324,7 @@ int run_length_decryption()
 
 int xor_encryption()
 {
-	char cadena[910], ch, Regresar_Menu = 0, Cifrado[910];
+	char ch, go_back_to_menu = 0, Cifrado[910];
 	int i = 0, y = 9, x = 3;
 
 	/**variables de algoritmo XOR*/
@@ -1413,62 +1336,17 @@ int xor_encryption()
 	int suma, binTemp, decimal;
 	/************************************/
 
-	while (ch != 13) /** Termina si el usuario presiona enter*/
-	{
-		if ((ch == 8) && (y >= 9))
-		{					  /** 8 es la tecla DEL */
-			i = i - 2;		  /** al retroceder i se resta 2 para retroceder 1 lugar ya que al final se aumento i una vez mas*/
-			cadena[i] = '\0'; /** al retroceder ingresa un valor null en el numero de matriz[i]*/
-			x = x - 2;		  /** la coordenada igual retrocede para poder escribir en una coordenada anterior*/
-			if (x < 3)
-			{
-				y--;	/**si la COORD x es menor a 3, y subira a la ultima linea*/
-				x = 72; /**al subir Y, x tiene que ubicarse al final de la linea*/
-			}
-		}
-		x++; /** se aumenta COORD x cada ciclo para simular que se escribe una cadena*/
-		if (x == 74)
-		{
-			printf("\n"); /** si COORD x llega a 74, este brinca una linea para continuar escribiendo y no borre el marco dibujado*/
-			y++;		  /** COORD y aumenta 1 por lo tanto brinca a la linea de abajo */
-			x = 4;		  /** al estar en la linea de abajo x regresa a su valor inicial para esribir de izq a derecha*/
-		}
-		if (i == 910)
-		{				  /** determina si ya llego al limite de caracteres para la matriz*/
-			printf("\a"); /** se genera un sonido en caso de llegar al limite de caracteres*/
-			ch = 13;	  /** se genera un ENTER automatico para continuar con el programa*/
-		}
-		else
-		{
-			gotoxy(x, y); /** Funcion para ubicar en el plano la impresion de cada caracter*/
-			ch = getch(); /** entrada de caracteres*/
-			if (ch == ESC)
-			{
-				return 1;
-				/**ch = 13;*/
-			}
-			printf("%c", ch); /** mostrar el caracter que acaba de ser tecleado*/
-			cadena[i] = ch;
-			i++; /** contador para asignar caracter a cada matriz*/
-		}
+	/** Read text*/
+	char *cadena = input_text();
+	if(cadena && !cadena[0]){
+		return 1;				/** Return key to cancel and go back to menu */
 	}
-	/**if(i == 1){
-		** como solo dio una vuelta el while quiere decir que se presiono ESC no hace nada y sale */
-	/** entonces regresa al menu principal*
-		Regresar_Menu = 1;
-	}
-	else{*/
-	cadena[i] = '\0'; /** inserta un valor NULL al final*/
 	ichar = strlen(cadena) - 1;
-
-	system("cls"); /**limpia la pantalla para imprimir desde el principio de la terminal*/
-	/**printf("\n %d Caracteres\n",ichar);     ** PRUEBA DE NUMERO DE CARACTERES*/
 
 	/***************************************************************************************************/
 	/***** Algoritmo de Cifrado XOR ********************************************************************/
 	/***************************************************************************************************/
 
-	/**printf("\nnumero de caracteres: %d\n",ichar); ** prueba para saber si funciona */
 	/**printf("Binario en 8 bits\n\n");*/
 	contador_Almacen = 0;
 	for (i = 0; i < ichar; i++)
@@ -1598,12 +1476,11 @@ int xor_encryption()
 	/*** Guardar Resultado en un TXT *******************************************************************/
 	/***************************************************************************************************/
 
-	doc = fopen("mensaje.txt", "w");
-	fprintf(doc, "%s", Cifrado); /** PRUEBA IMPRIME TODO LOS CARACTERES ALMACENADOS y los manda al ARCHIVO TXT */
-	fflush(doc);
-	fclose(doc);
-	/**}*/
-	return Regresar_Menu;
+	if(!save_text_to_file(Cifrado)){
+		printf("Error saving message.txt");
+	}
+
+	return go_back_to_menu;
 }
 
 int xor_decryption()
@@ -1737,7 +1614,7 @@ int xor_decryption()
 
 int vigerene_encryption()
 {
-	char cadena[910], ch, Regresar_Menu = 0, Cifrado[910];
+	char ch, go_back_to_menu = 0, Cifrado[910];
 	int i = 0, y = 9, x = 3, ichar;
 
 	/**variables de algoritmo Vigerene*/
@@ -1747,57 +1624,12 @@ int vigerene_encryption()
 
 	/************************************/
 
-	while (ch != 13) /** Termina si el usuario presiona enter*/
-	{
-		if ((ch == 8) && (y >= 9))
-		{					  /** 8 es la tecla DEL */
-			i = i - 2;		  /** al retroceder i se resta 2 para retroceder 1 lugar ya que al final se aumento i una vez mas*/
-			cadena[i] = '\0'; /** al retroceder ingresa un valor null en el numero de matriz[i]*/
-			x = x - 2;		  /** la coordenada igual retrocede para poder escribir en una coordenada anterior*/
-			if (x < 3)
-			{
-				y--;	/**si la COORD x es menor a 3, y subira a la ultima linea*/
-				x = 72; /**al subir Y, x tiene que ubicarse al final de la linea*/
-			}
-		}
-		x++; /** se aumenta COORD x cada ciclo para simular que se escribe una cadena*/
-		if (x == 74)
-		{
-			printf("\n"); /** si COORD x llega a 74, este brinca una linea para continuar escribiendo y no borre el marco dibujado*/
-			y++;		  /** COORD y aumenta 1 por lo tanto brinca a la linea de abajo */
-			x = 4;		  /** al estar en la linea de abajo x regresa a su valor inicial para esribir de izq a derecha*/
-		}
-		if (i == 910)
-		{				  /** determina si ya llego al limite de caracteres para la matriz*/
-			printf("\a"); /** se genera un sonido en caso de llegar al limite de caracteres*/
-			ch = 13;	  /** se genera un ENTER automatico para continuar con el programa*/
-		}
-		else
-		{
-			gotoxy(x, y); /** Funcion para ubicar en el plano la impresion de cada caracter*/
-			ch = getch(); /** entrada de caracteres*/
-			if (ch == ESC)
-			{
-				return 1;
-				/**ch = 13;*/
-			}
-			printf("%c", ch); /** mostrar el caracter que acaba de ser tecleado*/
-			cadena[i] = ch;
-			i++; /** contador para asignar caracter a cada matriz*/
-		}
+	/** Read text*/
+	char *cadena = input_text();
+	if(cadena && !cadena[0]){
+		return 1;				/** Return key to cancel and go back to menu */
 	}
-	/**if(i == 1){
-		** como solo dio una vuelta el while quiere decir que se presiono ESC no hace nada y sale *
-		** entonces regresa al menu principal*
-		Regresar_Menu = 1;
-	}
-	else{*/
-	printf("\a");
-	/**cadena[i]= '\0';                     ** inserta un valor NULL al final*/
 	ichar = strlen(cadena) - 1;
-
-	system("cls"); /**limpia la pantalla para imprimir desde el principio de la terminal*/
-	/**printf("\n %d Caracteres\n",ichar);     ** PRUEBA DE NUMERO DE CARACTERES*/
 
 	/***************************************************************************************************/
 	/***** Algoritmo de Cifrado Vigerene ***************************************************************/
@@ -1808,14 +1640,15 @@ int vigerene_encryption()
 	/**fgets(clave, 10, stdin);*/
 	iclave = strlen(clave);
 
-	uppercase_to_lowercase(cadena);
+	string_to_uppercase(cadena);
+	string_to_uppercase(clave);
 	for (i = 0; i < ichar; i++)
 	{
-		if (cadena[i] >= 64 && cadena[i] < 91)
+		if (cadena[i] >= 'A' && cadena[i] <= 'Z')
 		{
 			if (c == iclave)
 				c = 0;
-			Cifrado[i] = ((cadena[i] - 65 + clave[c] - 65) % 26) + 65;
+			Cifrado[i] = (( (cadena[i] - 65) + (clave[c] - 65) ) % 26) + 65;
 			c++;
 		}
 		else
@@ -1835,12 +1668,11 @@ int vigerene_encryption()
 	/*** Guardar Resultado en un TXT *******************************************************************/
 	/***************************************************************************************************/
 
-	doc = fopen("mensaje.txt", "w");
-	fprintf(doc, "%s", Cifrado); /** PRUEBA IMPRIME TODO LOS CARACTERES ALMACENADOS y los manda al ARCHIVO TXT */
-	fflush(doc);
-	fclose(doc);
-	/**}*/
-	return Regresar_Menu;
+	if(!save_text_to_file(Cifrado)){
+		printf("Error saving message.txt");
+	}
+
+	return go_back_to_menu;
 }
 
 int vigerene_decryption()
@@ -1867,7 +1699,6 @@ int vigerene_decryption()
 	}
 
 	fgets(lectura, 909, doc);
-	/**fscanf(doc,"%s^[\0]",lectura);*/ /** no funciona!!! solo lee una palabra */
 	fclose(doc);
 
 	printf("\tMensaje leido:\n\n %s", lectura); /** PRUEBA */
@@ -1877,8 +1708,6 @@ int vigerene_decryption()
 	/*********** Termina lectura de archivo ahora podemos usar Lectura[]; para descifrar */
 
 	ichar = strlen(lectura);
-
-	/**printf("\nNumero de Caracteres %d\n",ichar);  ** PRUEBA */
 
 	/***********************************************************************************/
 
@@ -1905,17 +1734,17 @@ int vigerene_decryption()
 
 	iclave = strlen(clave);
 
-	uppercase_to_lowercase(lectura);
+	string_to_uppercase(lectura);
+	string_to_uppercase(clave);
 	c = 0;
 	printf("\n\n   Mensaje Descifrado:\n\n");
 	printf(" ");
 	for (i = 0; i < ichar; i++)
 	{
-		if (lectura[i] >= 64 && lectura[i] < 91)
+		if (lectura[i] >= 'A' && lectura[i] <= 'Z')
 		{
-			if (c == iclave)
-				c = 0;
-			descifrar[i] = (((((lectura[i] - 65) % 26) - ((clave[c] - 65) % 26) + 26) % 26)) + 65;
+			if (c == iclave - 1) { c = 0; }
+			descifrar[i] = ( ((lectura[i] - 65) - (clave[c] - 65)) + 26 ) % 26 + 'A';
 			c++;
 		}
 		else
@@ -1926,8 +1755,6 @@ int vigerene_decryption()
 	{
 		printf("%c", descifrar[i]);
 	}
-	/**gotoxy(0,10);   ** para eliminar una letra que se imprime en esta coordenada y es erronea *
-	printf(" ");*/
 
 	return 0;
 }
