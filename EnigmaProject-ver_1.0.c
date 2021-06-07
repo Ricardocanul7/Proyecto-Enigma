@@ -17,17 +17,6 @@ INTEGRANTES:
 #include <stdlib.h>
 #include <stdbool.h>
 
-/** Teclas de direccion o navegacion "DEPRACATED - REMOVE WHEN NO REFERENCES LEFT ON MAIN CODE"
- * Replaced by enum KeyboardKeys below.
-*/
-#define arriba 72
-#define abajo 80
-#define izquierda 75
-#define derecha 77
-#define enter 13
-#define Espacio 32
-#define ESC 27
-
 FILE *doc; /** doc es la variable usada para el archivo txt que se guardara en el proceso de cifrado*/
 
 /* Screens */
@@ -38,7 +27,7 @@ void login_screen();
 int encryption_type_option_screen();
 int decryption_type_option_screen();
 void draw_message_input_form();
-char* input_text();	 /**Estructura para ingresar datos de cadena para cada tipo de encriptado... no sera funcion*/
+char *input_text();	 /**Estructura para ingresar datos de cadena para cada tipo de encriptado... no sera funcion*/
 void about_screen(); /** Info+Animacion de la seccion Acerca de */
 
 /* Animations */
@@ -47,9 +36,10 @@ void decryption_animation(); /** Animacion Descifrado */
 void bye_animation();
 
 /* Actions */
-int authentication(); 		/**Compara el usuario que se ingresa del teclado con el de la constante*/
-int open_file();	  		/** abrir texto para descifrar */
+int authentication(); /**Compara el usuario que se ingresa del teclado con el de la constante*/
+int open_file();	  /** abrir texto para descifrar */
 bool save_text_to_file(char str[]);
+void clean_screen();
 
 /* Utils */
 void set_color_and_background(int ForgC, int BackC);
@@ -57,24 +47,24 @@ int *gotoxy(int x, int y);
 void string_to_uppercase(char cadena[]);
 
 /** Algoritmos De Cifrado **************/
-int simple_encryption();	 		/***/
-int run_length_encryption(); 		/***/
-int xor_encryption();		 		/***/
-int vigerene_encryption();	 		/***/
+int simple_encryption();	 /***/
+int run_length_encryption(); /***/
+int xor_encryption();		 /***/
+int vigerene_encryption();	 /***/
 /***************************************/
 
 /** Algoritmos De Descifrado ***********/
-int simple_decryption();	 		/***/
-int run_length_decryption(); 		/***/
-int xor_decryption();		 		/***/
-int vigerene_decryption();	 		/***/
+int simple_decryption();	 /***/
+int run_length_decryption(); /***/
+int xor_decryption();		 /***/
+int vigerene_decryption();	 /***/
 /***************************************/
 
 /** ICONOS *****************************/
-void padlock_close_icon(); 			/***/
-void padlock_open_icon();  			/***/
-void about_icon();		   			/***/
-void exit_icon();		   			/***/
+void padlock_close_icon(); /***/
+void padlock_open_icon();  /***/
+void about_icon();		   /***/
+void exit_icon();		   /***/
 /***************************************/
 
 /* Enums */
@@ -129,6 +119,11 @@ void string_to_uppercase(char cadena[])
 	{
 		cadena[i] = toupper(cadena[i]);
 	}
+}
+
+void clean_screen()
+{
+	system("cls");
 }
 
 void main()
@@ -236,7 +231,7 @@ void login_screen()
 			Sleep(300); /**tiempo que aparecera "¡Incorrecto!" en pantalla*/
 		}
 
-		system("cls"); /** limpia pantalla cada bucle para poder ingresar usuario nuevo*/
+		clean_screen();
 	} while (auth_response != IS_LOGGED);
 	printf("\a");
 }
@@ -306,7 +301,7 @@ void main_menu()
 
 	do
 	{
-		system("cls");
+		clean_screen();
 
 		/*********************************************************/
 		/** Se imprime Un dibujo representando la opcion marcada */
@@ -382,10 +377,10 @@ void main_menu()
 			set_color_and_background(50, 0); /** establecer color Verde de nuevo porque acabo de limpiar la pantalla*/
 			if (menu_index == ENCRYPTION)	 /** Cifrar */
 			{
-				system("cls");
+				clean_screen();
 				gotoxy(13, 13);
 				encryption_type = encryption_type_option_screen(); /** tipo seria del 1 al 4  */
-				system("cls");
+				clean_screen();
 				switch (encryption_type)
 				{
 				case SIMPLE:
@@ -436,15 +431,15 @@ void main_menu()
 			}
 			if (menu_index == DECRYPTION) /** Descifrar */
 			{
-				system("cls");
+				clean_screen();
 				gotoxy(13, 13);
 				encryption_type = decryption_type_option_screen(); /** tipo seria del 1 al 4          */
-				system("cls");
+				clean_screen();
 				switch (encryption_type)
 				{
 				case SIMPLE:
 					decryption_animation();
-					system("cls");
+					clean_screen();
 					go_back = simple_decryption();
 					if (go_back == true)
 					{
@@ -475,7 +470,7 @@ void main_menu()
 					break;
 				case RUN_LENGTH:
 					decryption_animation();
-					system("cls");
+					clean_screen();
 					go_back = run_length_decryption();
 					if (go_back == true)
 					{
@@ -494,13 +489,13 @@ void main_menu()
 			}
 			if (menu_index == ABOUT) /** Acerca de  */
 			{
-				system("cls");
+				clean_screen();
 				about_screen(); /** Animacion e Informacion de los desarrolladores */
 				getch();
 			}
 			if (menu_index == EXIT) /** Salir  */
 			{
-				system("cls");
+				clean_screen();
 				bye_animation();
 				exit = true;
 			}
@@ -549,7 +544,7 @@ void draw_message_input_form()
 	printf("         ");
 }
 
-char* input_text()	 /**Funcion Para leer texto dentro del recuadro de MENSAJE(Esta funcion no se usa, solo es un prototipo para recibir texto en cada funcion de cifrado)*/
+char *input_text() /**Funcion Para leer texto dentro del recuadro de MENSAJE*/
 {
 	char *text_field = malloc(sizeof(char) * 910);
 	char pressed_key, back_to_menu = 0;
@@ -557,61 +552,62 @@ char* input_text()	 /**Funcion Para leer texto dentro del recuadro de MENSAJE(Es
 	int i = 0;
 	COORD coord = {.X = 3, .Y = 9};
 
-	while (pressed_key != KEY_ENTER)			/** Termina si el usuario presiona enter*/
+	while (pressed_key != KEY_ENTER) /** Termina si el usuario presiona enter*/
 	{
 		if ((pressed_key == 8) && (coord.Y >= 9))
-		{					  					/** 8 es la tecla DEL */
-			i = i - 2;		  					/** al retroceder i se resta 2 para retroceder 1 lugar ya que al final se aumento i una vez mas*/
-			text_field[i] = '\0'; 				/** al retroceder ingresa un valor null en el numero de matriz[i]*/
-			coord.X = coord.X - 2;				/** la coordenada igual retrocede para poder escribir en una coordenada anterior*/
+		{						   /** 8 es la tecla DEL */
+			i = i - 2;			   /** al retroceder i se resta 2 para retroceder 1 lugar ya que al final se aumento i una vez mas*/
+			text_field[i] = '\0';  /** al retroceder ingresa un valor null en el numero de matriz[i]*/
+			coord.X = coord.X - 2; /** la coordenada igual retrocede para poder escribir en una coordenada anterior*/
 			if (coord.X < 3)
 			{
-				coord.Y--;						/**si la COORD x es menor a 3, y subira a la ultima linea*/
-				coord.X = 72;					/**al subir Y, x tiene que ubicarse al final de la linea*/
+				coord.Y--;	  /**si la COORD x es menor a 3, y subira a la ultima linea*/
+				coord.X = 72; /**al subir Y, x tiene que ubicarse al final de la linea*/
 			}
 		}
-		coord.X++;								/** se aumenta COORD x cada ciclo para simular que se escribe una cadena*/
+		coord.X++; /** se aumenta COORD x cada ciclo para simular que se escribe una cadena*/
 		if (coord.X == 74)
 		{
-			printf("\n"); 						/** si COORD x llega a 74, este brinca una linea para continuar escribiendo y no borre el marco dibujado*/
-			coord.Y++;		  					/** COORD y aumenta 1 por lo tanto brinca a la linea de abajo */
-			coord.X = 4;						/** al estar en la linea de abajo x regresa a su valor inicial para esribir de izq a derecha*/
+			printf("\n"); /** si COORD x llega a 74, este brinca una linea para continuar escribiendo y no borre el marco dibujado*/
+			coord.Y++;	  /** COORD y aumenta 1 por lo tanto brinca a la linea de abajo */
+			coord.X = 4;  /** al estar en la linea de abajo x regresa a su valor inicial para esribir de izq a derecha*/
 		}
 		if (i == 910)
-		{										/** determina si ya llego al limite de caracteres para la matriz*/
-			printf("\a");						/** se genera un sonido en caso de llegar al limite de caracteres*/
-			pressed_key = KEY_ENTER;			/** se genera un ENTER automatico para continuar con el programa*/
+		{							 /** determina si ya llego al limite de caracteres para la matriz*/
+			printf("\a");			 /** se genera un sonido en caso de llegar al limite de caracteres*/
+			pressed_key = KEY_ENTER; /** se genera un ENTER automatico para continuar con el programa*/
 		}
 		else
 		{
-			gotoxy(coord.X, coord.Y);			/** Funcion para ubicar en el plano la impresion de cada caracter*/
-			pressed_key = getch(); 				/** entrada de caracteres*/
+			gotoxy(coord.X, coord.Y); /** Funcion para ubicar en el plano la impresion de cada caracter*/
+			pressed_key = getch();	  /** entrada de caracteres*/
 			if (pressed_key == KEY_ESC)
 			{
-				return "";						/** Return empty value to indicate that the operation has been aborted and handle go back to the menu */
+				return ""; /** Return empty value to indicate that the operation has been aborted and handle go back to the menu */
 			}
-			printf("%c", pressed_key);			/** mostrar el caracter que acaba de ser tecleado*/
-			text_field[i] = pressed_key;		/** agrega caracter a cadena de texto  */
-			i++;								/** contador para asignar caracter a cada matriz*/
+			printf("%c", pressed_key);	 /** mostrar el caracter que acaba de ser tecleado*/
+			text_field[i] = pressed_key; /** agrega caracter a cadena de texto  */
+			i++;
 		}
 	}
 
-	text_field[i] = '\0'; 						/** inserta un valor NULL al final*/
+	text_field[i] = '\0'; /** inserta un valor NULL al final*/
 	string_length = strlen(text_field);
 
-	system("cls");								/**limpia la pantalla para imprimir desde el principio de la terminal*/
-	// printf("\n %d Caracteres\n", string_length); /** PRUEBA DE NUMERO DE CARACTERES*/
+	clean_screen();
 
 	return text_field;
 }
 
-bool save_text_to_file(char str[]){
+bool save_text_to_file(char str[])
+{
 	doc = fopen("mensaje.txt", "w");
-	int success = fprintf(doc, "%s", str); 			/** PRUEBA IMPRIME TODO LOS CARACTERES ALMACENADOS */
+	int success = fprintf(doc, "%s", str); /** PRUEBA IMPRIME TODO LOS CARACTERES ALMACENADOS */
 	fflush(doc);
 	fclose(doc);
 
-	if(success >= 0){
+	if (success >= 0)
+	{
 		return true;
 	}
 	return false;
@@ -624,12 +620,14 @@ int encryption_type_option_screen()
 	coord.Y = 8;
 
 	char pressed_key;
-	int aux = 0, option;
+	int option;
+	bool exit = false;
 
 	do
 	{
-		system("cls");
+		clean_screen();
 		draw_screen_border();
+
 		gotoxy(26, 4);
 		printf("* SELECCIONA TIPO DE CIFRADO *");
 		gotoxy(24, 8);
@@ -683,15 +681,15 @@ int encryption_type_option_screen()
 			}
 		}
 
-		if (pressed_key == KEY_ESC)
-		{ /** si presiona la tecla ESC pasa valor 5 y regresa a menu */
+		if (pressed_key == KEY_ESC) /** si presiona la tecla ESC pasa valor 5 y regresa a menu */
+		{
 			option = 5;
-			aux = 1; /** como queremos regresar a menu aux = 1 es la condicion para salir del while */
+			exit = true; /** como queremos regresar a menu aux = 1 es la condicion para salir del while */
 		}
 
 		if (pressed_key == KEY_ENTER)
 		{ /** Lo que pasaria en cada caso  */
-			aux = 1;
+			exit = true;
 
 			if ((coord.X == 20) && (coord.Y == 8))
 			{ /** si se presiona la tecla enter*/
@@ -713,7 +711,7 @@ int encryption_type_option_screen()
 				option = RUN_LENGTH;
 			}
 		}
-	} while (aux != 1);
+	} while (exit != true);
 
 	return option;
 }
@@ -816,7 +814,7 @@ void about_screen()
 		Sleep(300);
 		if (transition > 1)
 		{
-			system("cls");
+			clean_screen();
 		}
 	}
 	gotoxy(19, 18);
@@ -959,11 +957,12 @@ int decryption_type_option_screen()
 	coord.Y = 8;
 
 	char pressed_key;
-	int aux = 0, option;
+	int option;
+	bool exit = false;
 
 	do
 	{
-		system("cls");
+		clean_screen();
 		draw_screen_border();
 		gotoxy(26, 4);
 		printf("* SELECCIONA TIPO DE DESCIFRADO *");
@@ -983,7 +982,7 @@ int decryption_type_option_screen()
 
 		pressed_key = getch();
 		if (pressed_key == KEY_DOWN)
-		{ /** TECLAS   */
+		{
 			if (coord.Y < 12)
 			{
 				coord.Y += 4;
@@ -994,7 +993,7 @@ int decryption_type_option_screen()
 			}
 		}
 		if (pressed_key == KEY_UP)
-		{ /** DE       */
+		{
 			if (coord.Y > 8)
 			{
 				coord.Y -= 4;
@@ -1005,7 +1004,7 @@ int decryption_type_option_screen()
 			}
 		}
 		if ((pressed_key == KEY_RIGHT) || (pressed_key == KEY_LEFT))
-		{ /** DIRECCION */
+		{
 			if (coord.X < 41)
 			{
 				coord.X += 21;
@@ -1015,17 +1014,17 @@ int decryption_type_option_screen()
 				coord.X = 20;
 			}
 		}
-		if (pressed_key == KEY_ESC)
-		{ /** si presiona la tecla ESC pasa valor 5 y regresa a menu */
+		if (pressed_key == KEY_ESC) /** si presiona la tecla ESC pasa valor 5 y regresa a menu */
+		{
 			option = 5;
-			aux = 1; /** como queremos regresar a menu aux = 1 es la condicion para salir del while */
+			exit = true;
 		}
 
-		if (pressed_key == KEY_ENTER)
-		{ /** Lo que pasaria en cada caso  */
-			aux = 1;
+		if (pressed_key == KEY_ENTER) /** Lo que pasaria en cada caso  */
+		{
+			exit = true;
 			if ((coord.X == 20) && (coord.Y == 8))
-			{ /** si se presiona la tecla enter*/
+			{
 				option = SIMPLE;
 			}
 			if ((coord.X == 20) && (coord.Y == 12))
@@ -1041,7 +1040,7 @@ int decryption_type_option_screen()
 				option = RUN_LENGTH;
 			}
 		}
-	} while (aux != 1);
+	} while (exit != true);
 
 	return option;
 }
@@ -1117,43 +1116,38 @@ void decryption_animation()
 
 int simple_encryption()
 {
-	char ch, ichar;
-	int i = 0, y = 9, x = 3;
-	int cifrar[910];
-	char cifrar_char[910];
+	char input_length;
+	char cipher_str[910];
 
 	/** Read text*/
-	char *cadena = input_text();
-	if(cadena && !cadena[0]){
-		return 1;				/** Return key to cancel and go back to menu */
+	char *input_str = input_text();
+	if (input_str && !input_str[0])
+	{
+		return 1; /** Return key to cancel and go back to menu */
 	}
-	ichar = strlen(cadena) - 2;
+	input_length = strlen(input_str) - 2;
 
 	/***************************************************************************************************/
 	/***** Algoritmo de Cifrado Simple */
 
-	i = 0;
-
-	while (i <= ichar)
-	{									/**Genera el codigo cifrado*/
-		cifrar[i] = cadena[i];			/**Convierte el caracter a codigo ASCII*/
-		cifrar_char[i] = cifrar[i] + 3; /**Modifica el numero*/
-		/** ESto lo puse como comentario porque interfiere con la animacion de Cifrando... */
-		/**printf("%c",cifrar_char[i]);        **Regresa el numero modificado a caracter****/
-		/***********************************************************************************/
+	int i = 0;
+	while (i <= input_length)
+	{									  /**Genera el codigo cifrado*/
+		cipher_str[i] = input_str[i] + 3; /**Modifica el numero*/
 		i++;
 	}
-	cifrar_char[i] = '\0'; /** se agrega final para que no imprima signos raros*/
+	cipher_str[i] = '\0'; /** se agrega final para que no imprima signos raros*/
 
 	loading_animation();
-	system("cls");
+	clean_screen();
 	printf(" Mensaje Cifrado:\n");
-	for (i = 0; i < ichar + 1; i++)
+	for (i = 0; i < input_length + 1; i++)
 	{
-		printf("%c", cifrar_char[i]);
+		printf("%c", cipher_str[i]);
 	}
 
-	if(!save_text_to_file(cifrar_char)){
+	if (!save_text_to_file(cipher_str))
+	{
 		printf("Error saving message.txt file");
 	}
 
@@ -1162,69 +1156,65 @@ int simple_encryption()
 
 int run_length_encryption()
 {
-	char ch, ichar;
-	int i = 0, y = 9, x = 3;
-
-	/**variables de algoritmo run length*/
-	int Repeticiones, j;		 /***/
-	char Cifrado[910], caracter; /***/
-	/************************************/
+	char input_length;
+	int char_repeat_counter;
+	char cipher_str[910], character;
 
 	/** Read text*/
-	char *cadena = input_text();
-	if(cadena && !cadena[0]){
-		return 1;				/** Return key to cancel and go back to menu */
+	char *input_str = input_text();
+	if (input_str && !input_str[0])
+	{
+		return 1; /** Return key to cancel and go back to menu */
 	}
-	ichar = strlen(cadena) - 1;
+	input_length = strlen(input_str) - 1;
 
 	/***************************************************************************************************/
 	/***** Algoritmo de Cifrado Run Length *************************************************************/
 	/***************************************************************************************************/
-	Repeticiones = 1;
-	j = 0;
-
-	for (i = 0; i < ichar; i++)
+	char_repeat_counter = 1;
+	int i = 0, j = 0;
+	for (i = 0; i < input_length; i++)
 	{
-		caracter = cadena[i]; /** se guardan caracteres de la cadena */
-		if (cadena[i] == cadena[i + 1])
-		{					/** si es igual que su anterior entra */
-			Repeticiones++; /** numero de veces que se repite     */
+		character = input_str[i]; /** se guardan caracteres de la cadena */
+		if (input_str[i] == input_str[i + 1])
+		{						   /** si es igual que su anterior entra */
+			char_repeat_counter++; /** numero de veces que se repite     */
 		}
 		else
 		{
-			if (cadena[i] == cadena[i - 1])
+			if (input_str[i] == input_str[i - 1])
 			{ /** si no es igual entra              */
-				Cifrado[j] = '#';
+				cipher_str[j] = '#';
 				j++;
-				Cifrado[j] = caracter;
+				cipher_str[j] = character;
 				j++;
-				Cifrado[j] = Repeticiones + '0';
+				cipher_str[j] = char_repeat_counter + '0';
 				j++;
-				Repeticiones = 1;
+				char_repeat_counter = 1;
 			}
 			else
 			{
-				Cifrado[j] = caracter;
+				cipher_str[j] = character;
 				j++;
 			}
 		}
 	}
 
-	Cifrado[j] = '\0';
-	/**printf("%s",Cifrado);*/
+	cipher_str[j] = '\0';
 
 	/***************************************************************************************************/
 	/*** Guardar Resultado en un TXT *******************************************************************/
 	/***************************************************************************************************/
 	loading_animation();
-	system("cls");
+	clean_screen();
 	printf(" Mensaje Cifrado:\n");
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < input_length; i++)
 	{
-		printf("%c", Cifrado[i]);
+		printf("%c", cipher_str[i]);
 	}
 
-	if(!save_text_to_file(Cifrado)){
+	if (!save_text_to_file(cipher_str))
+	{
 		printf("Error saving message.txt");
 	}
 	return 0;
@@ -1232,36 +1222,29 @@ int run_length_encryption()
 
 int simple_decryption()
 {
-	char lectura[910], descifrar[910];
-	int decimalC[910];
-	int ichar, i;
+	char input_str[910], decrypted_str[910];
+	int input_length, i;
 
 	/******************ABRE ARCHIVO TXT ************************************************/
 	doc = fopen("mensaje.txt", "r");
 
 	if (doc == NULL)
 	{
-		printf("\n\t\t\tARCHIVO NO ENCONTRADO!\n\n Asegurese de poner el arvhivo 'mensaje.txt' en la carpeta del programa");
+		printf("\n\t\t\tARCHIVO NO ENCONTRADO!\n\n Asegurese de poner el archivo 'mensaje.txt' en la carpeta del programa");
 		return 1; /** Regresa a menu */
 	}
 
-	fgets(lectura, 910, doc);
-	/**fscanf(doc,"%s\0",lectura);*/
-	/**printf("%s\n",lectura);                     ** PRUEBA */
+	fgets(input_str, 910, doc);
 	fclose(doc);
-	/*********** Termina lectura de archivo ahora podemos usar Lectura[]; para descifrar */
 	/*************************************************************************************/
 
-	ichar = strlen(lectura);
-	/**printf("Numero de Caracteres %d\n",ichar);  ** PRUEBA */
-
+	input_length = strlen(input_str);
 	i = 0;
 
-	while (i <= ichar - 1)
+	while (i <= input_length - 1)
 	{
-		decimalC[i] = lectura[i];
-		descifrar[i] = decimalC[i] - 3;
-		printf("%c", descifrar[i]);
+		decrypted_str[i] = input_str[i] - 3;
+		printf("%c", decrypted_str[i]);
 		i++;
 	}
 
@@ -1270,9 +1253,9 @@ int simple_decryption()
 
 int run_length_decryption()
 {
-	char lectura[910], descifrar[910];
-	int ichar, i, iDescifrar = 0, icaracteres, j;
-	char caracterTemp;
+	char input_str[910], decrypted_str[910];
+	int input_length, decrypt_counter = 0, char_counter;
+	char temp_char;
 
 	/******************ABRE ARCHIVO TXT ************************************************/
 	doc = fopen("mensaje.txt", "r");
@@ -1283,39 +1266,34 @@ int run_length_decryption()
 		return 1; /** Regresa a menu */
 	}
 
-	fgets(lectura, 910, doc);
-	/**fscanf(doc,"%s\0",&lectura);*/
-	/**printf("%s\n",lectura);                     ** PRUEBA */
+	fgets(input_str, 910, doc);
 	fclose(doc);
-	/*********** Termina lectura de archivo ahora podemos usar Lectura[]; para descifrar */
 
-	ichar = strlen(lectura);
-	/**printf("Numero de Caracteres %d\n",ichar);  ** PRUEBA */
+	input_length = strlen(input_str);
+	int i, j;
 
-	for (i = 0; i <= ichar; i++)
+	for (i = 0; i <= input_length; i++)
 	{
-		if (lectura[i] == '#')
+		if (input_str[i] == '#')
 		{
-			i++;						   /**Aumenta un espacio en el vector para leer la letra despues del signo # */
-			caracterTemp = lectura[i];	   /** lee la letra comprimida */
-			i++;						   /**Aumenta un espacio para leer el numero de veces que se repetira */
-			icaracteres = lectura[i] - 48; /** se guarda numero de veces en un entero */
+			i++;							  /**Aumenta un espacio en el vector para leer la letra despues del signo # */
+			temp_char = input_str[i];		  /** lee la letra comprimida */
+			i++;							  /**Aumenta un espacio para leer el numero de veces que se repetira */
+			char_counter = input_str[i] - 48; /** se guarda numero de veces en un entero */
 			/** menos 48 porque en ASCII es donde comienzan los numeros del 0 al 9 */
 
-			/**printf("\n( %d )",icaracteres);  ** Prueba para saber si funciona */
-
-			for (j = 0; j < icaracteres; j++)
+			for (j = 0; j < char_counter; j++)
 			{
-				descifrar[iDescifrar] = caracterTemp;
-				printf("%c", caracterTemp);
-				iDescifrar++;
+				decrypted_str[decrypt_counter] = temp_char;
+				printf("%c", temp_char);
+				decrypt_counter++;
 			}
 		}
 		else
 		{
-			descifrar[iDescifrar] = lectura[i];
-			printf("%c", descifrar[iDescifrar]);
-			iDescifrar++;
+			decrypted_str[decrypt_counter] = input_str[i];
+			printf("%c", decrypted_str[decrypt_counter]);
+			decrypt_counter++;
 		}
 	}
 
@@ -1324,74 +1302,56 @@ int run_length_decryption()
 
 int xor_encryption()
 {
-	char ch, go_back_to_menu = 0, Cifrado[910];
-	int i = 0, y = 9, x = 3;
+	char go_back_to_menu = 0, cipher_str[910];
+	int i = 0;
 
 	/**variables de algoritmo XOR*/
-	int ichar, cadena_convert_decimal[910], j;
-	int Binario_8bit_ASCII[7], Binario_Invertido[7], resto, contadorbin, contador_Almacen;
-	/**int contador_Salto_linea;*/
-	int Almacen_Binario[910][8];
-	int clave[8], claveaux, CifradoBin[910][8];
-	int suma, binTemp, decimal;
+	int input_length, cadena_convert_decimal[910], j;
+	int binary_8bit_ascii[7], inverted_binary[7], remainder, bin_counter, store_counter;
+	int binary_store[910][8];
+	int clave[8], claveaux, cipher_binary[910][8];
+	int decimal_storage, temp_binary, decimal;
 	/************************************/
 
 	/** Read text*/
 	char *cadena = input_text();
-	if(cadena && !cadena[0]){
-		return 1;				/** Return key to cancel and go back to menu */
+	if (cadena && !cadena[0])
+	{
+		return 1; /** Return key to cancel and go back to menu */
 	}
-	ichar = strlen(cadena) - 1;
+	input_length = strlen(cadena) - 1;
 
 	/***************************************************************************************************/
 	/***** Algoritmo de Cifrado XOR ********************************************************************/
 	/***************************************************************************************************/
 
-	/**printf("Binario en 8 bits\n\n");*/
-	contador_Almacen = 0;
-	for (i = 0; i < ichar; i++)
+	store_counter = 0;
+	for (i = 0; i < input_length; i++)
 	{
 		cadena_convert_decimal[i] = cadena[i];
-		/**printf("Prueba de que paso a decimal %d\n",cadena_convert_decimal[i]);*/
 
 		for (j = 0; j <= 7; j++)
 		{ /******* convierte a binario aunque invertido */
-			resto = (cadena_convert_decimal[i]) % 2;
+			remainder = (cadena_convert_decimal[i]) % 2;
 			cadena_convert_decimal[i] = (cadena_convert_decimal[i]) / 2;
-			Binario_Invertido[j] = resto;
-			/**printf("%d",resto);                  ** prueba para saber si pasa a binario */
+			inverted_binary[j] = remainder;
 		}
 
 		j = 0;
-		for (contadorbin = 7; contadorbin >= 0; contadorbin--)
+		for (bin_counter = 7; bin_counter >= 0; bin_counter--)
 		{
-			Binario_8bit_ASCII[j] = Binario_Invertido[contadorbin]; /** se cambia el invertido por el correcto */
-			/**printf("%d",Binario_8bit_ASCII[j]);             ** imprimo del 0++; para verificar que este en orden */
+			binary_8bit_ascii[j] = inverted_binary[bin_counter]; /** se cambia el invertido por el correcto */
 
 			/**Matriz bidimencional para almacenar cada serie binaria de 8 digitos por cada lugar *****************/
 			/** de los lugares recervados para cada caracter contado con ichar de cadena[];  **********************/
-			Almacen_Binario[contador_Almacen][j] = Binario_8bit_ASCII[j]; /**********************/
+			binary_store[store_counter][j] = binary_8bit_ascii[j]; /**********************/
 			/******************************************************************************************************/
 			j++;
 		}
-		contador_Almacen++; /** se aumenta 1 para pasar a otra dimension y almacenar otros 8 digitos *******/
+		store_counter++; /** se aumenta 1 para pasar a otra dimension y almacenar otros 8 digitos *******/
 	}
 
-	/** impresion de numeros binarios para verificar que se hayan guardado en la matriz   *
-		contador_Salto_linea = 0;
-		for(i = 0; i < ichar ; i++){             
-		for(j = 0; j <= 7; j++){
-		printf("%d",Almacen_Binario[i][j]);       **imprimira los binarios almacenado en cada dimension *
-		}                                             ** para verificar que han sido salvados correctamente *
-		** y posteriormente darles un uso  *
-		printf(" ");      ** espacio entre cada serie de 8 digitos*
-		contador_Salto_linea++;
-		if(contador_Salto_linea == 8){   ** si llega a 8 series de 8 digitos hace salto de linea  *
-		printf("\n\n");
-		contador_Salto_linea = 0;   ** y el contador regresa a cero para poder contar de 0 a 8*
-		}
-		}
-		********************************FIN DE CONVERSION A BINARIO ***************************************/
+	/**********************************FIN DE CONVERSION A BINARIO ***************************************/
 	printf("\nIngresa clave de cifrado binario de 8 bits\n"); /** esto debe ir despues de pedir el texto */
 	for (i = 0; i < 8; i++)
 	{
@@ -1409,74 +1369,54 @@ int xor_encryption()
 	}
 	printf("\n\nGuarda tu clave para poder descifrar el mensaje\nMuy bien! ahora presiona cualquier tecla para continuar");
 	getch();
-	system("cls");
+	clean_screen();
 	loading_animation();
-	system("cls");
+	clean_screen();
 
 	/** Ciclo para Cifrar el Binario de cada letra ***************************************/
-
 	printf("\n");
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < input_length; i++)
 	{ /** validar binario de letras con Clave para cifrar */
 		for (j = 0; j < 8; j++)
 		{
-			if (clave[j] == Almacen_Binario[i][j])
+			if (clave[j] == binary_store[i][j])
 			{ /** si son iguales se cambia valor por 0*/
-				CifradoBin[i][j] = 0;
+				cipher_binary[i][j] = 0;
 			}
 			else
 			{ /** si son diferentes se cambia valor por 1 */
-				CifradoBin[i][j] = 1;
+				cipher_binary[i][j] = 1;
 			}
 		}
 	}
 
-	/**********************************************************************************/
-	/****Imprime el Binario Cifredo como Prueba...************************************/
-	/**
-		contador_Salto_linea = 0;
-		for(i = 0; i < ichar ; i++){             
-		for(j = 0; j <= 7; j++){
-		printf("%d",CifradoBin[i][j]);       **imprimira los binarios almacenado en cada dimension *
-		}                                             ** para verificar que han sido salvados correctamente *
-		** y posteriormente darles un uso  *
-		printf(" ");      ** espacio entre cada serie de 8 digitos*
-		contador_Salto_linea++;
-		if(contador_Salto_linea == 8){   ** si llega a 8 series de 8 digitos hace salto de linea  *
-		printf("\n\n");
-		contador_Salto_linea = 0;   ** y el contador regresa a cero para poder contar de 0 a 8*
-		}
-		}  **********************************Eliminar cuando deje de servir *********************/
-	/********************************************************************************************/
-
 	/** Ciclo que convierte los Binarios Cifrados a Decimales....************************/
 
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < input_length; i++)
 	{
-		/**printf("\n");*/
-		suma = 0;
+		decimal_storage = 0;
 		for (j = 0; j < 8; j++)
 		{
-			binTemp = CifradoBin[i][j];
-			decimal = binTemp * pow(2, j);
-			suma = decimal + suma;
+			temp_binary = cipher_binary[i][j];
+			decimal = temp_binary * pow(2, j);
+			decimal_storage = decimal + decimal_storage;
 		}
-		/**printf("=%d,",suma);   ** prueba para saber si el decimal esta bien  */
-		Cifrado[i] = suma; /** se guarda en Cifrado cada numero decimal para leerlo posteriormente como caracter */
+		cipher_str[i] = decimal_storage; /** se guarda en Cifrado cada numero decimal para leerlo posteriormente como caracter */
 	}
 
-	/************ PRUEBA DE IMPRIMIR MENSAJE CIFRADO **************************************/
+	/************ IMPRIMIR MENSAJE CIFRADO **************************************/
 	printf("Mensaje Cifrado:\n");
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < input_length; i++)
 	{
-		printf("%c", Cifrado[i]);
+		printf("%c", cipher_str[i]);
 	}
 
 	/***************************************************************************************************/
 	/*** Guardar Resultado en un TXT *******************************************************************/
 	/***************************************************************************************************/
 
-	if(!save_text_to_file(Cifrado)){
+	if (!save_text_to_file(cipher_str))
+	{
 		printf("Error saving message.txt");
 	}
 
@@ -1485,13 +1425,13 @@ int xor_encryption()
 
 int xor_decryption()
 {
-	char lectura[910], descifrar[910];
-	int ichar, i;
+	char input_str[910], decrypted_str[910];
+	int char_counter, i;
 
 	/*** Variables de Descifrado XOR *************/
-	char seguro = 'n';
-	int clave[8], Binario_Invertido[8], Almacen_Binario[910][8], CifradoBin[910][8];
-	int claveaux, resto, j, contadorbin, suma, binTemp, decimal;
+	char confirmation = 'n';
+	int clave[8], inverted_binary[8], binary_store[910][8], cipher_binary[910][8];
+	int claveaux, remainder, j, binary_counter, decimal_storage, temp_binary, decimal;
 
 	/*********************************************/
 
@@ -1504,26 +1444,22 @@ int xor_decryption()
 		return 1; /** Regresa a menu */
 	}
 
-	fgets(lectura, 910, doc);
-	/**fscanf(doc,"%s\0",lectura);*/
-	printf("%s", lectura); /** PRUEBA */
-	/**getch();*/
+	fgets(input_str, 910, doc);
+	printf("%s", input_str);
 	fclose(doc);
-	/*********** Termina lectura de archivo ahora podemos usar Lectura[]; para descifrar */
 
-	ichar = strlen(lectura);
-	/**printf("Numero de Caracteres %d\n",ichar);  ** PRUEBA */
+	char_counter = strlen(input_str);
 
 	/***********************************************************************************/
 
-	while (seguro != 'y')
+	while (confirmation != 'y')
 	{
-		system("cls");
+		clean_screen();
 		printf("\n\tIngrese Clave binaria de decifrado: ");
 		for (i = 7; i >= 0; i--)
 		{
 			claveaux = getch();
-			if (claveaux == ESC)
+			if (claveaux == KEY_ESC)
 			{
 				return 1; /** si presiona ESC se regresa al menu */
 			}
@@ -1539,33 +1475,33 @@ int xor_decryption()
 			}
 		}
 		printf("\n\tEstas seguro? y/n");
-		seguro = getch();
+		confirmation = getch();
 	}
-	system("cls");
+	clean_screen();
 	decryption_animation();
-	system("cls");
+	clean_screen();
 
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < char_counter; i++)
 	{
-		/*************************************************************************************/
-		decimal = lectura[i]; /***/
+		decimal = input_str[i];
+		/** hay simbolos que lee como decimales negativos      */
 		if (decimal < 0)
-		{								/** hay simbolos que lee como decimales negativos      */
-			decimal = lectura[i] + 256; /** la condicion es para convertirlos a positivos      */
-		}								/** sumandole 256 que es el total de simbolos en ASCII */
-		/*************************************************************************************/
+		{
+			decimal = input_str[i] + 256; /** la condicion es para convertirlos a positivos      */
+		}								  /** sumandole 256 que es el total de simbolos en ASCII */
 
+		/** convierte a binario aunque invertido */
 		for (j = 0; j < 8; j++)
-		{ /******* convierte a binario aunque invertido */
-			resto = decimal % 2;
+		{
+			remainder = decimal % 2;
 			decimal = decimal / 2;
-			Binario_Invertido[j] = resto;
+			inverted_binary[j] = remainder;
 		}
 
 		j = 0;
-		for (contadorbin = 7; contadorbin >= 0; contadorbin--)
+		for (binary_counter = 7; binary_counter >= 0; binary_counter--)
 		{
-			Almacen_Binario[i][j] = Binario_Invertido[contadorbin]; /** se cambia el invertido por el correcto */
+			binary_store[i][j] = inverted_binary[binary_counter]; /** se cambia el invertido por el correcto */
 			j++;
 		}
 	}
@@ -1573,40 +1509,39 @@ int xor_decryption()
 	/** Ciclo para Descifrar el Binario de cada letra ***************************************/
 
 	printf("\n");
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < char_counter; i++)
 	{ /** validar binario de letras con Clave para cifrar */
 		for (j = 0; j < 8; j++)
 		{
-			if (clave[j] == Almacen_Binario[i][j])
+			if (clave[j] == binary_store[i][j])
 			{ /** si son iguales se cambia valor por 0*/
-				CifradoBin[i][j] = 0;
+				cipher_binary[i][j] = 0;
 			}
 			else
 			{ /** si son diferentes se cambia valor por 1 */
-				CifradoBin[i][j] = 1;
+				cipher_binary[i][j] = 1;
 			}
 		}
 	}
 
 	/********** Convierte Binario a Decimal **************************************************/
 
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < char_counter; i++)
 	{
-		suma = 0;
+		decimal_storage = 0;
 		for (j = 0; j < 8; j++)
 		{
-			binTemp = CifradoBin[i][j];
-			decimal = binTemp * (pow(2, j));
-			suma = decimal + suma;
+			temp_binary = cipher_binary[i][j];
+			decimal = temp_binary * (pow(2, j));
+			decimal_storage = decimal + decimal_storage;
 		}
-		/**printf("%d,",suma);   ** prueba para saber si el decimal esta bien */
-		descifrar[i] = suma;
+		decrypted_str[i] = decimal_storage;
 	}
 
 	printf("Mensaje Descifrado:\n");
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < char_counter; i++)
 	{
-		printf("%c", descifrar[i]);
+		printf("%c", decrypted_str[i]);
 	}
 
 	return 0;
@@ -1614,8 +1549,8 @@ int xor_decryption()
 
 int vigerene_encryption()
 {
-	char ch, go_back_to_menu = 0, Cifrado[910];
-	int i = 0, y = 9, x = 3, ichar;
+	char go_back_to_menu = 0, cipher_str[910];
+	int i = 0, input_length;
 
 	/**variables de algoritmo Vigerene*/
 
@@ -1625,11 +1560,12 @@ int vigerene_encryption()
 	/************************************/
 
 	/** Read text*/
-	char *cadena = input_text();
-	if(cadena && !cadena[0]){
-		return 1;				/** Return key to cancel and go back to menu */
+	char *input_str = input_text();
+	if (input_str && !input_str[0])
+	{
+		return 1; /** Return key to cancel and go back to menu */
 	}
-	ichar = strlen(cadena) - 1;
+	input_length = strlen(input_str) - 1;
 
 	/***************************************************************************************************/
 	/***** Algoritmo de Cifrado Vigerene ***************************************************************/
@@ -1637,38 +1573,38 @@ int vigerene_encryption()
 
 	printf("\n Clave de Cifrado(MAX: 4 letras): ");
 	scanf("%s", clave);
-	/**fgets(clave, 10, stdin);*/
 	iclave = strlen(clave);
 
-	string_to_uppercase(cadena);
+	string_to_uppercase(input_str);
 	string_to_uppercase(clave);
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < input_length; i++)
 	{
-		if (cadena[i] >= 'A' && cadena[i] <= 'Z')
+		if (input_str[i] >= 'A' && input_str[i] <= 'Z')
 		{
 			if (c == iclave)
 				c = 0;
-			Cifrado[i] = (( (cadena[i] - 65) + (clave[c] - 65) ) % 26) + 65;
+			cipher_str[i] = (((input_str[i] - 65) + (clave[c] - 65)) % 26) + 65;
 			c++;
 		}
 		else
 		{
-			Cifrado[i] = cadena[i];
+			cipher_str[i] = input_str[i];
 		}
 	}
 	loading_animation();
-	system("cls");
+	clean_screen();
 	printf("Mensaje Cifrado:\n");
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < input_length; i++)
 	{
-		printf("%c", Cifrado[i]);
+		printf("%c", cipher_str[i]);
 	}
 
 	/***************************************************************************************************/
 	/*** Guardar Resultado en un TXT *******************************************************************/
 	/***************************************************************************************************/
 
-	if(!save_text_to_file(Cifrado)){
+	if (!save_text_to_file(cipher_str))
+	{
 		printf("Error saving message.txt");
 	}
 
@@ -1677,15 +1613,13 @@ int vigerene_encryption()
 
 int vigerene_decryption()
 {
-	char lectura[910], descifrar[910];
-	int ichar, i;
+	char input_str[910], cipher_str[910];
+	int input_length, i;
 
 	/*** Variables de Descifrado Vigerene *************/
 
 	char clave[4];
 	int c, iclave;
-
-	/*********************************************/
 
 	/******************ABRE ARCHIVO TXT ************************************************/
 	doc = fopen("mensaje.txt", "r");
@@ -1698,16 +1632,14 @@ int vigerene_decryption()
 		return 1; /** Regresa a menu */
 	}
 
-	fgets(lectura, 909, doc);
+	fgets(input_str, 909, doc);
 	fclose(doc);
 
-	printf("\tMensaje leido:\n\n %s", lectura); /** PRUEBA */
+	printf("\tMensaje leido:\n\n %s", input_str);
 	gotoxy(0, 2);
 	printf(" ");
 
-	/*********** Termina lectura de archivo ahora podemos usar Lectura[]; para descifrar */
-
-	ichar = strlen(lectura);
+	input_length = strlen(input_str);
 
 	/***********************************************************************************/
 
@@ -1716,7 +1648,7 @@ int vigerene_decryption()
 	do
 	{
 		clave[i] = getch();
-		if (clave[i] == ESC)
+		if (clave[i] == KEY_ESC)
 		{
 			return 1;
 		}
@@ -1726,34 +1658,35 @@ int vigerene_decryption()
 	printf("\n\nListo! presiona Enter para continuar");
 	getch();
 
-	/**scanf("%s",clave);
-	**fgets(clave, 10, stdin);*/
-	system("cls");
+	clean_screen();
 	decryption_animation();
-	system("cls");
+	clean_screen();
 
 	iclave = strlen(clave);
 
-	string_to_uppercase(lectura);
+	string_to_uppercase(input_str);
 	string_to_uppercase(clave);
 	c = 0;
 	printf("\n\n   Mensaje Descifrado:\n\n");
 	printf(" ");
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < input_length; i++)
 	{
-		if (lectura[i] >= 'A' && lectura[i] <= 'Z')
+		if (input_str[i] >= 'A' && input_str[i] <= 'Z')
 		{
-			if (c == iclave - 1) { c = 0; }
-			descifrar[i] = ( ((lectura[i] - 65) - (clave[c] - 65)) + 26 ) % 26 + 'A';
+			if (c == iclave - 1)
+			{
+				c = 0;
+			}
+			cipher_str[i] = (((input_str[i] - 65) - (clave[c] - 65)) + 26) % 26 + 'A';
 			c++;
 		}
 		else
-			descifrar[i] = lectura[i];
+			cipher_str[i] = input_str[i];
 	}
 
-	for (i = 0; i < ichar; i++)
+	for (i = 0; i < input_length; i++)
 	{
-		printf("%c", descifrar[i]);
+		printf("%c", cipher_str[i]);
 	}
 
 	return 0;
@@ -1761,7 +1694,7 @@ int vigerene_decryption()
 
 void bye_animation()
 {
-	int x, y;
+	COORD coord;
 
 	int bye[][18] = {
 		{32, 95, 95, 95, 95, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32},
@@ -1782,47 +1715,47 @@ void bye_animation()
 		{40, 95, 41}};
 
 	/** Bye 1 */
-	for (y = 0; y < 8; y++)
+	for (coord.Y = 0; coord.Y < 8; coord.Y++)
 	{
-		gotoxy(18, 7 + y);
-		for (x = 0; x < 18; x++)
+		gotoxy(18, 7 + coord.Y);
+		for (coord.X = 0; coord.X < 18; coord.X++)
 		{
-			printf("%c", bye[y][x]);
+			printf("%c", bye[coord.Y][coord.X]);
 		}
 	}
 	/** Bye 2 */
-	for (y = 0; y < 8; y++)
+	for (coord.Y = 0; coord.Y < 8; coord.Y++)
 	{
-		gotoxy(37, 7 + y);
-		for (x = 0; x < 18; x++)
+		gotoxy(37, 7 + coord.Y);
+		for (coord.X = 0; coord.X < 18; coord.X++)
 		{
-			printf("%c", bye[y][x]);
+			printf("%c", bye[coord.Y][coord.X]);
 		}
 	}
 	/** Signo de Admiracion */
-	for (y = 0; y < 6; y++)
+	for (coord.Y = 0; coord.Y < 6; coord.Y++)
 	{
-		gotoxy(55, 7 + y);
-		for (x = 0; x < 3; x++)
+		gotoxy(55, 7 + coord.Y);
+		for (coord.X = 0; coord.X < 3; coord.X++)
 		{
-			printf("%c", admiracion[y][x]);
+			printf("%c", admiracion[coord.Y][coord.X]);
 		}
 	}
 
-	y = 0;
-	for (x = 0; x < 41; x++)
+	coord.Y = 0;
+	for (coord.X = 0; coord.X < 41; coord.X++)
 	{ /**Impresion de asteriscos horizontales*/
-		gotoxy(17 + x, 15);
+		gotoxy(17 + coord.X, 15);
 		printf("*");
-		gotoxy(58 - x, 7);
+		gotoxy(58 - coord.X, 7);
 		printf("*");
 
-		if ((x % 5 == 0))
+		if ((coord.X % 5 == 0))
 		{ /** impresion de asteriscos verticales */
-			y++;
-			gotoxy(17, 6 + y);
+			coord.Y++;
+			gotoxy(17, 6 + coord.Y);
 			printf("*");
-			gotoxy(58, 16 - y);
+			gotoxy(58, 16 - coord.Y);
 			printf("*");
 		}
 
