@@ -44,6 +44,8 @@ void clean_screen();
 /* Utils */
 void set_color_and_background(int ForgC, int BackC);
 int *gotoxy(int x, int y);
+void print_on_coord(COORD coord, char str[]);
+void print_on_raw_coord(int y, int x, char str[]);
 void string_to_uppercase(char cadena[]);
 
 /** Algoritmos De Cifrado **************/
@@ -111,6 +113,16 @@ int *gotoxy(int x, int y) /** funcion para acceder a coordenadas del plano */
 	return 0;
 }
 
+void print_on_coord(COORD coord, char str[]){
+	gotoxy(coord.X, coord.Y);
+	printf(str);
+}
+
+void print_on_raw_coord(int x, int y, char str[]){
+	gotoxy(x, y);
+	printf(str);
+}
+
 void string_to_uppercase(char cadena[])
 {
 	int i;
@@ -138,67 +150,52 @@ void draw_login_form()
 	COORD coord;
 
 	/** esquinas de recuadro de usuario*/
-	gotoxy(29, 8);
-	printf("\xC9");
-	gotoxy(50, 8);
-	printf("\xBB");
-	gotoxy(29, 11);
-	printf("\xC8");
-	gotoxy(50, 11);
-	printf("\xBC");
+	print_on_raw_coord(29, 8, "\xC9");
+	print_on_raw_coord(50, 8, "\xBB");
+	print_on_raw_coord(29, 11, "\xC8");
+	print_on_raw_coord(50, 11, "\xBC");
 
 	/** draw user input box*/
 	coord.Y = 8;
 	do
 	{ /**left side of user box*/
 		coord.Y++;
-		gotoxy(29, coord.Y);
-		printf("\xBA");
+		print_on_raw_coord(29, coord.Y, "\xBA");
 	} while (coord.Y != 10);
 
 	coord.Y = 8;
 	do
 	{ /**right side of user box*/
 		coord.Y++;
-		gotoxy(50, coord.Y);
-		printf("\xBA");
+		print_on_raw_coord(50, coord.Y, "\xBA");
 	} while (coord.Y != 10);
 
 	coord.X = 29;
 	do
 	{ /**the bottom of the user box*/
 		coord.X++;
-		gotoxy(coord.X, 11);
-		printf("\xCD");
+		print_on_raw_coord(coord.X, 11, "\xCD");
 	} while (coord.X != 49);
 
 	coord.X = 29;
 	do
 	{ /**the top of user box*/
 		coord.X++;
-		gotoxy(coord.X, 8);
-		printf("\xCD");
+		print_on_raw_coord(coord.X, 8, "\xCD");
 	} while (coord.X != 49);
 
-	gotoxy(24, 2); /**Title Enigma at the top*/
-	printf("  ___       _                    \n");
-	gotoxy(24, 3);
-	printf(" | __>._ _ <_> ___. _ _ _  ____ \n");
-	gotoxy(24, 4);
-	printf(" | _> | � || |/ . || � � |<_>  |\n");
-	gotoxy(24, 5);
-	printf(" |___>|_|_||_|\\_. ||_|_|_|<____|\xA9\n");
-	gotoxy(24, 6);
-	printf("              <___:              \n");
+	print_on_raw_coord(24, 2, "  ___       _                    \n");
+	print_on_raw_coord(24, 3, " | __>._ _ <_> ___.._ _ _  ____ \n");
+	print_on_raw_coord(24, 4, " | _> |   || |/ . || Y Y |<_>  |\n");
+	print_on_raw_coord(24, 5, " |___>|_|_||_|\\_. ||_|_|_|<____|\xA9\n");
+	print_on_raw_coord(24, 6, "              <___:              \n");
 
-	gotoxy(36, 13); /**coordenadas debajo del user box*/
-	printf("         ");
-	gotoxy(36, 14);
-	printf(" USUARIO ");
-	gotoxy(36, 15);
-	printf("         ");
+	print_on_raw_coord(36, 13, "         ");
+	print_on_raw_coord(36, 14, " USUARIO ");
+	print_on_raw_coord(36, 15, "         ");
 
-	gotoxy(32, 10); /** coordenadas para ingresar texto*/
+	/** set coords to place input pointer*/
+	gotoxy(32, 10);
 }
 
 int authentication() /** comparar contraseña de usuario para acceder al menu */
@@ -225,9 +222,8 @@ void login_screen()
 		auth_response = authentication();
 		if (auth_response != IS_LOGGED)
 		{
-			gotoxy(32, 10);
 			set_color_and_background(4, 0);
-			printf("¡Incorrecto!");
+			print_on_raw_coord(32, 10, "¡Incorrecto!");
 			Sleep(300); /**tiempo que aparecera "¡Incorrecto!" en pantalla*/
 		}
 
@@ -241,15 +237,10 @@ void draw_screen_border()
 	COORD coord;
 
 	/** Dibujar esquinas */
-
-	gotoxy(1, 1);
-	printf("\xC9");
-	gotoxy(1, 24);
-	printf("\xC8");
-	gotoxy(77, 1);
-	printf("\xBB");
-	gotoxy(77, 24);
-	printf("\xBC");
+	print_on_raw_coord(1, 1, "\xC9");
+	print_on_raw_coord(1, 24, "\xC8");
+	print_on_raw_coord(77, 1, "\xBB");
+	print_on_raw_coord(77, 24, "\xBC");
 
 	/** Dibujo del Marco o Dorde*/
 
@@ -257,32 +248,28 @@ void draw_screen_border()
 	do
 	{ /**lado superior*/
 		coord.X++;
-		gotoxy(coord.X, 1);
-		printf("\xCD");
+		print_on_raw_coord(coord.X, 1, "\xCD");
 	} while (coord.X != 76);
 
 	coord.X = 1;
 	do
 	{ /**lado inferior*/
 		coord.X++;
-		gotoxy(coord.X, 24);
-		printf("\xCD");
+		print_on_raw_coord(coord.X, 24, "\xCD");
 	} while (coord.X != 76);
 
 	coord.Y = 1;
 	do
 	{ /** lado derecho*/
 		coord.Y++;
-		gotoxy(77, coord.Y);
-		printf("\xBA");
+		print_on_raw_coord(77, coord.Y, "\xBA");
 	} while (coord.Y != 23);
 
 	coord.Y = 1;
 	do
 	{ /** lado izquierdo*/
 		coord.Y++;
-		gotoxy(1, coord.Y);
-		printf("\xBA");
+		print_on_raw_coord(1, coord.Y, "\xBA");
 	} while (coord.Y != 23);
 }
 
@@ -326,16 +313,13 @@ void main_menu()
 		/*********************************************************/
 		set_color_and_background(50, 0); /** establecer color de nuevo porque acabo de limpiar la pantalla*/
 		draw_screen_border();
-		gotoxy(10, 8);
-		printf("Encriptar");
-		gotoxy(17, 11);
-		printf("Desencriptar");
-		gotoxy(24, 14);
-		printf("Acerca de");
-		gotoxy(31, 17);
-		printf("Salir");
-		gotoxy(coord.X, coord.Y);
-		printf("-->");
+
+		print_on_raw_coord(10, 8, "Encriptar");
+		print_on_raw_coord(17, 11, "Desencriptar");
+		print_on_raw_coord(24, 14, "Acerca de");
+		print_on_raw_coord(31, 17, "Salir");
+
+		print_on_coord(coord, "-->");
 
 		pressed_key = getch();
 		if (pressed_key == -32)
@@ -378,7 +362,6 @@ void main_menu()
 			if (menu_index == ENCRYPTION)	 /** Cifrar */
 			{
 				clean_screen();
-				gotoxy(13, 13);
 				encryption_type = encryption_type_option_screen(); /** tipo seria del 1 al 4  */
 				clean_screen();
 				switch (encryption_type)
@@ -514,34 +497,31 @@ void draw_message_input_form()
 	{ /**Sombreado Superior*/
 		for (coord.Y = 2; coord.Y < 8; coord.Y++)
 		{
-			gotoxy(coord.X, coord.Y);
-			printf("\xB1");
+			print_on_coord(coord, "\xB1");
 		}
 	}
 
 	for (coord.Y = 8; coord.Y < 24; coord.Y++)
 	{
-		gotoxy(2, coord.Y);
-		printf("\xB1");
+		coord.X = 2;
+		print_on_coord(coord, "\xB1");
 	}
 
 	for (coord.Y = 8; coord.Y < 24; coord.Y++)
 	{
-		gotoxy(76, coord.Y);
-		printf("\xB1");
+		coord.X = 76;
+		print_on_coord(coord, "\xB1");
 	}
 
 	for (coord.X = 2; coord.X < 76; coord.X++)
 	{
-		gotoxy(coord.X, 23);
-		printf("\xB1"); /**Base de dise�o*/
+		coord.Y = 23;
+		print_on_coord(coord, "\xB1");
 	}
-	gotoxy(3, 5);
-	printf("         ");
-	gotoxy(3, 6);
-	printf(" MENSAJE ");
-	gotoxy(3, 7);
-	printf("         ");
+
+	print_on_raw_coord(3, 5, "         ");
+	print_on_raw_coord(3, 6, " MENSAJE ");
+	print_on_raw_coord(3, 7, "         ");
 }
 
 char *input_text() /**Funcion Para leer texto dentro del recuadro de MENSAJE*/
@@ -628,21 +608,14 @@ int encryption_type_option_screen()
 		clean_screen();
 		draw_screen_border();
 
-		gotoxy(26, 4);
-		printf("* SELECCIONA TIPO DE CIFRADO *");
-		gotoxy(24, 8);
-		printf("1.-SIMPLE");
-		gotoxy(24, 12);
-		printf("2.-XOR");
-		gotoxy(45, 8);
-		printf("3.-VIGERENE");
-		gotoxy(45, 12);
-		printf("4.-RUN LENGTH");
-		gotoxy(45, 13);
-		printf("  (COMPRESOR)");
+		print_on_raw_coord(26, 4,  "* SELECCIONA TIPO DE CIFRADO *");
+		print_on_raw_coord(24, 8,  "1.-SIMPLE");
+		print_on_raw_coord(24, 12, "2.-XOR");
+		print_on_raw_coord(45, 8,  "3.-VIGERENE");
+		print_on_raw_coord(45, 12, "4.-RUN LENGTH");
+		print_on_raw_coord(45, 13, "  (COMPRESOR)");
 
-		gotoxy(coord.X, coord.Y);
-		printf("-->");
+		print_on_coord(coord, "-->");
 
 		pressed_key = getch();
 		if (pressed_key == KEY_DOWN)
@@ -721,21 +694,15 @@ void loading_animation()
 	int loading;
 	COORD coord;
 
-	gotoxy(30, 8);
-	printf("Cifrando mensaje...");
-	gotoxy(40, 23);
-	printf("Generando archivo mensaje.txt");
+	print_on_raw_coord(30, 8,  "Cifrando mensaje...");
+	print_on_raw_coord(40, 23, "Generando archivo mensaje.txt");
 
 	draw_screen_border();
 	/** esquinas de recuadro de usuario*/
-	gotoxy(29, 9);
-	printf("\xC9");
-	gotoxy(50, 9);
-	printf("\xBB");
-	gotoxy(29, 12);
-	printf("\xC8");
-	gotoxy(50, 12);
-	printf("\xBC");
+	print_on_raw_coord(29, 9, "\xC9");
+	print_on_raw_coord(50, 9, "\xBB");
+	print_on_raw_coord(29, 12, "\xC8");
+	print_on_raw_coord(50, 12, "\xBC");
 
 	/**box*/
 
@@ -743,51 +710,42 @@ void loading_animation()
 	do
 	{ /**left side of box*/
 		coord.Y++;
-		gotoxy(29, coord.Y);
-		printf("\xBA");
+		print_on_raw_coord(29, coord.Y, "\xBA");
 	} while (coord.Y != 11);
 
 	coord.Y = 9;
 	do
 	{ /**right side of box*/
 		coord.Y++;
-		gotoxy(50, coord.Y);
-		printf("\xBA");
+		print_on_raw_coord(50, coord.Y, "\xBA");
 	} while (coord.Y != 11);
 
 	coord.X = 29;
 	do
 	{ /**the bottom of the box*/
 		coord.X++;
-		gotoxy(coord.X, 12);
-		printf("\xCD");
+		print_on_raw_coord(coord.X, 12, "\xCD");
 	} while (coord.X != 49);
 
 	coord.X = 29;
 	do
 	{ /**the top of box*/
 		coord.X++;
-		gotoxy(coord.X, 9);
-		printf("\xCD");
+		print_on_raw_coord(coord.X, 9, "\xCD");
 	} while (coord.X != 49);
 
 	/** Cargano Animacion*/
 
 	for (loading = 30; loading < 50; loading++)
 	{
-
-		gotoxy(loading, 10);
-		printf("\xDB");
-		gotoxy(loading, 11);
-		printf("\xDB");
+		print_on_raw_coord(loading, 10, "\xDB");
+		print_on_raw_coord(loading, 11, "\xDB");
 		Sleep(100);
 	}
-	gotoxy(40, 23);
-	printf("                                    "); /** borrar printf de "generando txt" */
-	gotoxy(30, 8);
-	printf("  Cifrado Exitoso! ");
-	gotoxy(20, 17);
-	printf("Presione una tecla para volver al menu.");
+
+	print_on_raw_coord(40, 23, "                                    "); /** borrar printf de "generando txt" */
+	print_on_raw_coord(30, 8, "  Cifrado Exitoso! ");
+	print_on_raw_coord(20, 17, "Presione una tecla para volver al menu.");
 	getch();
 }
 
@@ -797,28 +755,26 @@ void about_screen()
 
 	for (transition = 16; transition > 0; transition--)
 	{
+		print_on_raw_coord(24, 8,  "  ___       _                    \n");
+		print_on_raw_coord(24, 9,  " | __>._ _ <_> ___.._ _ _  ____ \n");
+		print_on_raw_coord(24, 10, " | _> |   || |/ . || Y Y |<_>  |\n");
+		print_on_raw_coord(24, 11, " |___>|_|_||_|\\_. ||_|_|_|<____|\xA9\n");
+		print_on_raw_coord(24, 12, "              <___:              \n");
 
-		gotoxy(24, 8); /**Titulo de Enigma en el centro de la pantalla*/
-		printf("  ___       _                    \n");
-		gotoxy(24, 9);
-		printf(" | __>._ _ <_> ___. _ _ _  ____ \n");
-		gotoxy(24, 10);
-		printf(" | _> | � || |/ . || � � |<_>  |\n");
-		gotoxy(24, 11);
-		printf(" |___>|_|_||_|\\_. ||_|_|_|<____|\xA9\n");
-		gotoxy(24, 12);
-		printf("              <___:              \n");
-
-		gotoxy(0, transition);
-		printf("EnigmaProject fue realizado por:\n\n -Arias Morales Marvin\n\n -Canul Flota Ricardo.\n\n -Cordova Villamil Jorge\n\n -Pool Alvarado Marco");
+		char* message = 
+			"EnigmaProject fue realizado por:\n\n"
+			" -Arias Morales Marvin\n\n"
+			" -Canul Flota Ricardo.\n\n"
+			" -Cordova Villamil Jorge\n\n"
+			" -Pool Alvarado Marco";
+		print_on_raw_coord(0, transition, message);
 		Sleep(300);
 		if (transition > 1)
 		{
 			clean_screen();
 		}
 	}
-	gotoxy(19, 18);
-	printf("Pulse una tecla para volver al menu");
+	print_on_raw_coord(19, 18, "Pulse una tecla para volver al menu");
 }
 
 void padlock_close_icon()
@@ -964,21 +920,15 @@ int decryption_type_option_screen()
 	{
 		clean_screen();
 		draw_screen_border();
-		gotoxy(26, 4);
-		printf("* SELECCIONA TIPO DE DESCIFRADO *");
-		gotoxy(24, 8);
-		printf("1.-SIMPLE");
-		gotoxy(24, 12);
-		printf("2.-XOR");
-		gotoxy(45, 8);
-		printf("3.-VIGERENE");
-		gotoxy(45, 12);
-		printf("4.-RUN LENGTH");
-		gotoxy(45, 13);
-		printf("  (DESCOMPRESOR)");
 
-		gotoxy(coord.X, coord.Y);
-		printf("-->");
+		print_on_raw_coord(26, 4, "* SELECCIONA TIPO DE DESCIFRADO *");
+		print_on_raw_coord(24, 8,  "1.-SIMPLE");
+		print_on_raw_coord(24, 12, "2.-XOR");
+		print_on_raw_coord(45, 8,  "3.-VIGERENE");
+		print_on_raw_coord(45, 12, "4.-RUN LENGTH");
+		print_on_raw_coord(45, 13, "  (COMPRESOR)");
+
+		print_on_coord(coord, "-->");
 
 		pressed_key = getch();
 		if (pressed_key == KEY_DOWN)
@@ -1050,21 +1000,16 @@ void decryption_animation()
 	int loading;
 	COORD coord;
 
-	gotoxy(30, 8);
-	printf("Descifrando mensaje...");
-	gotoxy(48, 22);
-	printf("Leyendo mensaje.txt...");
+	print_on_raw_coord(30, 8, "Descifrando mensaje...");
+	print_on_raw_coord(48, 22, "Leyendo mensaje.txt...");
 
 	draw_screen_border();
 	/** esquinas de recuadro de usuario*/
-	gotoxy(29, 9);
-	printf("\xC9");
-	gotoxy(50, 9);
-	printf("\xBB");
-	gotoxy(29, 12);
-	printf("\xC8");
-	gotoxy(50, 12);
-	printf("\xBC");
+
+	print_on_raw_coord(29, 9, "\xC9");
+	print_on_raw_coord(50, 9, "\xBB");
+	print_on_raw_coord(29, 12, "\xC8");
+	print_on_raw_coord(50, 12, "\xBC");
 
 	/**box*/
 
@@ -1072,46 +1017,41 @@ void decryption_animation()
 	do
 	{ /**left side of box*/
 		coord.Y++;
-		gotoxy(29, coord.Y);
-		printf("\xBA");
+		print_on_raw_coord(29, coord.Y, "\xBA");
 	} while (coord.Y != 11);
 
 	coord.Y = 9;
 	do
 	{ /**right side of box*/
 		coord.Y++;
-		gotoxy(50, coord.Y);
-		printf("\xBA");
+		print_on_raw_coord(50, coord.Y, "\xBA");
 	} while (coord.Y != 11);
 
 	coord.X = 29;
 	do
 	{ /**the bottom of the box*/
 		coord.X++;
-		gotoxy(coord.X, 12);
-		printf("\xCD");
+		print_on_raw_coord(coord.X, 12, "\xCD");
 	} while (coord.X != 49);
 
 	coord.X = 29;
 	do
 	{ /**the top of box*/
 		coord.X++;
-		gotoxy(coord.X, 9);
-		printf("\xCD");
+		print_on_raw_coord(coord.X, 9, "\xCD");
 	} while (coord.X != 49);
 
 	/** Cargando Animacion*/
 
 	for (loading = 30; loading < 50; loading++)
 	{
-		gotoxy(loading, 10);
-		printf("\xDB");
-		gotoxy(loading, 11);
-		printf("\xDB");
+		print_on_raw_coord(loading, 10, "\xDB");
+		print_on_raw_coord(loading, 11, "\xDB");
 		Sleep(100);
 	}
+
+	print_on_raw_coord(30, 8, "  Archivo Descifrado ");
 	gotoxy(30, 8);
-	printf("  Archivo Descifrado ");
 }
 
 int simple_encryption()
@@ -1636,8 +1576,7 @@ int vigerene_decryption()
 	fclose(doc);
 
 	printf("\tMensaje leido:\n\n %s", input_str);
-	gotoxy(0, 2);
-	printf(" ");
+	print_on_raw_coord(0, 2, " ");
 
 	input_length = strlen(input_str);
 
@@ -1745,18 +1684,14 @@ void bye_animation()
 	coord.Y = 0;
 	for (coord.X = 0; coord.X < 41; coord.X++)
 	{ /**Impresion de asteriscos horizontales*/
-		gotoxy(17 + coord.X, 15);
-		printf("*");
-		gotoxy(58 - coord.X, 7);
-		printf("*");
+		print_on_raw_coord(17 + coord.X, 15, "*");
+		print_on_raw_coord(58 - coord.X, 7, "*");
 
 		if ((coord.X % 5 == 0))
 		{ /** impresion de asteriscos verticales */
 			coord.Y++;
-			gotoxy(17, 6 + coord.Y);
-			printf("*");
-			gotoxy(58, 16 - coord.Y);
-			printf("*");
+			print_on_raw_coord(17, 6 + coord.Y, "*");
+			print_on_raw_coord(58, 16 - coord.Y, "*");
 		}
 
 		Sleep(50);
