@@ -1,3 +1,4 @@
 *.exe
 mensaje.txt
 .vscode/settings.json
+*/**.exe
