@@ -43,6 +43,20 @@ int simple_encryption(void)
 	return 0;
 }
 
+void simple_encrypt_str(const char *input, char *output, int len)
+{
+	for (int i = 0; i < len; i++)
+		output[i] = input[i] + 3;
+	output[len] = '\0';
+}
+
+void simple_decrypt_str(const char *input, char *output, int len)
+{
+	for (int i = 0; i < len; i++)
+		output[i] = input[i] - 3;
+	output[len] = '\0';
+}
+
 int simple_decryption(void)
 {
 	char input_str[BUFFER_SIZE];

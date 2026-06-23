@@ -90,4 +90,17 @@ int run_length_decryption(void);
 int xor_decryption(void);
 int vigenere_decryption(void);
 
+/** Testable Algorithm Functions (pure logic, no I/O) **/
+void simple_encrypt_str(const char *input, char *output, int len);
+void simple_decrypt_str(const char *input, char *output, int len);
+void xor_decimal_to_binary(int decimal, int binary[8]);
+int xor_binary_to_decimal(const int binary[8]);
+void xor_apply_key(const int binary[8], const int key[8], int result[8]);
+void xor_encrypt_str(const char *input, const int key[8], char *output, int len);
+void xor_decrypt_str(const char *input, const int key[8], char *output, int len);
+void vigenere_encrypt_str(const char *input, const char *key, char *output, int len);
+void vigenere_decrypt_str(const char *input, const char *key, char *output, int len);
+int run_length_encode_str(const char *input, char *output);
+int run_length_decode_str(const char *input, char *output);
+
 #endif // ENIGMA_H

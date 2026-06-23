@@ -148,3 +148,45 @@ int vigenere_decryption(void)
 
 	return 0;
 }
+
+void vigenere_encrypt_str(const char *input, const char *key, char *output, int len)
+{
+	int key_len = strlen(key);
+	int c = 0;
+	for (int i = 0; i < len; i++)
+	{
+		if (input[i] >= 'A' && input[i] <= 'Z')
+		{
+			if (c == key_len)
+				c = 0;
+			output[i] = (((input[i] - 'A') + (key[c] - 'A')) % 26) + 'A';
+			c++;
+		}
+		else
+		{
+			output[i] = input[i];
+		}
+	}
+	output[len] = '\0';
+}
+
+void vigenere_decrypt_str(const char *input, const char *key, char *output, int len)
+{
+	int key_len = strlen(key);
+	int c = 0;
+	for (int i = 0; i < len; i++)
+	{
+		if (input[i] >= 'A' && input[i] <= 'Z')
+		{
+			if (c == key_len)
+				c = 0;
+			output[i] = (((input[i] - 'A') - (key[c] - 'A')) + 26) % 26 + 'A';
+			c++;
+		}
+		else
+		{
+			output[i] = input[i];
+		}
+	}
+	output[len] = '\0';
+}

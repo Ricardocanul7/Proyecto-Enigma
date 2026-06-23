@@ -26,6 +26,17 @@ OBJECT_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(SOURCE_FILES))
 
 TARGET = $(BUILD_DIR)/EnigmaProject.exe
 
+# Test files
+TEST_SOURCE_FILES = \
+    tests/test_main.c \
+    tests/test_simple.c \
+    tests/test_xor.c \
+    tests/test_vigenere.c \
+    tests/test_run_length.c
+
+TEST_OBJECT_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(TEST_SOURCE_FILES))
+TEST_TARGET = $(BUILD_DIR)/EnigmaTests.exe
+
 # Regla por defecto: compila todo
 all: $(TARGET)
 
@@ -77,8 +88,19 @@ $(BUILD_DIR)/src/algorithms/vigenere.o: src/algorithms/vigenere.c include/enigma
 	@mkdir -p $(BUILD_DIR)/src/algorithms
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
+# Test rules
+$(BUILD_DIR)/tests/%.o: tests/%.c include/enigma.h tests/test.h | $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/tests
+	$(CXX) $(INCLUDE_PATH) -c $< -o $@
+
+$(TEST_TARGET): $(TEST_OBJECT_FILES) $(filter-out $(BUILD_DIR)/main.o,$(OBJECT_FILES)) | $(BUILD_DIR)
+	$(CXX) $(INCLUDE_PATH) $^ -o $@
+
+test: $(TEST_TARGET)
+	$(TEST_TARGET)
+
 # Limpia el directorio build
 clean:
 	rm -rf $(BUILD_DIR)
 
-.PHONY: all clean
+.PHONY: all clean test

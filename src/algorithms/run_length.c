@@ -107,3 +107,58 @@ int run_length_decryption(void)
 
 	return 0;
 }
+
+int run_length_encode_str(const char *input, char *output)
+{
+	int len = strlen(input);
+	int j = 0;
+	int repeat = 1;
+
+	for (int i = 0; i < len; i++)
+	{
+		if (input[i] == input[i + 1])
+		{
+			repeat++;
+		}
+		else
+		{
+			if (i > 0 && input[i] == input[i - 1])
+			{
+				output[j++] = '#';
+				output[j++] = input[i];
+				output[j++] = repeat + '0';
+				repeat = 1;
+			}
+			else
+			{
+				output[j++] = input[i];
+			}
+		}
+	}
+	output[j] = '\0';
+	return j;
+}
+
+int run_length_decode_str(const char *input, char *output)
+{
+	int len = strlen(input);
+	int j = 0;
+
+	for (int i = 0; i < len; i++)
+	{
+		if (input[i] == '#')
+		{
+			char ch = input[i + 1];
+			int count = input[i + 2] - '0';
+			for (int k = 0; k < count; k++)
+				output[j++] = ch;
+			i += 2;
+		}
+		else
+		{
+			output[j++] = input[i];
+		}
+	}
+	output[j] = '\0';
+	return j;
+}

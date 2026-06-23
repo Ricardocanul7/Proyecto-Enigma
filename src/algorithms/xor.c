@@ -207,3 +207,46 @@ int xor_decryption(void)
 
 	return 0;
 }
+
+void xor_decimal_to_binary(int decimal, int binary[8])
+{
+	int inverted[8];
+	for (int j = 0; j < 8; j++)
+	{
+		inverted[j] = decimal % 2;
+		decimal = decimal / 2;
+	}
+	for (int j = 0; j < 8; j++)
+		binary[j] = inverted[7 - j];
+}
+
+int xor_binary_to_decimal(const int binary[8])
+{
+	int decimal = 0;
+	for (int j = 0; j < 8; j++)
+		decimal += binary[j] * (1 << (7 - j));
+	return decimal;
+}
+
+void xor_apply_key(const int binary[8], const int key[8], int result[8])
+{
+	for (int j = 0; j < 8; j++)
+		result[j] = (key[j] == binary[j]) ? 0 : 1;
+}
+
+void xor_encrypt_str(const char *input, const int key[8], char *output, int len)
+{
+	for (int i = 0; i < len; i++)
+	{
+		int binary[8], xored[8];
+		xor_decimal_to_binary((unsigned char)input[i], binary);
+		xor_apply_key(binary, key, xored);
+		output[i] = (char)xor_binary_to_decimal(xored);
+	}
+	output[len] = '\0';
+}
+
+void xor_decrypt_str(const char *input, const int key[8], char *output, int len)
+{
+	xor_encrypt_str(input, key, output, len);
+}
