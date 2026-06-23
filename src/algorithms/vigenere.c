@@ -9,36 +9,45 @@
 
 int vigenere_encryption(void)
 {
-	char go_back_to_menu = 0, cipher_str[910];
-	int i = 0, input_length;
+	char cipher_str[BUFFER_SIZE];
+	int i, input_length;
 
-	/**Vigenere algorithm variables*/
-	char password[4];
+	char password[5];
 	int c = 0, password_length;
 
-	/** Read text*/
 	char *input_str = input_text();
-	if (input_str && !input_str[0])
-	{
+	if (!input_str)
 		return 1;
-	}
-	input_length = strlen(input_str) - 1;
 
-	/***** Vigenere Encryption Algorithm */
+	input_length = strlen(input_str);
 
 	printf("\n Encryption Key (MAX: 4 letters): ");
-	scanf("%s", password);
+	for (i = 0; i < 4; i++)
+	{
+		password[i] = getch();
+		if (password[i] == KEY_ESC)
+		{
+			free_text_input(input_str);
+			return 1;
+		}
+		if (password[i] == '\r')
+			break;
+		printf("%c", password[i]);
+	}
+	password[i] = '\0';
 	password_length = strlen(password);
 
 	string_to_uppercase(input_str);
 	string_to_uppercase(password);
+
+	c = 0;
 	for (i = 0; i < input_length; i++)
 	{
 		if (input_str[i] >= 'A' && input_str[i] <= 'Z')
 		{
 			if (c == password_length)
 				c = 0;
-			cipher_str[i] = (((input_str[i] - 65) + (password[c] - 65)) % 26) + 65;
+			cipher_str[i] = (((input_str[i] - 'A') + (password[c] - 'A')) % 26) + 'A';
 			c++;
 		}
 		else
@@ -46,6 +55,8 @@ int vigenere_encryption(void)
 			cipher_str[i] = input_str[i];
 		}
 	}
+	cipher_str[i] = '\0';
+
 	loading_animation();
 	clean_screen();
 	printf("Encrypted Message:\n");
@@ -59,21 +70,19 @@ int vigenere_encryption(void)
 		printf("Error saving message.txt");
 	}
 
-	return go_back_to_menu;
+	free_text_input(input_str);
+	return 0;
 }
 
-int vigerene_decryption(void)
+int vigenere_decryption(void)
 {
-	char input_str[910], cipher_str[910];
+	char input_str[BUFFER_SIZE], cipher_str[BUFFER_SIZE];
 	int input_length, i;
 
-	/*** Vigenere Decryption Variables */
-	char password[4];
+	char password[5];
 	int c, password_length;
 
-	/******************OPEN TXT FILE ************************************************/
-	doc = fopen("mensaje.txt", "r");
-
+	FILE *doc = fopen("mensaje.txt", "r");
 	if (doc == NULL)
 	{
 		printf("\n\t\t\tFILE NOT FOUND!\n\n Make sure 'mensaje.txt' is in the program folder");
@@ -82,7 +91,7 @@ int vigerene_decryption(void)
 		return 1;
 	}
 
-	fgets(input_str, 909, doc);
+	fgets(input_str, BUFFER_SIZE, doc);
 	fclose(doc);
 
 	printf("\tRead message:\n\n %s", input_str);
@@ -96,12 +105,14 @@ int vigerene_decryption(void)
 	{
 		password[i] = getch();
 		if (password[i] == KEY_ESC)
-		{
 			return 1;
-		}
+		if (password[i] == '\r')
+			break;
 		printf("%c", password[i]);
 		i++;
-	} while (i != 4);
+	} while (i < 4);
+	password[i] = '\0';
+
 	printf("\n\nReady! Press Enter to continue");
 	getch();
 
@@ -121,15 +132,14 @@ int vigerene_decryption(void)
 		if (input_str[i] >= 'A' && input_str[i] <= 'Z')
 		{
 			if (c == password_length)
-			{
 				c = 0;
-			}
-			cipher_str[i] = (((input_str[i] - 65) - (password[c] - 65)) + 26) % 26 + 'A';
+			cipher_str[i] = (((input_str[i] - 'A') - (password[c] - 'A')) + 26) % 26 + 'A';
 			c++;
 		}
 		else
 			cipher_str[i] = input_str[i];
 	}
+	cipher_str[i] = '\0';
 
 	for (i = 0; i < input_length; i++)
 	{

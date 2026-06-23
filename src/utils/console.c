@@ -12,26 +12,25 @@ void set_color_and_background(int ForgC, int BackC)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), wColor);
 }
 
-int *gotoxy(int x, int y)
+void gotoxy(int x, int y)
 {
 	HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD dwPos;
 	dwPos.X = x;
 	dwPos.Y = y;
 	SetConsoleCursorPosition(hcon, dwPos);
-	return 0;
 }
 
-void print_on_coord(COORD coord, char str[])
+void print_on_coord(COORD coord, const char str[])
 {
 	gotoxy(coord.X, coord.Y);
-	printf(str);
+	printf("%s", str);
 }
 
-void print_on_raw_coord(int x, int y, char str[])
+void print_on_raw_coord(int x, int y, const char str[])
 {
 	gotoxy(x, y);
-	printf(str);
+	printf("%s", str);
 }
 
 void string_to_uppercase(char cadena[])

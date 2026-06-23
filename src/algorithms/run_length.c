@@ -8,19 +8,16 @@
 
 int run_length_encryption(void)
 {
-	char input_length;
+	int input_length;
 	int char_repeat_counter;
-	char cipher_str[910], character;
+	char cipher_str[BUFFER_SIZE], character;
 
-	/** Read text*/
 	char *input_str = input_text();
-	if (input_str && !input_str[0])
-	{
-		return 1; /** Return key to cancel and go back to menu */
-	}
-	input_length = strlen(input_str) - 1;
+	if (!input_str)
+		return 1;
 
-	/***** Run Length Encryption Algorithm */
+	input_length = strlen(input_str);
+
 	char_repeat_counter = 1;
 	int i = 0, j = 0;
 	for (i = 0; i < input_length; i++)
@@ -32,20 +29,16 @@ int run_length_encryption(void)
 		}
 		else
 		{
-			if (input_str[i] == input_str[i - 1])
+			if (i > 0 && input_str[i] == input_str[i - 1])
 			{
-				cipher_str[j] = '#';
-				j++;
-				cipher_str[j] = character;
-				j++;
-				cipher_str[j] = char_repeat_counter + '0';
-				j++;
+				cipher_str[j++] = '#';
+				cipher_str[j++] = character;
+				cipher_str[j++] = char_repeat_counter + '0';
 				char_repeat_counter = 1;
 			}
 			else
 			{
-				cipher_str[j] = character;
-				j++;
+				cipher_str[j++] = character;
 			}
 		}
 	}
@@ -55,7 +48,7 @@ int run_length_encryption(void)
 	loading_animation();
 	clean_screen();
 	printf(" Encrypted Message:\n");
-	for (i = 0; i < input_length; i++)
+	for (i = 0; i < j; i++)
 	{
 		printf("%c", cipher_str[i]);
 	}
@@ -64,44 +57,43 @@ int run_length_encryption(void)
 	{
 		printf("Error saving message.txt");
 	}
+
+	free_text_input(input_str);
 	return 0;
 }
 
 int run_length_decryption(void)
 {
-	char input_str[910], decrypted_str[910];
+	char input_str[BUFFER_SIZE], decrypted_str[BUFFER_SIZE];
 	int input_length, decrypt_counter = 0, char_counter;
 	char temp_char;
 
-	/******************OPEN TXT FILE ************************************************/
-	doc = fopen("mensaje.txt", "r");
-
+	FILE *doc = fopen("mensaje.txt", "r");
 	if (doc == NULL)
 	{
 		printf("\n\t\t\tFILE NOT FOUND!\n\n Make sure 'mensaje.txt' is in the program folder");
 		return 1;
 	}
 
-	fgets(input_str, 910, doc);
+	fgets(input_str, BUFFER_SIZE, doc);
 	fclose(doc);
 
 	input_length = strlen(input_str);
 	int i, j;
 
-	for (i = 0; i <= input_length; i++)
+	for (i = 0; i < input_length; i++)
 	{
 		if (input_str[i] == '#')
 		{
 			i++;
 			temp_char = input_str[i];
 			i++;
-			char_counter = input_str[i] - 48;
+			char_counter = input_str[i] - '0';
 
 			for (j = 0; j < char_counter; j++)
 			{
-				decrypted_str[decrypt_counter] = temp_char;
+				decrypted_str[decrypt_counter++] = temp_char;
 				printf("%c", temp_char);
-				decrypt_counter++;
 			}
 		}
 		else
@@ -111,6 +103,7 @@ int run_length_decryption(void)
 			decrypt_counter++;
 		}
 	}
+	decrypted_str[decrypt_counter] = '\0';
 
 	return 0;
 }

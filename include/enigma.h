@@ -16,12 +16,15 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+/** Buffer size for text input and processing **/
+#define BUFFER_SIZE 910
+
 /** Encryption Type Enums **/
 typedef enum EncryptionTypes
 {
 	SIMPLE = 1,
 	XOR = 2,
-	VIGERENE = 3,
+	VIGENERE = 3,
 	RUN_LENGTH = 4
 } EncryptionType;
 
@@ -43,13 +46,18 @@ typedef enum MenuOptions
 	EXIT
 } MenuOption;
 
-/** Utility Function Prototypes **/
+/** Console/Utility Function Prototypes **/
 void set_color_and_background(int ForgC, int BackC);
-int *gotoxy(int x, int y);
-void print_on_coord(COORD coord, char str[]);
-void print_on_raw_coord(int x, int y, char str[]);
+void gotoxy(int x, int y);
+void print_on_coord(COORD coord, const char str[]);
+void print_on_raw_coord(int x, int y, const char str[]);
 void string_to_uppercase(char cadena[]);
 void clean_screen(void);
+
+/** File I/O Function Prototypes **/
+char *input_text(void);
+bool save_text_to_file(const char str[]);
+void free_text_input(char *text);
 
 /** Screen Function Prototypes **/
 void draw_login_form(void);
@@ -57,8 +65,7 @@ int authentication(void);
 void login_screen(void);
 void draw_screen_border(void);
 void main_menu(void);
-int encryption_type_option_screen(void);
-int decryption_type_option_screen(void);
+int algorithm_option_screen(const char *title);
 void draw_message_input_form(void);
 void loading_animation(void);
 void decryption_animation(void);
@@ -81,13 +88,6 @@ int vigenere_encryption(void);
 int simple_decryption(void);
 int run_length_decryption(void);
 int xor_decryption(void);
-int vigerene_decryption(void);
-
-/** Input/File Function Prototypes **/
-char *input_text(void);
-bool save_text_to_file(char str[]);
-
-/* Global Variables */
-extern FILE *doc;
+int vigenere_decryption(void);
 
 #endif // ENIGMA_H

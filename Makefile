@@ -1,8 +1,8 @@
 # Makefile - Proyecto Enigma
-# Universidad Autónoma de Yucatán
-# Compila la aplicación EnigmaProject
+# Universidad Autonoma de Yucatan
+# Compila la aplicacion EnigmaProject
 
-# Detecta automáticamente el compilador disponible
+# Detecta automaticamente el compilador disponible
 CXX = gcc
 INCLUDE_PATH = -Iinclude
 
@@ -12,6 +12,7 @@ BUILD_DIR = build
 SOURCE_FILES = \
     main.c \
     src/utils/console.c \
+    src/utils/file_io.c \
     src/ui/screens.c \
     src/ui/icons.c \
     src/ui/animations.c \
@@ -41,6 +42,10 @@ $(BUILD_DIR)/main.o: main.c include/enigma.h | $(BUILD_DIR)
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
 $(BUILD_DIR)/src/utils/console.o: src/utils/console.c include/enigma.h | $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/src/utils
+	$(CXX) $(INCLUDE_PATH) -c $< -o $@
+
+$(BUILD_DIR)/src/utils/file_io.o: src/utils/file_io.c include/enigma.h | $(BUILD_DIR)
 	@mkdir -p $(BUILD_DIR)/src/utils
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
