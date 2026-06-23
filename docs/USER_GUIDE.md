@@ -2,7 +2,7 @@
 
 ## Inicio
 
-Al ejecutar `EnigmaProject.exe`, aparecerá la pantalla de login.
+Al ejecutar `build/EnigmaProject.exe`, aparecerá la pantalla de login.
 
 ### Login
 

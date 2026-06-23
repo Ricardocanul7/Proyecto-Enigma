@@ -201,3 +201,5 @@ Declarada en `simple.c` y referenciada via `extern` en `enigma.h`.
 - **Funciones de retorno:** `1` (true) para regresar al menú, `0` (false) para continuar
 - **Teclas:** Definidas como constantes `KEY_*` en el header
 - **Coordenadas:** Sistema de coordenadas de consola Windows (x=columna, y=fila)
+- **Compilación:** Los archivos objeto y el ejecutable se generan en `build/`, excluido del repositorio via `.gitignore`
+- **Backup:** El código fuente original monolítico se mantiene en `archive/` como referencia

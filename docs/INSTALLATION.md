@@ -34,13 +34,13 @@ make
 
 3. Ejecutar:
 ```bash
-./EnigmaProject.exe
+./build/EnigmaProject.exe
 ```
 
 ### Opción 2: Compilar con GCC directamente
 
 ```bash
-gcc -Iinclude -O2 main.c src/utils/console.c src/ui/screens.c src/ui/icons.c src/ui/animations.c src/algorithms/simple.c src/algorithms/run_length.c src/algorithms/xor.c src/algorithms/vigenere.c -o EnigmaProject.exe
+gcc -Iinclude -O2 main.c src/utils/console.c src/ui/screens.c src/ui/icons.c src/ui/animations.c src/algorithms/simple.c src/algorithms/run_length.c src/algorithms/xor.c src/algorithms/vigenere.c -o build/EnigmaProject.exe
 ```
 
 ### Opción 3: Compilar con Visual C++ (cl.exe)
@@ -48,12 +48,12 @@ gcc -Iinclude -O2 main.c src/utils/console.c src/ui/screens.c src/ui/icons.c src
 Desde el símbolo del sistema de Developer:
 
 ```batch
-cl main.c src\utils\console.c src\ui\screens.c src\ui\icons.c src\ui\animations.c src\algorithms\simple.c src\algorithms\run_length.c src\algorithms\xor.c src\algorithms\vigenere.c /Fe:EnigmaProject.exe /Iinclude
+cl main.c src\utils\console.c src\ui\screens.c src\ui\icons.c src\ui\animations.c src\algorithms\simple.c src\algorithms\run_length.c src\algorithms\xor.c src\algorithms\vigenere.c /Fe:build\EnigmaProject.exe /Iinclude
 ```
 
 ## Verificación
 
-1. Ejecutar `EnigmaProject.exe`
+1. Ejecutar `build/EnigmaProject.exe`
 2. Aparecerá la pantalla de login
 3. Ingresar el usuario: **FMAT**
 4. Si el menú principal aparece correctamente, la compilación fue exitosa
@@ -86,11 +86,13 @@ Después de compilar, se generará:
 
 ```
 Proyecto-Enigma/
-├── EnigmaProject.exe    ← Ejecutable generado
+├── build/
+│   └── EnigmaProject.exe  ← Ejecutable generado
 ├── main.c
 ├── Makefile
 ├── include/
 ├── src/
+├── archive/
 └── docs/
 ```
 
