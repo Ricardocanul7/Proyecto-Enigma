@@ -1,58 +1,58 @@
-# Algoritmos de Cifrado
+# Encryption Algorithms
 
-Este documento describe detalladamente los cuatro algoritmos de cifrado y descifrado implementados en el proyecto.
+This document describes in detail the four encryption and decryption algorithms implemented in the project.
 
 ---
 
-## 1. Cifrado Simple (César)
+## 1. Simple Encryption (Caesar)
 
-**Tipo:** Sustitución monoalfabética
-**Complejidad:** Baja
-**Archivo:** `src/algorithms/simple.c`
+**Type:** Monoalphabetic substitution
+**Complexity:** Low
+**File:** `src/algorithms/simple.c`
 
-### Principio
+### Principle
 
-Desplaza cada carácter del mensaje 3 posiciones hacia adelante en la tabla ASCII. Para descifrar, se realiza la operación inversa (restar 3).
+Shifts each character of the message 3 positions forward in the ASCII table. To decrypt, the inverse operation is performed (subtract 3).
 
-### Cifrado
+### Encryption
 
 ```
-Mensaje original:  H O L A
+Original message:  H O L A
 ASCII:             72 79 76 65
 +3:                75 82 79 68
-Resultado:         K R O D
+Result:            K R O D
 ```
 
-**Fórmula:** `cifrado[i] = original[i] + 3`
+**Formula:** `encrypted[i] = original[i] + 3`
 
-### Descifrado
+### Decryption
 
-**Fórmula:** `descifrado[i] = cifrado[i] - 3`
+**Formula:** `decrypted[i] = encrypted[i] - 3`
 
-### Ejemplo
+### Example
 
-| Entrada | Salida |
-|---------|--------|
+| Input | Output |
+|-------|--------|
 | `HOLA`  | `KROD` |
 | `hola`  | `krod` |
 
-### Limitaciones
+### Limitations
 
-- Solo desplaza 3 posiciones (no es un cifrado César configurable)
-- No maneja caracteres especiales de forma diferente
-- Es un cifrado trivial, no apto para uso real de seguridad
+- Only shifts 3 positions (not a configurable Caesar cipher)
+- Does not handle special characters differently
+- It is a trivial cipher, not suitable for real security use
 
 ---
 
-## 2. Cifrado XOR
+## 2. XOR Encryption
 
-**Tipo:** Operación bitwise
-**Complejidad:** Media
-**Archivo:** `src/algorithms/xor.c`
+**Type:** Bitwise operation
+**Complexity:** Medium
+**File:** `src/algorithms/xor.c`
 
-### Principio
+### Principle
 
-Opera cada bit del mensaje con una clave binaria de 8 bits usando la operación XOR (OR exclusivo):
+Operates each bit of the message with an 8-bit binary key using the XOR operation (exclusive OR):
 
 | A | B | A XOR B |
 |---|---|---------|
@@ -61,191 +61,191 @@ Opera cada bit del mensaje con una clave binaria de 8 bits usando la operación 
 | 1 | 0 |    1    |
 | 1 | 1 |    0    |
 
-### Flujo del Cifrado
+### Encryption Flow
 
-1. **Lectura del mensaje:** Se captura el texto a cifrar
-2. **Conversión a binario:** Cada carácter se convierte a su representación binaria de 8 bits
-3. **Ingreso de clave:** El usuario ingresa una clave binaria de 8 bits (ej: `10110110`)
-4. **Operación XOR:** Se aplica XOR entre cada bit del mensaje y la clave
-5. **Conversión a decimal:** Los resultados binarios se convierten a caracteres
-6. **Guardado:** Se almacena en `mensaje.txt`
+1. **Message reading:** The text to encrypt is captured
+2. **Binary conversion:** Each character is converted to its 8-bit binary representation
+3. **Key input:** The user enters an 8-bit binary key (e.g., `10110110`)
+4. **XOR operation:** XOR is applied between each bit of the message and the key
+5. **Decimal conversion:** Binary results are converted to characters
+6. **Saving:** Stored in `mensaje.txt`
 
-### Ejemplo
+### Example
 
 ```
-Carácter:  'A' (65)  →  01000001
-Clave:                  10110110
-XOR:                    11110111  →  247 → '˙'
+Character: 'A' (65)  ->  01000001
+Key:                   10110110
+XOR:                   11110111  ->  247 -> '˙'
 ```
 
-### Flujo del Descifrado
+### Decryption Flow
 
-1. Se lee el archivo `mensaje.txt`
-2. Se solicita la misma clave binaria de 8 bits
-3. Se aplica XOR entre cada carácter cifrado y la clave
-4. El resultado es el mensaje original
+1. The file `mensaje.txt` is read
+2. The same 8-bit binary key is requested
+3. XOR is applied between each encrypted character and the key
+4. The result is the original message
 
-### Notas
+### Notes
 
-- La misma clave se usa para cifrar y descifrar (XOR es simétrico)
-- El usuario debe recordar la clave para poder descifrar
-- La clave debe ser exactamente de 8 bits (0s y 1s)
+- The same key is used for encryption and decryption (XOR is symmetric)
+- The user must remember the key to decrypt later
+- The key must be exactly 8 bits (0s and 1s)
 
 ---
 
-## 3. Cifrado Vigenère
+## 3. Vigenere Encryption
 
-**Tipo:** Sustitución polialfabética
-**Complejidad:** Media
-**Archivo:** `src/algorithms/vigenere.c`
+**Type:** Polyalphabetic substitution
+**Complexity:** Medium
+**File:** `src/algorithms/vigenere.c`
 
-### Principio
+### Principle
 
-Utiliza una palabra clave de hasta 4 letras para desplazar cada carácter del mensaje. A diferencia de César, cada posición usa un desplazamiento diferente según la letra de la clave.
+Uses a keyword of up to 4 letters to shift each character of the message. Unlike Caesar, each position uses a different shift based on the key letter.
 
-### Fórmula
+### Formula
 
-**Cifrado:** `C[i] = (P[i] + K[i]) mod 26`
-**Descifrado:** `P[i] = (C[i] - K[i] + 26) mod 26`
+**Encryption:** `C[i] = (P[i] + K[i]) mod 26`
+**Decryption:** `P[i] = (C[i] - K[i] + 26) mod 26`
 
-Donde:
-- `P[i]` = posición del carácter plano (0-25 para A-Z)
-- `K[i]` = posición de la letra de la clave (0-25 para A-Z)
-- `C[i]` = posición del carácter cifrado
+Where:
+- `P[i]` = position of plaintext character (0-25 for A-Z)
+- `K[i]` = position of key letter (0-25 for A-Z)
+- `C[i]` = position of encrypted character
 
-### Ejemplo
+### Example
 
 ```
-Mensaje:   H O L A
-Clave:     K E Y
-Desplaz.:  K(10) E(4) Y(24) K(10)  (repite)
+Message:  H O L A
+Key:      K E Y
+Shift:    K(10) E(4) Y(24) K(10)  (repeats)
 
-H(7)  + K(10) = R(17)  →  R
-O(14) + E(4)  = S(18)  →  S
-L(11) + Y(24) = J(9)   →  J
-A(0)  + K(10) = K(10)  →  K
+H(7)  + K(10) = R(17)  ->  R
+O(14) + E(4)  = S(18)  ->  S
+L(11) + Y(24) = J(9)   ->  J
+A(0)  + K(10) = K(10)  ->  K
 
-Resultado: R S J K
+Result: R S J K
 ```
 
-### Flujo
+### Flow
 
-1. Se captura el mensaje (se convierte a mayúsculas)
-2. Se ingresa la clave (máximo 4 letras)
-3. Se aplica la fórmula de cifrado para cada carácter alfabético
-4. Los caracteres no alfabéticos se mantienen sin cambios
-5. Se muestra el resultado y se guarda en `mensaje.txt`
+1. The message is captured (converted to uppercase)
+2. The key is entered (maximum 4 letters)
+3. The encryption formula is applied for each alphabetic character
+4. Non-alphabetic characters remain unchanged
+5. The result is displayed and saved to `mensaje.txt`
 
-### Características
+### Characteristics
 
-- Solo cifra letras (A-Z), otros caracteres pasan sin cambios
-- La clave se repite cíclicamente sobre el mensaje
-- Ambas partes (mensaje y clave) se convierten a mayúsculas
+- Only encrypts letters (A-Z), other characters pass through unchanged
+- The key repeats cyclically over the message
+- Both parties (message and key) are converted to uppercase
 
 ---
 
-## 4. Run-Length Encoding (Compresión)
+## 4. Run-Length Encoding (Compression)
 
-**Tipo:** Compresión de datos
-**Complejidad:** Baja
-**Archivo:** `src/algorithms/run_length.c`
+**Type:** Data compression
+**Complexity:** Low
+**File:** `src/algorithms/run_length.c`
 
-### Principio
+### Principle
 
-Reemplaza secuencias de caracteres repetidos consecutivos con una representación compacta: el carácter seguido del número de repeticiones.
+Replaces repeated character sequences with a compact representation: the character followed by the number of repetitions.
 
-### Formato
-
-```
-#caracternum
-```
-
-Donde:
-- `#` es el delimitador
-- `caractern` es el carácter que se repite
-- `num` es el número de veces que se repite
-
-### Ejemplo
+### Format
 
 ```
-Entrada:   AAABBBCC
-Salida:    #A3#B3#C2
-
-Entrada:   AABCDE
-Salida:    #A2BCDE
+#characternum
 ```
 
-### Algoritmo de Cifrado
+Where:
+- `#` is the delimiter
+- `character` is the character that repeats
+- `num` is the number of times it repeats
+
+### Example
 
 ```
-Para cada posición i del mensaje:
-  Si el carácter actual == siguiente carácter:
-    Incrementar contador de repeticiones
-  Si no:
-    Si el carácter actual == anterior carácter:
-      Escribir # + carácter + contador
-      Reiniciar contador
-    Si no:
-      Escribir el carácter tal cual
+Input:    AAABBBCC
+Output:   #A3#B3#C2
+
+Input:    AABCDE
+Output:   #A2BCDE
 ```
 
-### Algoritmo de Descifrado
+### Encryption Algorithm
 
 ```
-Para cada carácter del mensaje cifrado:
-  Si es '#':
-    Leer el siguiente carácter (el que se repite)
-    Leer el siguiente dígito (número de repeticiones)
-    Repetir el carácter esa cantidad de veces
-  Si no:
-    Copiar el carácter tal cual
+For each position i of the message:
+  If current character == next character:
+    Increment repetition counter
+  Else:
+    If current character == previous character:
+      Write # + character + counter
+      Reset counter
+    Else:
+      Write the character as is
 ```
 
-### Ejemplo Detallado
+### Decryption Algorithm
 
-**Entrada:** `AAAABBBCDDDEEE`
+```
+For each character of the encrypted message:
+  If '#':
+    Read next character (the one that repeats)
+    Read next digit (number of repetitions)
+    Repeat the character that many times
+  Else:
+    Copy the character as is
+```
 
-**Cifrado paso a paso:**
-| Paso | Carácter | Siguiente | Acción | Salida parcial |
-|------|----------|-----------|--------|----------------|
-| 1 | A | A | Contar | - |
-| 2 | A | A | Contar | - |
-| 3 | A | A | Contar | - |
-| 4 | A | B | Escribir #A4 | #A4 |
-| 5 | B | B | Contar | - |
-| 6 | B | B | Contar | - |
-| 7 | B | C | Escribir #B3 | #A4#B3 |
-| 8 | C | D | Escribir C | #A4#B3C |
-| 9 | D | D | Contar | - |
-| 10 | D | D | Contar | - |
-| 11 | D | E | Escribir #D3 | #A4#B3C#D3 |
-| 12 | E | E | Contar | - |
-| 13 | E | - | Escribir #E2 | #A4#B3C#D3#E2 |
+### Detailed Example
 
-**Salida:** `#A4#B3C#D3#E2`
+**Input:** `AAAABBBCDDDEEE`
 
-### Limitaciones
+**Step-by-step encryption:**
+| Step | Character | Next | Action | Partial Output |
+|------|-----------|------|--------|----------------|
+| 1 | A | A | Count | - |
+| 2 | A | A | Count | - |
+| 3 | A | A | Count | - |
+| 4 | A | B | Write #A4 | #A4 |
+| 5 | B | B | Count | - |
+| 6 | B | B | Count | - |
+| 7 | B | C | Write #B3 | #A4#B3 |
+| 8 | C | D | Write C | #A4#B3C |
+| 9 | D | D | Count | - |
+| 10 | D | D | Count | - |
+| 11 | D | E | Write #D3 | #A4#B3C#D3 |
+| 12 | E | E | Count | - |
+| 13 | E | - | Write #E2 | #A4#B3C#D3#E2 |
 
-- Solo maneja repeticiones de un solo carácter
-- No comprime eficientemente patrones complejos
-- El carácter `#` se usa como delimitador (no se puede comprimir directamente)
+**Output:** `#A4#B3C#D3#E2`
+
+### Limitations
+
+- Only handles single character repetitions
+- Does not compress complex patterns efficiently
+- The `#` character is used as delimiter (cannot be compressed directly)
 
 ---
 
-## Comparación de Algoritmos
+## Algorithm Comparison
 
-| Característica | Simple | XOR | Vigenère | Run-Length |
+| Characteristic | Simple | XOR | Vigenere | Run-Length |
 |----------------|--------|-----|----------|------------|
-| **Tipo** | Sustitución | Bitwise | Polialfabético | Compresión |
-| **Clave** | Ninguna (fija +3) | Binaria (8 bits) | Texto (4 letras) | Ninguna |
-| **Caracteres** | Todos | Todos | Solo A-Z | Todos |
-| **Reversible** | Sí | Sí (misma clave) | Sí (misma clave) | Sí |
-| **Seguridad** | Muy baja | Baja | Baja | N/A (no es cifrado) |
-| **Uso original** | Ejemplo educativo | Ejemplo educativo | Ejemplo educativo | Reducción de tamaño |
+| **Type** | Substitution | Bitwise | Polyalphabetic | Compression |
+| **Key** | None (fixed +3) | Binary (8 bits) | Text (4 letters) | None |
+| **Characters** | All | All | Only A-Z | All |
+| **Reversible** | Yes | Yes (same key) | Yes (same key) | Yes |
+| **Security** | Very low | Low | Low | N/A (not encryption) |
+| **Original use** | Educational example | Educational example | Educational example | Size reduction |
 
-## Referencias
+## References
 
-- [Cifrado César - Wikipedia](https://es.wikipedia.org/wiki/Cifrado_C%C3%A9sar)
-- [Cifrado XOR - Wikipedia](https://es.wikipedia.org/wiki/Cifrado_XOR)
-- [Cifrado de Vigenère - Wikipedia](https://es.wikipedia.org/wiki/Cifrado_de_Vigen%C3%A8re)
-- [Run-Length Encoding - Wikipedia](https://es.wikipedia.org/wiki/Codificaci%C3%B3n_por_longitud_de_ejecuci%C3%B3n)
+- [Caesar Cipher - Wikipedia](https://en.wikipedia.org/wiki/Caesar_cipher)
+- [XOR Cipher - Wikipedia](https://en.wikipedia.org/wiki/XOR_cipher)
+- [Vigenere Cipher - Wikipedia](https://en.wikipedia.org/wiki/Vigenere_cipher)
+- [Run-Length Encoding - Wikipedia](https://en.wikipedia.org/wiki/Run-length_encoding)

@@ -1,138 +1,138 @@
-# Proyecto Enigma
+# EnigmaProject
 
-Sistema de cifrado y descifrado de mensajes de texto que implementa cuatro algoritmos criptográficos clásicos, desarrollado en lenguaje C para la plataforma Windows.
+Text message encryption and decryption system implementing four classic cryptographic algorithms, developed in C for the Windows platform.
 
-## Descripción
+## Description
 
-EnigmaProject es un programa de consola que permite a los usuarios cifrar y descifrar mensajes utilizando distintos métodos de encriptación. El proyecto fue elaborado como proyecto final del curso de Fundamentos de Programación en la Universidad Autónoma de Yucatán.
+EnigmaProject is a console program that allows users to encrypt and decrypt messages using different encryption methods. The project was created as a final project for the Fundamentals of Programming course at Universidad Autonoma de Yucatan.
 
-## Características
+## Features
 
-- **4 algoritmos de cifrado:** Simple (César), XOR, Vigenère y Run-Length Encoding
-- **Interfaz visual:** Menús navegables con teclado, iconos ASCII art y animaciones
-- **Sistema de autenticación:** Acceso restringido con usuario
-- **Guardado automático:** Los mensajes cifrados se almacenan en `mensaje.txt`
+- **4 encryption algorithms:** Simple (Caesar), XOR, Vigenere and Run-Length Encoding
+- **Visual interface:** Navigable keyboard menus, ASCII art icons and animations
+- **Authentication system:** Restricted access with username
+- **Auto-save:** Encrypted messages are stored in `mensaje.txt`
 
-## Capturas de Pantalla
+## Screenshots
 
-| Login | Menú Principal |
-|-------|----------------|
-| ![Login](docs/media/Enigma1.PNG) | ![Menú](docs/media/Enigma2.PNG) |
+| Login | Main Menu |
+|-------|-----------|
+| ![Login](docs/media/Enigma1.PNG) | ![Menu](docs/media/Enigma2.PNG) |
 
-| Selección de Cifrado | Entrada de Texto |
-|----------------------|------------------|
-| ![Cifrado](docs/media/Enigma3.PNG) | ![Texto](docs/media/Enigma4.PNG) |
+| Encryption Selection | Text Input |
+|----------------------|------------|
+| ![Encryption](docs/media/Enigma3.PNG) | ![Text](docs/media/Enigma4.PNG) |
 
-| Cifrando | Mensaje Cifrado |
-|----------|-----------------|
-| ![Cifrando](docs/media/Enigma5.PNG) | ![Resultado](docs/media/Enigma6.PNG) |
+| Encrypting | Encrypted Message |
+|------------|-------------------|
+| ![Encrypting](docs/media/Enigma5.PNG) | ![Result](docs/media/Enigma6.PNG) |
 
-| Descifrando | Mensaje Descifrado |
-|-------------|-------------------|
-| ![Descifrando](docs/media/Enigma7.PNG) | ![Resultado](docs/media/Enigma8.PNG) |
+| Decrypting | Decrypted Message |
+|------------|-------------------|
+| ![Decrypting](docs/media/Enigma7.PNG) | ![Result](docs/media/Enigma8.PNG) |
 
-## Requisitos
+## Requirements
 
-- **Sistema operativo:** Windows (usa API de Windows: `windows.h`, `conio.h`)
-- **Compilador:** GCC (MinGW/MSYS2) o Microsoft Visual C++ (cl.exe)
+- **Operating System:** Windows (uses Windows API: `windows.h`, `conio.h`)
+- **Compiler:** GCC (MinGW/MSYS2) or Microsoft Visual C++ (cl.exe)
 
-## Compilación
+## Compilation
 
-### Con GCC (recomendado)
+### With GCC (recommended)
 
 ```bash
 make
 ```
 
-El ejecutable se genera en `build/EnigmaProject.exe`.
+The executable is generated in `build/EnigmaProject.exe`.
 
-### Con Microsoft Visual C++
+### With Microsoft Visual C++
 
 ```batch
 cl main.c src\utils\console.c src\ui\screens.c src\ui\icons.c src\ui\animations.c src\algorithms\simple.c src\algorithms\run_length.c src\algorithms\xor.c src\algorithms\vigenere.c /Fe:build\EnigmaProject.exe /Iinclude
 ```
 
-### Limpiar archivos compilados
+### Clean compiled files
 
 ```bash
 make clean
 ```
 
-Esto elimina la carpeta `build/` completamente.
+This removes the `build/` folder completely.
 
-## Uso
+## Usage
 
-1. Ejecutar `build/EnigmaProject.exe`
-2. Ingresar el usuario: **FMAT**
-3. Navegar con las teclas de dirección (↑ ↓ ← →)
-4. Seleccionar opción con **Enter**
-5. Para regresar a un menú anterior, presionar **Esc**
+1. Run `build/EnigmaProject.exe`
+2. Enter the username: **FMAT**
+3. Navigate with arrow keys (up down left right)
+4. Select option with **Enter**
+5. To return to a previous menu, press **Esc**
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 Proyecto-Enigma/
-├── main.c                          # Punto de entrada del programa
-├── Makefile                        # Archivo de compilación
+├── main.c                          # Program entry point
+├── Makefile                        # Build file
 ├── include/
-│   └── enigma.h                    # Header principal (enums, constantes, prototipos)
+│   └── enigma.h                    # Main header (enums, constants, prototypes)
 ├── src/
 │   ├── utils/
-│   │   └── console.c               # Funciones de utilidad de consola
+│   │   └── console.c               # Console utility functions
 │   ├── ui/
-│   │   ├── screens.c               # Pantallas de interfaz de usuario
-│   │   ├── icons.c                 # Iconos ASCII art
-│   │   └── animations.c           # Animaciones de carga y transición
+│   │   ├── screens.c               # User interface screens
+│   │   ├── icons.c                 # ASCII art icons
+│   │   └── animations.c           # Loading and transition animations
 │   └── algorithms/
-│       ├── simple.c                # Cifrado simple (César) + entrada de texto
-│       ├── xor.c                   # Cifrado XOR
-│       ├── vigenere.c              # Cifrado Vigenère
-│       └── run_length.c           # Run-Length Encoding (compresión)
-├── build/                          # Archivos de compilación (excluido del repositorio)
+│       ├── simple.c                # Simple encryption (Caesar) + text input
+│       ├── xor.c                   # XOR encryption
+│       ├── vigenere.c              # Vigenere encryption
+│       └── run_length.c           # Run-Length Encoding (compression)
+├── build/                          # Compiled files (excluded from repository)
 │   ├── EnigmaProject.exe
 │   └── ...
 ├── archive/
-│   └── EnigmaProject-ver_1.0.c     # Código fuente original (backup)
+│   └── EnigmaProject-ver_1.0.c     # Original source code (backup)
 ├── docs/
-│   ├── media/                      # Capturas de pantalla
-│   ├── ARCHITECTURE.md             # Arquitectura del código
-│   ├── ALGORITHMS.md               # Descripción de algoritmos
-│   ├── INSTALLATION.md             # Guía de instalación
-│   └── USER_GUIDE.md               # Manual de usuario
+│   ├── media/                      # Screenshots
+│   ├── ARCHITECTURE.md             # Code architecture
+│   ├── ALGORITHMS.md               # Algorithm descriptions
+│   ├── INSTALLATION.md             # Installation guide
+│   └── USER_GUIDE.md               # User manual
 └── .gitignore
 ```
 
-Para más detalles, consulte la documentación en la carpeta [`docs/`](docs/).
+For more details, see the documentation in the [`docs/`](docs/) folder.
 
-## Algoritmos Implementados
+## Implemented Algorithms
 
-| Algoritmo | Tipo | Descripción |
+| Algorithm | Type | Description |
 |-----------|------|-------------|
-| Simple (César) | Sustitución | Desplaza cada carácter 3 posiciones en ASCII |
-| XOR | Bitwise | Opera cada bit con una clave binaria de 8 bits |
-| Vigenère | Polialfabético | Sustitución con clave repetitiva de hasta 4 letras |
-| Run-Length | Compresión | Reemplaza secuencias repetidas con `#caracternum` |
+| Simple (Caesar) | Substitution | Shifts each character 3 positions in ASCII |
+| XOR | Bitwise | Operates each bit with an 8-bit binary key |
+| Vigenere | Polyalphabetic | Substitution with repetitive key of up to 4 letters |
+| Run-Length | Compression | Replaces repeated sequences with `#characternum` |
 
-Consulte [`docs/ALGORITHMS.md`](docs/ALGORITHMS.md) para una explicación detallada de cada algoritmo.
+See [`docs/ALGORITHMS.md`](docs/ALGORITHMS.md) for a detailed explanation of each algorithm.
 
-## Documentación
+## Documentation
 
-| Documento | Descripción |
-|-----------|-------------|
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Arquitectura y diseño del código |
-| [`docs/ALGORITHMS.md`](docs/ALGORITHMS.md) | Explicación detallada de cada algoritmo |
-| [`docs/INSTALLATION.md`](docs/INSTALLATION.md) | Guía de instalación y compilación |
-| [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) | Manual de usuario |
+| Document | Description |
+|----------|-------------|
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Code architecture and design |
+| [`docs/ALGORITHMS.md`](docs/ALGORITHMS.md) | Detailed explanation of each algorithm |
+| [`docs/INSTALLATION.md`](docs/INSTALLATION.md) | Installation and compilation guide |
+| [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) | User manual |
 
-## Desarrolladores
+## Developers
 
 - **Arias Morales Marvin**
 - **Canul Flota Ricardo**
 - **Cordova Villamil Jorge**
 - **Pool Alvarado Marco**
 
-Universidad Autónoma de Yucatán - 2026
+Universidad Autonoma de Yucatan - 2026
 
-## Licencia
+## License
 
-Proyecto académico. El código se distribuye con fines educativos.
+Academic project. The code is distributed for educational purposes.

@@ -1,118 +1,118 @@
-# EnigmaProject - Estructura Reorganizada del Proyecto
+# EnigmaProject - Project Restructured
 
-## Resumen de la Auditoría
+## Audit Summary
 
-Se realizó una auditoría completa al archivo `EnigmaProject-ver_1.0.c` (aproximadamente 1700 líneas). 
-El proyecto presenta los siguientes problemas de organización:
+A complete audit was performed on the `EnigmaProject-ver_1.0.c` file (approximately 1700 lines).
+The project presents the following organizational issues:
 
-### Problemas Identificados:
-- **Todo el código está en un solo archivo:** Los 1700+ líneas están en `EnigmaProject-ver_1.0.c`, lo que dificulta:
-  - Mantenimiento y depuración
-  - Compilación modular
-  - Actualización incremental
-  - Colaboración en equipo
+### Identified Problems:
+- **All code is in a single file:** The 1700+ lines are in `EnigmaProject-ver_1.0.c`, which makes it difficult to:
+  - Maintenance and debugging
+  - Modular compilation
+  - Incremental updates
+  - Team collaboration
 
-## Nueva Estructura del Proyecto
+## New Project Structure
 
 ```
 Proyecto-Enigma/
-├── main.c                              # Punto de entrada (entry point)
+├── main.c                              # Entry point
 ├── include/
-│   └── enigma.h                        # Header con enums, constantes y prototipos
+│   └── enigma.h                        # Header with enums, constants and prototypes
 ├── src/
 │   ├── utils/
-│   │   └── console.c                   # Funciones de consola (set_color, gotoxy, print_on_coord)
+│   │   └── console.c                   # Console functions (set_color, gotoxy, print_on_coord)
 │   ├── ui/
-│   │   ├── screens.c                   # Funciones UI (login, menu, pantallas)
-│   │   ├── icons.c                     # Iconos ASCII art (padlock, about, exit)
-│   │   └── animations.c                # Animaciones de carga y despedida
+│   │   ├── screens.c                   # UI functions (login, menu, screens)
+│   │   ├── icons.c                     # ASCII art icons (padlock, about, exit)
+│   │   └── animations.c               # Loading and farewell animations
 │   └── algorithms/
-│       ├── simple.c                    # Cifrado/descifrado tipo simple
-│       ├── run_length.c                # Run-Length Encoding (compresor)
-│       ├── xor.c                       # Cifrado/descifrado XOR
-│       └── vigenere.c                  # Cifrado/descifrado Vigenère
-├── README.md                           # Este archivo
-├── REORGANIZATION_README.md            # Guía de migración
-├── USUARIO para poder usar el Programa.txt  # Manual del usuario
-├── Proyecto_encriptacion.pdf            # Documentación PDF
-├── Proyecto_Enigma_Manual_Usuario.pdf   # Manual del usuario (PDF)
-└── readme-media/                       # Imágenes de referencia
+│       ├── simple.c                    # Simple encryption/decryption
+│       ├── run_length.c                # Run-Length Encoding (compressor)
+│       ├── xor.c                       # XOR encryption/decryption
+│       └── vigenere.c                  # Vigenere encryption/decryption
+├── README.md                           # This file
+├── REORGANIZATION_README.md            # Migration guide
+├── USUARIO para poder usar el Programa.txt  # User manual
+├── Proyecto_encriptacion.pdf            # PDF documentation
+├── Proyecto_Enigma_Manual_Usuario.pdf   # User manual (PDF)
+└── readme-media/                       # Reference images
 ```
 
-## Descripción de los Archivos Reorganizados
+## Reorganized Files Description
 
-### 1. **main.c** - Archivo Principal
-- Punto de entrada del programa
-- Lógica básica: pantalla de login → menú principal
-- Incluye solo las declaraciones necesarias
+### 1. **main.c** - Main File
+- Program entry point
+- Basic logic: login screen → main menu
+- Includes only necessary declarations
 
 ### 2. **include/enigma.h** - Header File
-- Contiene todos los enums (EncryptionType, MenuOption)
-- Definiciones de teclas (KEY_UP, KEY_DOWN, etc.)
-- Todos los prototipos de funciones organizados por categoría
-- Variables globales declaradas externamente
+- Contains all enums (EncryptionType, MenuOption)
+- Key definitions (KEY_UP, KEY_DOWN, etc.)
+- All function prototypes organized by category
+- Globally declared external variables
 
-### 3. **src/utils/console.c** - Utilidades de Consola
-- `set_color_and_background()` - Colores del consola
-- `gotoxy()` - Posicionamiento en la consola
-- `print_on_coord()` / `print_on_raw_coord()` - Impresión
-- `string_to_uppercase()` - Conversión a mayúsculas
-- `clean_screen()` - Limpieza de pantalla
+### 3. **src/utils/console.c** - Console Utilities
+- `set_color_and_background()` - Console colors
+- `gotoxy()` - Console positioning
+- `print_on_coord()` / `print_on_raw_coord()` - Printing
+- `string_to_uppercase()` - Uppercase conversion
+- `clean_screen()` - Screen clearing
 
-### 4. **src/ui/screens.c** - Interfaz de Pantallas
-- `draw_login_form()` - Formulario de login visual
-- `authentication()` - Validación del USUARIO (FMAT)
-- `login_screen()` - Pantalla completa de login
-- `draw_screen_border()` - Borde decorativo con ASCII art
-- `encryption_type_option_screen()` - Selección de tipo de cifrado
-- `decryption_type_option_screen()` - Selección de tipo de descifrado
-- `main_menu()` - Menú principal del programa
+### 4. **src/ui/screens.c** - Screen Interface
+- `draw_login_form()` - Visual login form
+- `authentication()` - USER validation (FMAT)
+- `login_screen()` - Complete login screen
+- `draw_screen_border()` - Decorative border with ASCII art
+- `encryption_type_option_screen()` - Encryption type selection
+- `decryption_type_option_screen()` - Decryption type selection
+- `main_menu()` - Program main menu
 
-### 5. **src/ui/icons.c** - Iconos Gráficos
-- `padlock_close_icon()` - Candado cerrado (cifrando)
-- `padlock_open_icon()` - Candado abierto (descifrando)
-- `about_icon()` - Icono "Acerca de"
-- `exit_icon()` - Icono "Salir"
+### 5. **src/ui/icons.c** - Graphic Icons
+- `padlock_close_icon()` - Closed padlock (encrypting)
+- `padlock_open_icon()` - Open padlock (decrypting)
+- `about_icon()` - "About" icon
+- `exit_icon()` - "Exit" icon
 
-### 6. **src/ui/animations.c** - Animaciones
-- `loading_animation()` - Animación de carga al cifrar
-- `decryption_animation()` - Animación de descifrado
-- `about_screen()` - Pantalla de información del proyecto
-- `bye_animation()` - Animación de despedida
+### 6. **src/ui/animations.c** - Animations
+- `loading_animation()` - Loading animation when encrypting
+- `decryption_animation()` - Decryption animation
+- `about_screen()` - Project information screen
+- `bye_animation()` - Farewell animation
 
-### 7. **src/algorithms/*.c** - Algoritmos de Cifrado/Descifrado
+### 7. **src/algorithms/*.c** - Encryption/Decryption Algorithms
 
 #### simple.c
-- `simple_encryption()` - Encriptación sin cambios
-- `simple_decryption()` - Descifrado sin cambios  
-- `input_text()` - Captura de texto de entrada
-- `save_text_to_file()` - Guardado en mensaje.txt
+- `simple_encryption()` - Encryption without changes
+- `simple_decryption()` - Decryption without changes
+- `input_text()` - Text input capture
+- `save_text_to_file()` - Save to mensaje.txt
 
-#### run_length.c (Compresor)
+#### run_length.c (Compressor)
 - `run_length_encryption()` - Run-Length Encoding
-- `run_length_decryption()` - Descifrado del compresor
+- `run_length_decryption()` - Compressor decryption
 
 #### xor.c
-- `xor_encryption()` - Cifrado con operación XOR
-- `xor_decryption()` - Descifrado con XOR
+- `xor_encryption()` - XOR operation encryption
+- `xor_decryption()` - XOR decryption
 
 #### vigenere.c
-- `vigenere_encryption()` - Cifrado Vigenère
-- `vigerene_decryption()` - Descifrado Vigenère
+- `vigenere_encryption()` - Vigenere encryption
+- `vigerene_decryption()` - Vigenere decryption
 
-## Ventajas de la Reorganización
+## Advantages of the Reorganization
 
-| Antes | Después |
-|-------|---------|
-| 1 archivo monolítico de 1700 líneas | ~9 archivos modulares organizados por función |
-| Difícil encontrar código específico | Estructura lógica y fácil de navegar |
-| Compilación del todo junto | Posibilidad de compilación incremental |
-| Dificultad para trabajar en equipo | Múltiples desarrolladores pueden trabajar simultáneamente |
-| Mantenimiento complejo | Actualizaciones localizadas sin afectar el resto |
+| Before | After |
+|--------|-------|
+| 1 monolithic file of 1700 lines | ~9 modular files organized by function |
+| Difficult to find specific code | Logical structure and easy to navigate |
+| All-at-once compilation | Possibility of incremental compilation |
+| Difficulty working in team | Multiple developers can work simultaneously |
+| Complex maintenance | Localized updates without affecting the rest |
 
-## Instrucciones de Compilación
+## Build Instructions
 
-### Con Microsoft Visual C++ (cl.exe):
+### With Microsoft Visual C++ (cl.exe):
 ```batch
 cl main.c src/utils/console.c src/ui/screens.c src/ui/icons.c ^
 src/ui/animations.c src/algorithms/simple.c src/algorithms/run_length.c ^
@@ -120,20 +120,20 @@ src/algorithms/xor.c src/algorithms/vigenere.c /Fe:EnigmaProject.exe ^
 /Iinclude /Od./
 ```
 
-### Con Build de Visual Studio:
-1. Crear nuevo proyecto C++ Console Application vacía
-2. Agregar `main.c` como archivo principal
-3. Agregar todos los archivos `.c` de `src/` y `include/`
-4. Establecer la ruta del include a `/include`
+### With Visual Studio Build:
+1. Create a new empty C++ Console Application project
+2. Add `main.c` as the main file
+3. Add all `.c` files from `src/` and `include/`
+4. Set the include path to `/include`
 
-## Instrucciones para Migrar desde EnigmaProject-ver_1.0.c
+## Instructions to Migrate from EnigmaProject-ver_1.0.c
 
-### Paso 1: Copiar el nuevo código
-- Copie todos los nuevos archivos en las carpetas correspondientes
-- Renombre `EnigmaProject-ver_1.0.c` como backup (`EnigmaProject-v1.0_backup.c`)
+### Step 1: Copy the new code
+- Copy all new files to the corresponding folders
+- Rename `EnigmaProject-ver_1.0.c` as backup (`EnigmaProject-v1.0_backup.c`)
 
-### Paso 2: Actualizar la carpeta de include
-Asegúrese de que VS Code reconozca el header:
+### Step 2: Update the include folder
+Make sure VS Code recognizes the header:
 ```json
 // .vscode/c_cpp_properties.json
 {
@@ -142,32 +142,32 @@ Asegúrese de que VS Code reconozca el header:
 }
 ```
 
-### Paso 3: Compilar y probar
-- Compile con las instrucciones arriba
-- Pruebe cada algoritmo individualmente
+### Step 3: Compile and test
+- Compile with the instructions above
+- Test each algorithm individually
 
-## Notas Importantes
+## Important Notes
 
-1. **No eliminar el archivo original inmediatamente** - Manténgalo como backup hasta verificar que todo funcione correctamente
+1. **Do not delete the original file immediately** - Keep it as backup until verifying everything works correctly
 
-2. **Las funciones globales ya están declaradas en include/enigma.h** - No es necesario duplicarlas en main.c o archivos individuales
+2. **Global functions are already declared in include/enigma.h** - It is not necessary to duplicate them in main.c or individual files
 
-3. **El sistema de colores ASCII (95, 124, etc.)** - Estas son las claves ASCII para los caracteres de dibujo del consola. Mantenerlos intactos en todos los archivos.
+3. **The ASCII color system (95, 124, etc.)** - These are ASCII keys for the console drawing characters. Keep them intact in all files.
 
-## Próximos Pasos Recomendados
+## Recommended Next Steps
 
-1. ✅ Crear archivo `compile.bat` con el comando completo
-2. Crear `.vscode/settings.json` para configuración de IntelliSense
-3. Refactorizar código dentro de cada archivo si es necesario
-4. Añadir comentarios adicionales a las funciones
-5. Crear tests unitarios para cada algoritmo
+1. Create `compile.bat` file with the complete command
+2. Create `.vscode/settings.json` for IntelliSense configuration
+3. Refactor code within each file if necessary
+4. Add additional comments to functions
+5. Create unit tests for each algorithm
 
 ---
 
-**Desarrolladores del Proyecto:**
+**Project Developers:**
 - Arias Morales Marvin
-- Canul Flota Ricardo  
+- Canul Flota Ricardo
 - Cordova Villamil Jorge
 - Pool Alvarado Marco
 
-**Universidad Autónoma de Yucatán - 2026**
+**Universidad Autonoma de Yucatan - 2026**

@@ -1,10 +1,10 @@
-# Arquitectura del Proyecto
+# Project Architecture
 
-## Visión General
+## Overview
 
-El proyecto sigue una arquitectura modular basada en la separación de responsabilidades: utilidades de consola, interfaz de usuario, algoritmos de cifrado y punto de entrada.
+The project follows a modular architecture based on separation of concerns: console utilities, user interface, encryption algorithms and entry point.
 
-## Diagrama de Módulos
+## Module Diagram
 
 ```
                     ┌─────────────┐
@@ -37,59 +37,59 @@ El proyecto sigue una arquitectura modular basada en la separación de responsab
         └──────────────┘
 ```
 
-## Descripción de Módulos
+## Module Description
 
-### 1. `main.c` - Punto de Entrada
+### 1. `main.c` - Entry Point
 
-El archivo principal contiene únicamente la función `main()` que orquesta el flujo del programa:
+The main file contains only the `main()` function that orchestrates the program flow:
 
 ```
 main() → login_screen() → main_menu()
 ```
 
-No contiene lógica de negocio ni presentación; solo coordina las llamadas a los módulos principales.
+It contains no business logic or presentation; it only coordinates calls to the main modules.
 
-### 2. `include/enigma.h` - Header Principal
+### 2. `include/enigma.h` - Main Header
 
-Archivo de encabezado compartido por todos los módulos. Contiene:
+Header file shared by all modules. Contains:
 
 - **Enums:**
-  - `EncryptionType` - Tipos de cifrado (SIMPLE, XOR, VIGERENE, RUN_LENGTH)
-  - `MenuOption` - Opciones del menú (ENCRYPTION, DECRYPTION, ABOUT, EXIT)
-- **Constantes de teclado:**
+  - `EncryptionType` - Encryption types (SIMPLE, XOR, VIGERENE, RUN_LENGTH)
+  - `MenuOption` - Menu options (ENCRYPTION, DECRYPTION, ABOUT, EXIT)
+- **Keyboard constants:**
   - `KEY_UP`, `KEY_DOWN`, `KEY_LEFT`, `KEY_RIGHT`, `KEY_ENTER`, `KEY_ESC`
-- **Prototipos de funciones:** Declaraciones de todas las funciones del proyecto
-- **Variables globales:** `extern FILE *doc;` para manejo de archivos
+- **Function prototypes:** Declarations of all project functions
+- **Global variables:** `extern FILE *doc;` for file handling
 
-### 3. `src/utils/console.c` - Utilidades de Consola
+### 3. `src/utils/console.c` - Console Utilities
 
-Capa de abstracción sobre la API de Windows para operaciones de consola:
+Abstraction layer over the Windows API for console operations:
 
-| Función | Descripción |
-|---------|-------------|
-| `set_color_and_background()` | Establece colores de texto y fondo |
-| `gotoxy()` | Posiciona el cursor en coordenadas (x, y) |
-| `print_on_coord()` | Imprime texto en una estructura COORD |
-| `print_on_raw_coord()` | Imprime texto en coordenadas x, y |
-| `string_to_uppercase()` | Convierte una cadena a mayúsculas |
-| `clean_screen()` | Limpia la pantalla (cls) |
+| Function | Description |
+|----------|-------------|
+| `set_color_and_background()` | Sets text and background colors |
+| `gotoxy()` | Positions cursor at coordinates (x, y) |
+| `print_on_coord()` | Prints text using a COORD structure |
+| `print_on_raw_coord()` | Prints text at x, y coordinates |
+| `string_to_uppercase()` | Converts a string to uppercase |
+| `clean_screen()` | Clears the screen (cls) |
 
-### 4. `src/ui/screens.c` - Pantallas de Interfaz
+### 4. `src/ui/screens.c` - Interface Screens
 
-Contiene todas las pantallas estáticas y menús navegables:
+Contains all static screens and navigable menus:
 
-| Función | Descripción |
-|---------|-------------|
-| `draw_login_form()` | Dibuja el formulario visual de login |
-| `authentication()` | Valida el usuario contra la constante "FMAT" |
-| `login_screen()` | Loop principal de login hasta autenticación exitosa |
-| `draw_screen_border()` | Dibuja el borde decorativo del programa |
-| `draw_message_input_form()` | Dibuja el formulario de entrada de texto |
-| `encryption_type_option_screen()` | Menú de selección de tipo de cifrado |
-| `decryption_type_option_screen()` | Menú de selección de tipo de descifrado |
-| `main_menu()` | Menú principal con navegación por teclado |
+| Function | Description |
+|----------|-------------|
+| `draw_login_form()` | Draws the visual login form |
+| `authentication()` | Validates username against the "FMAT" constant |
+| `login_screen()` | Main login loop until successful authentication |
+| `draw_screen_border()` | Draws the decorative program border |
+| `draw_message_input_form()` | Draws the text input form |
+| `encryption_type_option_screen()` | Encryption type selection menu |
+| `decryption_type_option_screen()` | Decryption type selection menu |
+| `main_menu()` | Main menu with keyboard navigation |
 
-**Flujo de navegación del menú:**
+**Menu navigation flow:**
 
 ```
 main_menu()
@@ -107,99 +107,99 @@ main_menu()
     └── EXIT → bye_animation()
 ```
 
-### 5. `src/ui/icons.c` - Iconos ASCII Art
+### 5. `src/ui/icons.c` - ASCII Art Icons
 
-Iconos dibujados con caracteres especiales de código ASCII extendido:
+Icons drawn with extended ASCII special characters:
 
-- `padlock_close_icon()` - Candado cerrado (se muestra al seleccionar "Encriptar")
-- `padlock_open_icon()` - Candado abierto (se muestra al procesar cifrado/descifrado)
-- `about_icon()` - Icono decorativo de "Acerca de"
-- `exit_icon()` - Icono decorativo de "Salir"
+- `padlock_close_icon()` - Closed padlock (shown when selecting "Encrypt")
+- `padlock_open_icon()` - Open padlock (shown when processing encryption/decryption)
+- `about_icon()` - Decorative "About" icon
+- `exit_icon()` - Decorative "Exit" icon
 
-### 6. `src/ui/animations.c` - Animaciones
+### 6. `src/ui/animations.c` - Animations
 
-Animaciones de transición entre pantallas:
+Screen transition animations:
 
-- `loading_animation()` - Barra de progreso al cifrar (muestra "Cifrando mensaje...")
-- `decryption_animation()` - Barra de progreso al descifrar (muestra "Descifrando mensaje...")
-- `about_screen()` - Animación de presentación de los desarrolladores
-- `bye_animation()` - Animación de despedida con arte ASCII
+- `loading_animation()` - Progress bar when encrypting (shows "Encrypting message...")
+- `decryption_animation()` - Progress bar when decrypting (shows "Decrypting message...")
+- `about_screen()` - Developer presentation animation
+- `bye_animation()` - Farewell animation with ASCII art
 
-### 7. `src/algorithms/*.c` - Algoritmos de Cifrado
+### 7. `src/algorithms/*.c` - Encryption Algorithms
 
-Cada archivo contiene la implementación de un algoritmo específico:
+Each file contains the implementation of a specific algorithm:
 
-| Archivo | Funciones | Descripción |
-|---------|-----------|-------------|
-| `simple.c` | `simple_encryption()`, `simple_decryption()`, `input_text()`, `save_text_to_file()` | Cifrado por sustitución (shift +3). También contiene las funciones de entrada de texto y guardado en archivo, compartidas por todos los algoritmos |
-| `xor.c` | `xor_encryption()`, `xor_decryption()` | Cifrado XOR con clave binaria de 8 bits |
-| `vigenere.c` | `vigenere_encryption()`, `vigerene_decryption()` | Cifrado polialfabético con clave de hasta 4 letras |
-| `run_length.c` | `run_length_encryption()`, `run_length_decryption()` | Compresión Run-Length Encoding |
+| File | Functions | Description |
+|------|-----------|-------------|
+| `simple.c` | `simple_encryption()`, `simple_decryption()`, `input_text()`, `save_text_to_file()` | Substitution cipher (shift +3). Also contains text input and file saving functions shared by all algorithms |
+| `xor.c` | `xor_encryption()`, `xor_decryption()` | XOR encryption with 8-bit binary key |
+| `vigenere.c` | `vigenere_encryption()`, `vigerene_decryption()` | Polyalphabetic encryption with key of up to 4 letters |
+| `run_length.c` | `run_length_encryption()`, `run_length_decryption()` | Run-Length Encoding compression |
 
-## Flujo General del Programa
+## General Program Flow
 
 ```
 ┌─────────────────────────────────────────────┐
-│                 ARRANQUE                    │
+│                  START                      │
 │                                             │
 │  main() → clean_screen() → login_screen()   │
 └─────────────────┬───────────────────────────┘
                   │
                   ▼
 ┌─────────────────────────────────────────────┐
-│              PANTALLA DE LOGIN              │
+│              LOGIN SCREEN                   │
 │                                             │
 │  draw_screen_border()                       │
 │  draw_login_form()                          │
 │  authentication() → fgets("FMAT")           │
-│  Si incorrecto: mostrar error → reintentar  │
-│  Si correcto: continuar                     │
+│  If incorrect: show error → retry           │
+│  If correct: continue                       │
 └─────────────────┬───────────────────────────┘
                   │
                   ▼
 ┌─────────────────────────────────────────────┐
-│              MENÚ PRINCIPAL                 │
+│              MAIN MENU                      │
 │                                             │
-│  Navegación con flechas del teclado         │
-│  Iconos ASCII según opción seleccionada     │
-│  Enter para seleccionar                     │
-│  Esc para regresar                          │
+│  Navigation with keyboard arrows            │
+│  ASCII icons per selected option            │
+│  Enter to select                            │
+│  Esc to return                              │
 └─────────────────┬───────────────────────────┘
                   │
       ┌───────────┼───────────┬───────────┐
       ▼           ▼           ▼           ▼
-  Encriptar  Desencriptar  Acerca de   Salir
+   Encrypt    Decrypt      About       Exit
       │           │           │           │
       ▼           ▼           ▼           ▼
-  Selección  Selección   Animación   Animación
-  de tipo    de tipo     about       bye
+  Selection  Selection   Animation   Animation
+  of type    of type     about       bye
       │           │
       ▼           ▼
-  input_text()  Abrir mensaje.txt
+  input_text()  Open mensaje.txt
       │           │
       ▼           ▼
-  Algoritmo   Algoritmo
-  de cifrado  de descifrado
+  Encryption  Decryption
+  algorithm   algorithm
       │           │
       ▼           ▼
-  Guardar en  Mostrar en
-  mensaje.txt consola
+  Save to     Show on
+  mensaje.txt console
 ```
 
-## Variables Globales
+## Global Variables
 
-| Variable | Tipo | Descripción |
+| Variable | Type | Description |
 |----------|------|-------------|
-| `doc` | `FILE *` | Puntero al archivo de texto (mensaje.txt) |
+| `doc` | `FILE *` | Pointer to text file (mensaje.txt) |
 
-Declarada en `simple.c` y referenciada via `extern` en `enigma.h`.
+Declared in `simple.c` and referenced via `extern` in `enigma.h`.
 
-## Convenciones de Código
+## Code Conventions
 
-- **Nomenclatura:** snake_case para funciones y variables
-- **Archivos .c:** Incluyen `../../include/enigma.h` como ruta relativa
-- **Funciones de retorno:** `1` (true) para regresar al menú, `0` (false) para continuar
-- **Teclas:** Definidas como constantes `KEY_*` en el header
-- **Coordenadas:** Sistema de coordenadas de consola Windows (x=columna, y=fila)
-- **Compilación:** Los archivos objeto y el ejecutable se generan en `build/`, excluido del repositorio via `.gitignore`
-- **Backup:** El código fuente original monolítico se mantiene en `archive/` como referencia
+- **Naming:** snake_case for functions and variables
+- **.c files:** Include `../../include/enigma.h` as relative path
+- **Return values:** `1` (true) to return to menu, `0` (false) to continue
+- **Keys:** Defined as `KEY_*` constants in the header
+- **Coordinates:** Windows console coordinate system (x=column, y=row)
+- **Build:** Object files and executable are generated in `build/`, excluded from repository via `.gitignore`
+- **Backup:** Original monolithic source code is kept in `archive/` as reference

@@ -1,8 +1,8 @@
-# Manual de Usuario
+# User Manual
 
-## Inicio
+## Start
 
-Al ejecutar `build/EnigmaProject.exe`, aparecerá la pantalla de login.
+When you run `build/EnigmaProject.exe`, the login screen will appear.
 
 ### Login
 
@@ -19,60 +19,60 @@ Al ejecutar `build/EnigmaProject.exe`, aparecerá la pantalla de login.
 │         │                     │                 │
 │         │      FMAT           │                 │
 │         └─────────────────────┘                 │
-│                   USUARIO                       │
+│                   USER                          │
 └─────────────────────────────────────────────────┘
 ```
 
-1. Ingrese el usuario: **FMAT**
-2. Presione **Enter**
-3. Si es incorrecto, aparecerá "¡Incorrecto!" y deberá reintentar
-4. Si es correcto, accederá al menú principal
+1. Enter the username: **FMAT**
+2. Press **Enter**
+3. If incorrect, "Incorrect!" will appear and you must retry
+4. If correct, you will access the main menu
 
-## Menú Principal
+## Main Menu
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │                                                     │
-│  --> Encriptar                    [icono candado]   │
+│  --> Encrypt                     [padlock icon]     │
 │                                                     │
-│      Desencriptar                 [icono candado]   │
+│      Decrypt                     [padlock icon]     │
 │                                                     │
-│      Acerca de                    [icono info]      │
+│      About                       [info icon]        │
 │                                                     │
-│      Salir                        [icono exit]      │
+│      Exit                        [exit icon]        │
 │                                                     │
 └─────────────────────────────────────────────────────┘
 ```
 
-### Navegación
+### Navigation
 
-| Tecla | Acción |
-|-------|--------|
-| ↑ | Mover selección hacia arriba |
-| ↓ | Mover selección hacia abajo |
-| Enter | Seleccionar opción |
-| Esc | Regresar al menú anterior |
+| Key | Action |
+|-----|--------|
+| Up Arrow | Move selection up |
+| Down Arrow | Move selection down |
+| Enter | Select option |
+| Esc | Return to previous menu |
 
-## Encriptar Mensaje
+## Encrypt Message
 
-### Paso 1: Seleccionar tipo de cifrado
+### Step 1: Select encryption type
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │                                                     │
-│          * SELECCIONA TIPO DE CIFRADO *             │
+│          * SELECT ENCRYPTION TYPE *                 │
 │                                                     │
-│    --> 1.-SIMPLE            3.-VIGERENE             │
+│    --> 1.-SIMPLE            3.-VIGENERE             │
 │                                                     │
 │        2.-XOR               4.-RUN LENGTH           │
-│                               (COMPRESOR)           │
+│                               (COMPRESSOR)          │
 │                                                     │
 └─────────────────────────────────────────────────────┘
 ```
 
-Use las teclas de dirección para navegar y **Enter** para seleccionar.
+Use the arrow keys to navigate and **Enter** to select.
 
-### Paso 2: Ingresar el mensaje
+### Step 2: Enter the message
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -83,73 +83,73 @@ Use las teclas de dirección para navegar y **Enter** para seleccionar.
 │▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
 │▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
 │▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
-│▓▓ MENSAJE ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
+│▓▓ MESSAGE ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
 │▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
 └─────────────────────────────────────────────────────┘
 ```
 
-- Escriba su mensaje directamente
-- El texto se muestra en pantalla mientras se escribe
-- **Backspace** para borrar caracteres
-- **Esc** para cancelar y regresar al menú
-- **Enter** para finalizar la entrada
+- Type your message directly
+- The text is displayed on screen as you type
+- **Backspace** to delete characters
+- **Esc** to cancel and return to menu
+- **Enter** to finish input
 
-### Paso 3: Proceso de cifrado
+### Step 3: Encryption process
 
-Aparecerá una animación de carga mientras se procesa el mensaje.
+A loading animation will appear while the message is processed.
 
-### Paso 4: Resultado
+### Step 4: Result
 
-El mensaje cifrado se muestra en pantalla y se guarda automáticamente en el archivo `mensaje.txt`.
+The encrypted message is displayed on screen and automatically saved to the file `mensaje.txt`.
 
-## Desencriptar Mensaje
+## Decrypt Message
 
-### Paso 1: Seleccionar tipo de descifrado
+### Step 1: Select decryption type
 
-Igual que en el cifrado, seleccione el algoritmo que corresponda al que se usó para cifrar.
+Same as encryption, select the algorithm that corresponds to the one used for encryption.
 
-### Paso 2: Proceso de descifrado
+### Step 2: Decryption process
 
-- **Simple:** Lee automáticamente de `mensaje.txt`
-- **XOR:** Solicita la clave binaria de 8 bits que se usó para cifrar
-- **Vigenère:** Solicita la clave de texto de hasta 4 letras
-- **Run-Length:** Lee automáticamente de `mensaje.txt`
+- **Simple:** Automatically reads from `mensaje.txt`
+- **XOR:** Requests the 8-bit binary key used for encryption
+- **Vigenere:** Requests the text key of up to 4 letters
+- **Run-Length:** Automatically reads from `mensaje.txt`
 
-### Paso 3: Resultado
+### Step 3: Result
 
-El mensaje descifrado se muestra en la pantalla.
+The decrypted message is displayed on the screen.
 
-## Acerca de
+## About
 
-Muestra información sobre los desarrolladores del proyecto con una animación de presentación.
+Shows information about the project developers with a presentation animation.
 
-## Salir
+## Exit
 
-Muestra una animación de despedida y cierra el programa.
+Shows a farewell animation and closes the program.
 
-## Algoritmos Disponibles
+## Available Algorithms
 
-| Algoritmo | Clave requerida | Archivo generado |
-|-----------|-----------------|------------------|
+| Algorithm | Required Key | Generated File |
+|-----------|--------------|----------------|
 | Simple | No | mensaje.txt |
-| XOR | Sí (binaria de 8 bits) | mensaje.txt |
-| Vigenère | Sí (texto, máx 4 letras) | mensaje.txt |
+| XOR | Yes (8-bit binary) | mensaje.txt |
+| Vigenere | Yes (text, max 4 letters) | mensaje.txt |
 | Run-Length | No | mensaje.txt |
 
-## Consejos
+## Tips
 
-1. **Guarde la clave:** Si usa XOR o Vigenère, anote la clave usada para poder descifrar después
-2. **Archivo mensaje.txt:** Se genera/actualiza en la misma carpeta del ejecutable
-3. **Misma clave para descifrar:** Use exactamente la misma clave que usó para cifrar
-4. **Caso sensible:** Vigenère convierte todo a mayúsculas automáticamente
-5. **Cancelar operación:** Presione **Esc** en cualquier momento para regresar al menú
+1. **Save the key:** If using XOR or Vigenere, write down the key used so you can decrypt later
+2. **mensaje.txt file:** Generated/updated in the same folder as the executable
+3. **Same key for decryption:** Use exactly the same key you used for encryption
+4. **Case sensitive:** Vigenere converts everything to uppercase automatically
+5. **Cancel operation:** Press **Esc** at any time to return to the menu
 
-## Solución de Problemas Comunes
+## Common Troubleshooting
 
-| Problema | Solución |
-|----------|----------|
-| No puedo regresar al menú | Presione **Esc** |
-| No se muestra el mensaje cifrado | Verifique que existe `mensaje.txt` en la carpeta del programa |
-| "ARCHIVO NO ENCONTRADO" | Asegúrese de que `mensaje.txt` está en la misma carpeta que el ejecutable |
-| La pantalla queda corrupta | Ejecute `cls` en la consola o reinicie el programa |
-| No funciona el cifrado Vigenère | Verifique que la clave tenga solo letras (máximo 4) |
+| Problem | Solution |
+|---------|----------|
+| I can't return to the menu | Press **Esc** |
+| Encrypted message not displayed | Verify that `mensaje.txt` exists in the program folder |
+| "FILE NOT FOUND" | Make sure `mensaje.txt` is in the same folder as the executable |
+| Screen appears corrupted | Run `cls` in the console or restart the program |
+| Vigenere encryption not working | Verify that the key has only letters (maximum 4) |

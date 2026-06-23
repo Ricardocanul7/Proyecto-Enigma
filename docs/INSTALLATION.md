@@ -1,93 +1,93 @@
-# Guía de Instalación
+# Installation Guide
 
-## Requisitos Previos
+## Prerequisites
 
-### Sistema Operativo
+### Operating System
 
-- **Windows** (7, 8, 10 o 11)
-- El programa usa API exclusivas de Windows (`windows.h`, `conio.h`) y no es compatible con Linux o macOS
+- **Windows** (7, 8, 10 or 11)
+- The program uses Windows-only APIs (`windows.h`, `conio.h`) and is not compatible with Linux or macOS
 
-### Compilador
+### Compiler
 
-Opción A: **GCC** (recomendado)
-- [MinGW-w64](https://www.mingw-w64.org/) o [MSYS2](https://www.msys2.org/)
-- Asegurarse de que `gcc` esté en el PATH del sistema
+Option A: **GCC** (recommended)
+- [MinGW-w64](https://www.mingw-w64.org/) or [MSYS2](https://www.msys2.org/)
+- Make sure `gcc` is in the system PATH
 
-Opción B: **Microsoft Visual C++**
-- [Visual Studio](https://visualstudio.microsoft.com/) con trabajo de carga "Desarrollo de Escritorio con C++"
-- Usar el símbolo del sistema de Developer
+Option B: **Microsoft Visual C++**
+- [Visual Studio](https://visualstudio.microsoft.com/) with the "Desktop Development with C++" workload
+- Use the Developer Command Prompt
 
-## Instalación
+## Installation
 
-### Opción 1: Compilar con Make (recomendado)
+### Option 1: Build with Make (recommended)
 
-1. Clonar o descargar el repositorio:
+1. Clone or download the repository:
 ```bash
-git clone <url-del-repositorio>
+git clone <repository-url>
 cd Proyecto-Enigma
 ```
 
-2. Compilar con make:
+2. Build with make:
 ```bash
 make
 ```
 
-3. Ejecutar:
+3. Run:
 ```bash
 ./build/EnigmaProject.exe
 ```
 
-### Opción 2: Compilar con GCC directamente
+### Option 2: Compile with GCC directly
 
 ```bash
 gcc -Iinclude -O2 main.c src/utils/console.c src/ui/screens.c src/ui/icons.c src/ui/animations.c src/algorithms/simple.c src/algorithms/run_length.c src/algorithms/xor.c src/algorithms/vigenere.c -o build/EnigmaProject.exe
 ```
 
-### Opción 3: Compilar con Visual C++ (cl.exe)
+### Option 3: Compile with Visual C++ (cl.exe)
 
-Desde el símbolo del sistema de Developer:
+From the Developer Command Prompt:
 
 ```batch
 cl main.c src\utils\console.c src\ui\screens.c src\ui\icons.c src\ui\animations.c src\algorithms\simple.c src\algorithms\run_length.c src\algorithms\xor.c src\algorithms\vigenere.c /Fe:build\EnigmaProject.exe /Iinclude
 ```
 
-## Verificación
+## Verification
 
-1. Ejecutar `build/EnigmaProject.exe`
-2. Aparecerá la pantalla de login
-3. Ingresar el usuario: **FMAT**
-4. Si el menú principal aparece correctamente, la compilación fue exitosa
+1. Run `build/EnigmaProject.exe`
+2. The login screen will appear
+3. Enter the username: **FMAT**
+4. If the main menu appears correctly, the compilation was successful
 
-## Solución de Problemas
+## Troubleshooting
 
-### "gcc no se reconoce como comando"
+### "gcc is not recognized as an internal or external command"
 
-GCC no está en el PATH. Soluciones:
-- **MinGW:** Agregar `C:\msys64\mingw64\bin` al PATH del sistema
-- **MSYS2:** Usar la terminal MSYS2 para compilar
+GCC is not in the PATH. Solutions:
+- **MinGW:** Add `C:\msys64\mingw64\bin` to the system PATH
+- **MSYS2:** Use the MSYS2 terminal to compile
 
-### "No se puede encontrar windows.h"
+### "Cannot find windows.h"
 
-El compilador no tiene los headers de Windows. Soluciones:
-- Usar MinGW-w64 en lugar de un GCC nativo de Linux
-- En Visual Studio, asegurarse de instalar el trabajo de carga "C++ Desktop Development"
+The compiler does not have the Windows headers. Solutions:
+- Use MinGW-w64 instead of a native Linux GCC
+- In Visual Studio, make sure to install the "C++ Desktop Development" workload
 
-### El programa se cierra inmediatamente
+### Program closes immediately
 
-Verificar que la terminal de consola se mantenga abierta. Si se ejecuta desde el explorador de Windows, la ventana se cerrará al terminar. Usar una terminal de comandos para ejecutar.
+Make sure the console terminal stays open. If run from Windows Explorer, the window will close when finished. Use a command terminal to run.
 
-### Errores de Unicode/caracteres especiales
+### Unicode/special character errors
 
-El programa usa caracteres de código ASCII extendido para los iconos. Asegurarse de que la consola esté configurada con la página de códigos 437 o UTF-8.
+The program uses extended ASCII code characters for the icons. Make sure the console is set to code page 437 or UTF-8.
 
-## Estructura de Archivos Resultante
+## Resulting File Structure
 
-Después de compilar, se generará:
+After compiling, the following will be generated:
 
 ```
 Proyecto-Enigma/
 ├── build/
-│   └── EnigmaProject.exe  ← Ejecutable generado
+│   └── EnigmaProject.exe  <- Generated executable
 ├── main.c
 ├── Makefile
 ├── include/
@@ -96,6 +96,6 @@ Proyecto-Enigma/
 └── docs/
 ```
 
-## Desinstalación
+## Uninstallation
 
-Simplemente eliminar la carpeta del proyecto. No se instalan archivos en el sistema.
+Simply delete the project folder. No files are installed on the system.
