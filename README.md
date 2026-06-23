@@ -15,21 +15,21 @@ EnigmaProject is a console program that allows users to encrypt and decrypt mess
 
 ## Screenshots
 
-| Login | Main Menu |
-|-------|-----------|
-| ![Login](docs/media/Enigma1.PNG) | ![Menu](docs/media/Enigma2.PNG) |
+| Login | Main Menu (Encrypt) |
+|-------|---------------------|
+| ![Login](docs/media/login.png) | ![Menu Encrypt](docs/media/main-menu-encrypt.png) |
 
-| Encryption Selection | Text Input |
-|----------------------|------------|
-| ![Encryption](docs/media/Enigma3.PNG) | ![Text](docs/media/Enigma4.PNG) |
+| Main Menu (Decrypt) | Main Menu (About) |
+|----------------------|-------------------|
+| ![Menu Decrypt](docs/media/main-menu-decrypt.png) | ![Menu About](docs/media/main-menu-about.png) |
 
-| Encrypting | Encrypted Message |
-|------------|-------------------|
-| ![Encrypting](docs/media/Enigma5.PNG) | ![Result](docs/media/Enigma6.PNG) |
+| Main Menu (Exit) | Cipher Selection |
+|--------------------|------------------|
+| ![Menu Exit](docs/media/main-menu-exit.png) | ![Cipher Selection](docs/media/cipher-selection.png) |
 
-| Decrypting | Decrypted Message |
-|------------|-------------------|
-| ![Decrypting](docs/media/Enigma7.PNG) | ![Result](docs/media/Enigma8.PNG) |
+| Text Input | Encryption Successful |
+|------------|-----------------------|
+| ![Text Input](docs/media/text-input.png) | ![Encryption Successful](docs/media/encryption-successful.png) |
 
 ## Requirements
 
