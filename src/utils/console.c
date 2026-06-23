@@ -1,7 +1,7 @@
 /**
- * EnigmaProject - Funciones de Consola/Utilidad
- * 
- * Todas las funciones relacionadas con operaciones de consola
+ * EnigmaProject - Console/Utility Functions
+ *
+ * All functions related to console operations
  */
 
 #include "../../include/enigma.h"

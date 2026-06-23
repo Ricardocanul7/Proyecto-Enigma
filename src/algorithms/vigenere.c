@@ -1,8 +1,8 @@
 /**
- * EnigmaProject - Algoritmo de Cifrado/Descifrado tipo Vigenère
+ * EnigmaProject - Vigenere Encryption/Decryption Algorithm
  *
- * Es un método de cifrado polialfabético de sustitución.
- * La clave debe consistir en letras y sin espacios ni caracteres especiales.
+ * It is a polyalphabetic substitution cipher.
+ * The key must consist of letters without spaces or special characters.
  */
 
 #include "../../include/enigma.h"
@@ -12,7 +12,7 @@ int vigenere_encryption(void)
 	char go_back_to_menu = 0, cipher_str[910];
 	int i = 0, input_length;
 
-	/**variables de algoritmo Vigerene*/
+	/**Vigenere algorithm variables*/
 	char clave[4];
 	int c = 0, iclave;
 
@@ -24,9 +24,9 @@ int vigenere_encryption(void)
 	}
 	input_length = strlen(input_str) - 1;
 
-	/***** Algoritmo de Cifrado Vigerene */
+	/***** Vigenere Encryption Algorithm */
 
-	printf("\n Clave de Cifrado(MAX: 4 letras): ");
+	printf("\n Encryption Key (MAX: 4 letters): ");
 	scanf("%s", clave);
 	iclave = strlen(clave);
 
@@ -48,7 +48,7 @@ int vigenere_encryption(void)
 	}
 	loading_animation();
 	clean_screen();
-	printf("Mensaje Cifrado:\n");
+	printf("Encrypted Message:\n");
 	for (i = 0; i < input_length; i++)
 	{
 		printf("%c", cipher_str[i]);
@@ -67,17 +67,17 @@ int vigerene_decryption(void)
 	char input_str[910], cipher_str[910];
 	int input_length, i;
 
-	/*** Variables de Descifrado Vigerene */
+	/*** Vigenere Decryption Variables */
 	char clave[4];
 	int c, iclave;
 
-	/******************ABRE ARCHIVO TXT ************************************************/
+	/******************OPEN TXT FILE ************************************************/
 	doc = fopen("mensaje.txt", "r");
 
 	if (doc == NULL)
 	{
-		printf("\n\t\t\tARCHIVO NO ENCONTRADO!\n\n Asegurese de poner el archivo 'mensaje.txt' en la carpeta del programa");
-		printf("\n\nPresione una tecla para salir");
+		printf("\n\t\t\tFILE NOT FOUND!\n\n Make sure 'mensaje.txt' is in the program folder");
+		printf("\n\nPress any key to exit");
 		getch();
 		return 1;
 	}
@@ -85,12 +85,12 @@ int vigerene_decryption(void)
 	fgets(input_str, 909, doc);
 	fclose(doc);
 
-	printf("\tMensaje leido:\n\n %s", input_str);
+	printf("\tRead message:\n\n %s", input_str);
 	print_on_raw_coord(0, 2, " ");
 
 	input_length = strlen(input_str);
 
-	printf("\n\n\tCLAVE: ");
+	printf("\n\n\tKEY: ");
 	i = 0;
 	do
 	{
@@ -102,7 +102,7 @@ int vigerene_decryption(void)
 		printf("%c", clave[i]);
 		i++;
 	} while (i != 4);
-	printf("\n\nListo! presiona Enter para continuar");
+	printf("\n\nReady! Press Enter to continue");
 	getch();
 
 	clean_screen();
@@ -114,7 +114,7 @@ int vigerene_decryption(void)
 	string_to_uppercase(input_str);
 	string_to_uppercase(clave);
 	c = 0;
-	printf("\n\n   Mensaje Descifrado:\n\n");
+	printf("\n\n   Decrypted Message:\n\n");
 	printf(" ");
 	for (i = 0; i < input_length; i++)
 	{

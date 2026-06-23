@@ -1,8 +1,8 @@
 /**
- * EnigmaProject - Algoritmo de Cifrado/Descifrado Simple
+ * EnigmaProject - Simple Encryption/Decryption Algorithm
  *
- * Implementa cifrado por sustitución (shift de 3 caracteres)
- * y lectura/escritura de archivos.
+ * Implements substitution cipher (shift of 3 characters)
+ * and file read/write operations.
  */
 
 #include "../../include/enigma.h"
@@ -22,7 +22,7 @@ int simple_encryption(void)
 	}
 	input_length = strlen(input_str) - 2;
 
-	/***** Algoritmo de Cifrado Simple */
+	/***** Simple Encryption Algorithm */
 
 	int i = 0;
 	while (i <= input_length)
@@ -34,7 +34,7 @@ int simple_encryption(void)
 
 	loading_animation();
 	clean_screen();
-	printf(" Mensaje Cifrado:\n");
+	printf(" Encrypted Message:\n");
 	for (i = 0; i < input_length + 1; i++)
 	{
 		printf("%c", cipher_str[i]);
@@ -53,12 +53,12 @@ int simple_decryption(void)
 	char input_str[910], decrypted_str[910];
 	int input_length, i;
 
-	/******************ABRE ARCHIVO TXT ************************************************/
+	/******************OPEN TXT FILE ************************************************/
 	doc = fopen("mensaje.txt", "r");
 
 	if (doc == NULL)
 	{
-		printf("\n\t\t\tARCHIVO NO ENCONTRADO!\n\n Asegurese de poner el archivo 'mensaje.txt' en la carpeta del programa");
+		printf("\n\t\t\tFILE NOT FOUND!\n\n Make sure 'mensaje.txt' is in the program folder");
 		return 1;
 	}
 

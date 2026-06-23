@@ -1,7 +1,7 @@
 /**
- * EnigmaProject - Funciones de Pantallas UI
- * 
- * Todas las funciones relacionadas con la interfaz gráfica de consola
+ * EnigmaProject - UI Screen Functions
+ *
+ * All functions related to the console graphical interface
  */
 
 #include "../../include/enigma.h"
@@ -10,7 +10,7 @@ void draw_login_form(void)
 {
 	COORD coord;
 
-	/** esquinas de recuadro de usuario*/
+	/** user box corners */
 	print_on_raw_coord(29, 8, "\xC9");
 	print_on_raw_coord(50, 8, "\xBB");
 	print_on_raw_coord(29, 11, "\xC8");
@@ -48,7 +48,7 @@ void draw_login_form(void)
 	print_on_raw_coord(24, 6, "              <___:              \n");
 
 	print_on_raw_coord(36, 13, "         ");
-	print_on_raw_coord(36, 14, " USUARIO ");
+	print_on_raw_coord(36, 14, "  USER  ");
 	print_on_raw_coord(36, 15, "         ");
 
 	/** set coords to place input pointer*/
@@ -58,12 +58,12 @@ void draw_login_form(void)
 int authentication(void)
 {
 	char input_password[5];
-	char static_password[5] = "FMAT"; /**USUARIO DEL PROGRAMA*/
+	char static_password[5] = "FMAT"; /**PROGRAM USER*/
 
 	set_color_and_background(7, 0);
 	fgets(input_password, 5, stdin);
 
-	return strcmp(input_password, static_password); /**Comparar String si son iguales devuelve 0*/
+	return strcmp(input_password, static_password); /**Compare String returns 0 if equal*/
 }
 
 void login_screen(void)
@@ -79,8 +79,8 @@ void login_screen(void)
 		if (auth_response != IS_LOGGED)
 		{
 			set_color_and_background(4, 0);
-			print_on_raw_coord(32, 10, "¡Incorrecto!");
-			Sleep(300); /**tiempo que aparecera "¡Incorrecto!" en pantalla*/
+			print_on_raw_coord(32, 10, "Incorrect!");
+			Sleep(300); /**time "Incorrect!" stays on screen*/
 		}
 
 		clean_screen();
@@ -94,7 +94,7 @@ void draw_message_input_form(void)
 
 	draw_screen_border();
 
-	for (coord.X = 2; coord.X < 77; coord.X++) { /**Sombreado Superior*/
+	for (coord.X = 2; coord.X < 77; coord.X++) { /**Top shading*/
 		for (coord.Y = 2; coord.Y < 8; coord.Y++)
 		{
 			print_on_coord(coord, "\xB1");
@@ -117,7 +117,7 @@ void draw_message_input_form(void)
 	}
 
 	print_on_raw_coord(3, 5, "         ");
-	print_on_raw_coord(3, 6, " MENSAJE ");
+	print_on_raw_coord(3, 6, " MESSAGE ");
 	print_on_raw_coord(3, 7, "         ");
 }
 
@@ -125,43 +125,43 @@ void draw_screen_border(void)
 {
 	COORD coord;
 
-	/** Dibujar esquinas */
+	/** Draw corners */
 	print_on_raw_coord(1, 1, "\xC9");
 	print_on_raw_coord(1, 24, "\xC8");
 	print_on_raw_coord(77, 1, "\xBB");
 	print_on_raw_coord(77, 24, "\xBC");
 
-	/** Dibujo del Marco o Dorde*/
+	/** Draw Border Frame */
 
 	coord.X = 1;
-	do { /**lado superior*/
+	do { /**top side*/
 		coord.X++;
 		print_on_raw_coord(coord.X, 1, "\xCD");
 	} while (coord.X != 76);
 
 	coord.X = 1;
-	do { /**lado inferior*/
+	do { /**bottom side*/
 		coord.X++;
 		print_on_raw_coord(coord.X, 24, "\xCD");
 	} while (coord.X != 76);
 
 	coord.Y = 1;
-	do { /** lado derecho*/
+	do { /** right side*/
 		coord.Y++;
 		print_on_raw_coord(77, coord.Y, "\xBA");
 	} while (coord.Y != 23);
 
 	coord.Y = 1;
-	do { /** lado izquierdo*/
+	do { /** left side*/
 		coord.Y++;
 		print_on_raw_coord(1, coord.Y, "\xBA");
 	} while (coord.Y != 23);
 }
 
-/** Función de ingreso de texto - movida a utils/string_handler.c */
+/** Text input function - moved to utils/string_handler.c */
 char *input_text(void);
 
-/** Pantalla de opción de encriptación */
+/** Encryption type option screen */
 int encryption_type_option_screen(void)
 {
 	COORD coord;
@@ -176,12 +176,12 @@ int encryption_type_option_screen(void)
 		clean_screen();
 		draw_screen_border();
 
-		print_on_raw_coord(26, 4, "* SELECCIONA TIPO DE CIFRADO *");
+		print_on_raw_coord(26, 4, "* SELECT ENCRYPTION TYPE *");
 		print_on_raw_coord(24, 8,"1.-SIMPLE");
 		print_on_raw_coord(24, 12,"2.-XOR");
-		print_on_raw_coord(45, 8,"3.-VIGERENE");
+		print_on_raw_coord(45, 8,"3.-VIGENERE");
 		print_on_raw_coord(45, 12,"4.-RUN LENGTH");
-		print_on_raw_coord(45, 13," (COMPRESOR)");
+		print_on_raw_coord(45, 13," (COMPRESSOR)");
 
 		print_on_coord(coord, "-->");
 
@@ -210,7 +210,7 @@ int encryption_type_option_screen(void)
 			}
 		}
 
-		if (pressed_key == KEY_ESC) { /** si presiona la tecla ESC pasa valor 5 y regresa a menu */
+		if (pressed_key == KEY_ESC) { /** if ESC key is pressed, set value 5 and return to menu */
 			option = 5;
 			exit = true;
 		}
@@ -236,7 +236,7 @@ int encryption_type_option_screen(void)
 	return option;
 }
 
-/** Pantalla de opción de descifrado */
+/** Decryption type option screen */
 int decryption_type_option_screen(void)
 {
 	COORD coord;
@@ -251,12 +251,12 @@ int decryption_type_option_screen(void)
 		clean_screen();
 		draw_screen_border();
 
-		print_on_raw_coord(26, 4,"* SELECCIONA TIPO DE DESCIFRADO *");
+		print_on_raw_coord(26, 4,"* SELECT DECRYPTION TYPE *");
 		print_on_raw_coord(24, 8,"1.-SIMPLE");
 		print_on_raw_coord(24, 12,"2.-XOR");
-		print_on_raw_coord(45, 8,"3.-VIGERENE");
+		print_on_raw_coord(45, 8,"3.-VIGENERE");
 		print_on_raw_coord(45, 12,"4.-RUN LENGTH");
-		print_on_raw_coord(45, 13," (COMPRESOR)");
+		print_on_raw_coord(45, 13," (COMPRESSOR)");
 
 		print_on_coord(coord, "-->");
 
@@ -285,7 +285,7 @@ int decryption_type_option_screen(void)
 			}
 		}
 
-		if (pressed_key == KEY_ESC) { /** si presiona la tecla ESC pasa valor 5 y regresa a menu */
+		if (pressed_key == KEY_ESC) { /** if ESC key is pressed, set value 5 and return to menu */
 			option = 5;
 			exit = true;
 		}
@@ -311,7 +311,7 @@ int decryption_type_option_screen(void)
 	return option;
 }
 
-/** Pantalla principal de menú */
+/** Main menu screen */
 void main_menu(void)
 {
 	COORD coord;
@@ -322,13 +322,13 @@ void main_menu(void)
 	bool exit = false;
 	bool go_back = false;
 	int menu_index = 0;
-	char pressed_key; /** valores capturados por teclas de navegacion */
+	char pressed_key; /** navigation key values */
 
 	do {
 		clean_screen();
 
 		/*********************************************************/
-		/** Se imprime Un dibujo representando la opcion marcada */
+		/** Print icon representing the selected option */
 		if (coord.Y == 8) {
 			padlock_close_icon();
 		}
@@ -336,21 +336,21 @@ void main_menu(void)
 			padlock_open_icon();
 		}
 		if (coord.Y == 14) {
-			set_color_and_background(9, 0); /**Color Azul*/
+			set_color_and_background(9, 0); /**Blue Color*/
 			about_icon();
 		}
 		if (coord.Y == 17) {
-			set_color_and_background(4, 0); /**Color Rojo*/
+			set_color_and_background(4, 0); /**Red Color*/
 			exit_icon();
 		}
 		/*********************************************************/
-		set_color_and_background(50, 0); /** establecer color de nuevo porque acabo de limpiar la pantalla*/
+		set_color_and_background(50, 0); /** reset color because screen was just cleared */
 		draw_screen_border();
 
-		print_on_raw_coord(10, 8, "Encriptar");
-		print_on_raw_coord(17, 11, "Desencriptar");
-		print_on_raw_coord(24, 14, "Acerca de");
-		print_on_raw_coord(31, 17, "Salir");
+		print_on_raw_coord(10, 8, "Encrypt");
+		print_on_raw_coord(17, 11, "Decrypt");
+		print_on_raw_coord(24, 14, "About");
+		print_on_raw_coord(31, 17, "Exit");
 
 		print_on_coord(coord, "-->");
 
@@ -396,7 +396,7 @@ void main_menu(void)
 					{
 						break;
 					}
-					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
+					printf("\n\n\t\t   Press any key to return to menu");
 					getch();
 					break;
 				case XOR:
@@ -406,7 +406,7 @@ void main_menu(void)
 					{
 						break;
 					}
-					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
+					printf("\n\n\t\t   Press any key to return to menu");
 					getch();
 					break;
 				case VIGERENE:
@@ -416,7 +416,7 @@ void main_menu(void)
 					{
 						break;
 					}
-					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
+					printf("\n\n\t\t   Press any key to return to menu");
 					getch();
 					break;
 				case RUN_LENGTH:
@@ -426,7 +426,7 @@ void main_menu(void)
 					{
 						break;
 					}
-					printf("\n\n\t\t   Pulsa una tecla para regresar al menu");
+					printf("\n\n\t\t   Press any key to return to menu");
 					getch();
 					break;
 				case 5:
@@ -449,11 +449,11 @@ void main_menu(void)
 					go_back = simple_decryption();
 					if (go_back == true)
 					{
-						printf("\n\nPresione una tecla para salir");
+						printf("\n\nPress any key to exit");
 						getch();
 						break;
 					}
-					printf("\n\nPresione una tecla para salir");
+					printf("\n\nPress any key to exit");
 					getch();
 					break;
 				case XOR:
@@ -462,7 +462,7 @@ void main_menu(void)
 					{
 						break;
 					}
-					printf("\n\nPresione una tecla para salir");
+					printf("\n\nPress any key to exit");
 					getch();
 					break;
 				case VIGERENE:
@@ -471,7 +471,7 @@ void main_menu(void)
 					{
 						break;
 					}
-					printf("\n\nPresione una tecla para salir");
+					printf("\n\nPress any key to exit");
 					getch();
 					break;
 				case RUN_LENGTH:
@@ -480,11 +480,11 @@ void main_menu(void)
 					go_back = run_length_decryption();
 					if (go_back == true)
 					{
-						printf("\n\nPresione una tecla para salir");
+						printf("\n\nPress any key to exit");
 						getch();
 						break;
 					}
-					printf("\n\nPresione una tecla para salir");
+					printf("\n\nPress any key to exit");
 					getch();
 					break;
 				case 5:

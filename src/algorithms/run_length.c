@@ -1,7 +1,7 @@
 /**
- * EnigmaProject - Algoritmo de Run-Length Encoding (Compresor)
+ * EnigmaProject - Run-Length Encoding Algorithm (Compressor)
  *
- * Comprime secuencias repetidas en el mensaje usando el formato #caracternum
+ * Compresses repeated sequences in the message using the format #characternum
  */
 
 #include "../../include/enigma.h"
@@ -20,7 +20,7 @@ int run_length_encryption(void)
 	}
 	input_length = strlen(input_str) - 1;
 
-	/***** Algoritmo de Cifrado Run Length */
+	/***** Run Length Encryption Algorithm */
 	char_repeat_counter = 1;
 	int i = 0, j = 0;
 	for (i = 0; i < input_length; i++)
@@ -54,7 +54,7 @@ int run_length_encryption(void)
 
 	loading_animation();
 	clean_screen();
-	printf(" Mensaje Cifrado:\n");
+	printf(" Encrypted Message:\n");
 	for (i = 0; i < input_length; i++)
 	{
 		printf("%c", cipher_str[i]);
@@ -73,12 +73,12 @@ int run_length_decryption(void)
 	int input_length, decrypt_counter = 0, char_counter;
 	char temp_char;
 
-	/******************ABRE ARCHIVO TXT ************************************************/
+	/******************OPEN TXT FILE ************************************************/
 	doc = fopen("mensaje.txt", "r");
 
 	if (doc == NULL)
 	{
-		printf("\n\t\t\tARCHIVO NO ENCONTRADO!\n\n Asegurese de poner el arvhivo 'mensaje.txt' en la carpeta del programa");
+		printf("\n\t\t\tFILE NOT FOUND!\n\n Make sure 'mensaje.txt' is in the program folder");
 		return 1;
 	}
 

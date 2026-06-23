@@ -1,7 +1,7 @@
 /**
- * EnigmaProject - Funciones de Animaciones
- * 
- * Todas las funciones relacionadas con animaciones de consola
+ * EnigmaProject - Animation Functions
+ *
+ * All functions related to console animations
  */
 
 #include "../../include/enigma.h"
@@ -11,11 +11,11 @@ void loading_animation(void)
 	int loading;
 	COORD coord;
 
-	print_on_raw_coord(30, 8,"Cifrando mensaje...");
-	print_on_raw_coord(40, 23,"Generando archivo mensaje.txt");
+	print_on_raw_coord(30, 8,"Encrypting message...");
+	print_on_raw_coord(40, 23,"Generating message.txt file");
 
 	draw_screen_border();
-	/** esquinas de recuadro de usuario*/
+	/** user box corners */
 	print_on_raw_coord(29, 9,"\xC9");
 	print_on_raw_coord(50, 9,"\xBB");
 	print_on_raw_coord(29, 12,"\xC8");
@@ -47,7 +47,7 @@ void loading_animation(void)
 		print_on_raw_coord(coord.X, 9,"\xCD");
 	} while (coord.X != 49);
 
-	/** Cargano Animacion*/
+	/** Loading Animation */
 
 	for (loading = 30; loading < 50; loading++) {
 		print_on_raw_coord(loading, 10,"\xDB");
@@ -55,9 +55,9 @@ void loading_animation(void)
 		Sleep(100);
 	}
 
-	print_on_raw_coord(40, 23,"                                    "); /** borrar printf de "generando txt" */
-	print_on_raw_coord(30, 8,"  Cifrado Exitoso! ");
-	print_on_raw_coord(20, 17,"Presione una tecla para volver al menu.");
+	print_on_raw_coord(40, 23,"                                    "); /** clear "generating txt" printf */
+	print_on_raw_coord(30, 8,"  Encryption Successful! ");
+	print_on_raw_coord(20, 17,"Press any key to return to menu.");
 	getch();
 }
 
@@ -66,11 +66,11 @@ void decryption_animation(void)
 	int loading;
 	COORD coord;
 
-	print_on_raw_coord(30, 8,"Descifrando mensaje...");
-	print_on_raw_coord(48, 22,"Leyendo mensaje.txt...");
+	print_on_raw_coord(30, 8,"Decrypting message...");
+	print_on_raw_coord(48, 22,"Reading message.txt...");
 
 	draw_screen_border();
-	/** esquinas de recuadro de usuario*/
+	/** user box corners */
 
 	print_on_raw_coord(29, 9,"\xC9");
 	print_on_raw_coord(50, 9,"\xBB");
@@ -103,7 +103,7 @@ void decryption_animation(void)
 		print_on_raw_coord(coord.X, 9,"\xCD");
 	} while (coord.X != 49);
 
-	/** Cargando Animacion*/
+	/** Loading Animation */
 
 	for (loading = 30; loading < 50; loading++) {
 		print_on_raw_coord(loading, 10,"\xDB");
@@ -111,7 +111,7 @@ void decryption_animation(void)
 		Sleep(100);
 	}
 
-	print_on_raw_coord(30, 8,"  Archivo Descifrado ");
+	print_on_raw_coord(30, 8,"  Decrypted File ");
 	gotoxy(30, 8);
 }
 
@@ -127,7 +127,7 @@ void about_screen(void)
 		print_on_raw_coord(24, 12,"              <___:              \n");
 
 		char* message =
-			"EnigmaProject fue realizado por:\n\n"
+			"EnigmaProject was made by:\n\n"
 			" -Arias Morales Marvin\n\n"
 			" -Canul Flota Ricardo.\n\n"
 			" -Cordova Villamil Jorge\n\n"
@@ -138,7 +138,7 @@ void about_screen(void)
 			clean_screen();
 		}
 	}
-	print_on_raw_coord(19, 18,"Pulse una tecla para volver al menu");
+	print_on_raw_coord(19, 18,"Press any key to return to menu");
 }
 
 void bye_animation(void)
@@ -177,7 +177,7 @@ void bye_animation(void)
 			printf("%c", bye[coord.Y][coord.X]);
 		}
 	}
-	/** Signo de Admiracion */
+	/** Exclamation Sign */
 	for (coord.Y = 0; coord.Y < 6; coord.Y++) {
 		gotoxy(55, 7 + coord.Y);
 		for (coord.X = 0; coord.X < 3; coord.X++) {
@@ -186,11 +186,11 @@ void bye_animation(void)
 	}
 
 	coord.Y = 0;
-	for (coord.X = 0; coord.X < 41; coord.X++) { /**Impresion de asteriscos horizontales*/
+	for (coord.X = 0; coord.X < 41; coord.X++) { /**Horizontal asterisk animation*/
 		print_on_raw_coord(17 + coord.X, 15,"*");
 		print_on_raw_coord(58 - coord.X, 7,"*");
 
-		if ((coord.X % 5 == 0)) { /** impresion de asteriscos verticales*/
+		if ((coord.X % 5 == 0)) { /** vertical asterisk animation */
 			coord.Y++;
 			print_on_raw_coord(17, 6 + coord.Y,"*");
 			print_on_raw_coord(58, 16 - coord.Y,"*");

@@ -10,7 +10,7 @@ Este documento describe detalladamente los cuatro algoritmos de cifrado y descif
 **Complejidad:** Baja
 **Archivo:** `src/algorithms/simple.c`
 
-### Princípio
+### Principio
 
 Desplaza cada carácter del mensaje 3 posiciones hacia adelante en la tabla ASCII. Para descifrar, se realiza la operación inversa (restar 3).
 

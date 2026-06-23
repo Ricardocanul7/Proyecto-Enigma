@@ -1,10 +1,10 @@
 /**
- * EnigmaProject - Archivo Principal de Entrada (Entry Point)
- * 
+ * EnigmaProject - Main Entry Point
+ *
  * Universidad Autonoma de Yucatan
- * Proyecto de Encriptacion "ENIGMA"
- * 
- * Para compilar usar: cl main.c /Fe:EnigmaProject.exe /Iinclude /Osrc
+ * ENIGMA Encryption Project
+ *
+ * To compile use: cl main.c /Fe:EnigmaProject.exe /Iinclude /Osrc
  */
 
 #include <stdio.h>
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "include/enigma.h"
 
-/** Funciones de utilidad **/
+/** Utility Functions **/
 void set_color_and_background(int ForgC, int BackC);
 int *gotoxy(int x, int y);
 void print_on_coord(COORD coord, char str[]);
@@ -22,7 +22,7 @@ void print_on_raw_coord(int y, int x, char str[]);
 void string_to_uppercase(char cadena[]);
 void clean_screen(void);
 
-/** Funciones de pantallas **/
+/** Screen Functions **/
 void draw_login_form(void);
 int authentication(void);
 void login_screen(void);
@@ -36,19 +36,19 @@ void decryption_animation(void);
 void about_screen(void);
 void bye_animation(void);
 
-/** Iconos gráficos **/
+/** Graphic Icons **/
 void padlock_close_icon(void);
 void padlock_open_icon(void);
 void about_icon(void);
 void exit_icon(void);
 
-/** Algoritmos de cifrado/descifrado simple **/
+/** Simple Encryption/Decryption Algorithms **/
 int simple_encryption(void);
 int run_length_encryption(void);
 int xor_encryption(void);
 int vigenere_encryption(void);
 
-/** Animaciones (opcional - se pueden mover a un archivo separado) **/
+/** Animations (optional - can be moved to a separate file) **/
 void loading_animation(void);
 void decryption_animation(void);
 void about_screen(void);
@@ -58,10 +58,10 @@ int main(void)
 {
 	clean_screen();
 
-	/** Iniciar Pantalla de Login */
+	/** Start Login Screen */
 	login_screen();
 
-	/** Pantalla Principal del Menu */
+	/** Main Menu Screen */
 	main_menu();
 
 	return 0;

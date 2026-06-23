@@ -1,8 +1,8 @@
 /**
- * EnigmaProject - Algoritmo de Cifrado/Descifrado tipo XOR
+ * EnigmaProject - XOR Encryption/Decryption Algorithm
  *
- * Xor es la operacion bitwise o binaria, con las reglas:
- * 1. Si los bits del numero A y B son iguales el resultado es "0", si no el resultado es "1".
+ * XOR is a bitwise or binary operation, with the rules:
+ * 1. If bits of number A and B are equal the result is "0", otherwise the result is "1".
  */
 
 #include "../../include/enigma.h"
@@ -12,7 +12,7 @@ int xor_encryption(void)
 	char go_back_to_menu = 0, cipher_str[910];
 	int i = 0;
 
-	/**variables de algoritmo XOR*/
+	/**XOR algorithm variables*/
 	int input_length, cadena_convert_decimal[910], j;
 	int binary_8bit_ascii[8], inverted_binary[8], remainder, bin_counter, store_counter;
 	int binary_store[910][8];
@@ -27,7 +27,7 @@ int xor_encryption(void)
 	}
 	input_length = strlen(cadena) - 1;
 
-	/***** Algoritmo de Cifrado XOR */
+	/***** XOR Encryption Algorithm */
 
 	store_counter = 0;
 	for (i = 0; i < input_length; i++)
@@ -51,14 +51,14 @@ int xor_encryption(void)
 		store_counter++;
 	}
 
-	printf("\nIngresa clave de cifrado binario de 8 bits\n");
+	printf("\nEnter 8-bit binary encryption key:\n");
 	for (i = 0; i < 8; i++)
 	{
 		claveaux = getch();
 		clave[i] = claveaux - '0';
 		if ((clave[i] != 0) && (clave[i] != 1))
 		{
-			printf("\tError!\nEjemplo de clave: '10110110'\n");
+			printf("\tError!\nKey example: '10110110'\n");
 			i = -1;
 		}
 		else
@@ -66,13 +66,13 @@ int xor_encryption(void)
 			printf("%d", clave[i]);
 		}
 	}
-	printf("\n\nGuarda tu clave para poder descifrar el mensaje\nMuy bien! ahora presiona cualquier tecla para continuar");
+	printf("\n\nSave your key to decrypt the message later\nGood! Now press any key to continue");
 	getch();
 	clean_screen();
 	loading_animation();
 	clean_screen();
 
-	/** Ciclo para Cifrar el Binario de cada letra */
+	/** Loop to Encrypt Binary of each letter */
 	printf("\n");
 	for (i = 0; i < input_length; i++)
 	{
@@ -89,7 +89,7 @@ int xor_encryption(void)
 		}
 	}
 
-	/** Ciclo que convierte los Binarios Cifrados a Decimales */
+	/** Loop that converts Encrypted Binaries to Decimals */
 	for (i = 0; i < input_length; i++)
 	{
 		decimal_storage = 0;
@@ -102,8 +102,8 @@ int xor_encryption(void)
 		cipher_str[i] = decimal_storage;
 	}
 
-	/** IMPRIMIR MENSAJE CIFRADO */
-	printf("Mensaje Cifrado:\n");
+	/** PRINT ENCRYPTED MESSAGE */
+	printf("Encrypted Message:\n");
 	for (i = 0; i < input_length; i++)
 	{
 		printf("%c", cipher_str[i]);
@@ -122,17 +122,17 @@ int xor_decryption(void)
 	char input_str[910], decrypted_str[910];
 	int char_counter, i;
 
-	/*** Variables de Descifrado XOR */
+	/*** XOR Decryption Variables */
 	char confirmation = 'n';
 	int clave[8], inverted_binary[8], binary_store[910][8], cipher_binary[910][8];
 	int claveaux, remainder, j, binary_counter, decimal_storage, temp_binary, decimal;
 
-	/******************ABRE ARCHIVO TXT ************************************************/
+	/******************OPEN TXT FILE ************************************************/
 	doc = fopen("mensaje.txt", "r");
 
 	if (doc == NULL)
 	{
-		printf("\n\t\t\tARCHIVO NO ENCONTRADO!\n\n Asegurese de poner el arvhivo 'mensaje.txt' en la carpeta del programa");
+		printf("\n\t\t\tFILE NOT FOUND!\n\n Make sure 'mensaje.txt' is in the program folder");
 		return 1;
 	}
 
@@ -145,7 +145,7 @@ int xor_decryption(void)
 	while (confirmation != 'y')
 	{
 		clean_screen();
-		printf("\n\tIngrese Clave binaria de decifrado: ");
+		printf("\n\tEnter binary decryption key: ");
 		for (i = 7; i >= 0; i--)
 		{
 			claveaux = getch();
@@ -156,7 +156,7 @@ int xor_decryption(void)
 			clave[i] = claveaux - '0';
 			if ((clave[i] != 0) && (clave[i] != 1))
 			{
-				printf("\tError!\nEjemplo de clave: '10110110'\n");
+				printf("\tError!\nKey example: '10110110'\n");
 				i = 8;
 			}
 			else
@@ -164,7 +164,7 @@ int xor_decryption(void)
 				printf("%d", clave[i]);
 			}
 		}
-		printf("\n\tEstas seguro? y/n");
+		printf("\n\tAre you sure? y/n");
 		confirmation = getch();
 	}
 	clean_screen();
@@ -194,7 +194,7 @@ int xor_decryption(void)
 		}
 	}
 
-	/** Ciclo para Descifrar el Binario de cada letra */
+	/** Loop to Decrypt Binary of each letter */
 	printf("\n");
 	for (i = 0; i < char_counter; i++)
 	{
@@ -211,7 +211,7 @@ int xor_decryption(void)
 		}
 	}
 
-	/** Convierte Binario a Decimal */
+	/** Convert Binary to Decimal */
 	for (i = 0; i < char_counter; i++)
 	{
 		decimal_storage = 0;
@@ -224,7 +224,7 @@ int xor_decryption(void)
 		decrypted_str[i] = decimal_storage;
 	}
 
-	printf("Mensaje Descifrado:\n");
+	printf("Decrypted Message:\n");
 	for (i = 0; i < char_counter; i++)
 	{
 		printf("%c", decrypted_str[i]);
