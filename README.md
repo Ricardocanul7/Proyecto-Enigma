@@ -1,25 +1,128 @@
-# Proyecto-Enigma
+# Proyecto Enigma
 
-Proyecto Enigma es un programa que utiliza algunos metodos de cifrado para cifrar y descifrar mensajes de texto.
+Sistema de cifrado y descifrado de mensajes de texto que implementa cuatro algoritmos criptográficos clásicos, desarrollado en lenguaje C para la plataforma Windows.
 
-Este programa está escrito en C y corre unicamente en Windows debido a que usa ciertas librerias de Windows como los colores de la terminal, el programa fue elaborado como proyecto final de un curso de fundamentos de programacion en la universidad, pero los algoritmos pueden ser adaptados a otro lenguaje o mejorados por lo que dejo el codigo a disposicion del la comunidad
+## Descripción
 
-PS: El usuario para abrir el programa despues de compilarlo es "FMAT"
+EnigmaProject es un programa de consola que permite a los usuarios cifrar y descifrar mensajes utilizando distintos métodos de encriptación. El proyecto fue elaborado como proyecto final del curso de Fundamentos de Programación en la Universidad Autónoma de Yucatán.
 
-Capturas
+## Características
 
-![Screenshot](readme-media/Enigma1.PNG)
+- **4 algoritmos de cifrado:** Simple (César), XOR, Vigenère y Run-Length Encoding
+- **Interfaz visual:** Menús navegables con teclado, iconos ASCII art y animaciones
+- **Sistema de autenticación:** Acceso restringido con usuario
+- **Guardado automático:** Los mensajes cifrado se almacenan en `mensaje.txt`
 
-![Screenshot](readme-media/Enigma2.PNG)
+## Capturas de Pantalla
 
-![Screenshot](readme-media/Enigma3.PNG)
+| Login | Menú Principal |
+|-------|----------------|
+| ![Login](docs/media/Enigma1.PNG) | ![Menú](docs/media/Enigma2.PNG) |
 
-![Screenshot](readme-media/Enigma4.PNG)
+| Selección de Cifrado | Entrada de Texto |
+|----------------------|------------------|
+| ![Cifrado](docs/media/Enigma3.PNG) | ![Texto](docs/media/Enigma4.PNG) |
 
-![Screenshot](readme-media/Enigma5.PNG)
+| Cifrando | Mensaje Cifrado |
+|----------|-----------------|
+| ![Cifrando](docs/media/Enigma5.PNG) | ![Resultado](docs/media/Enigma6.PNG) |
 
-![Screenshot](readme-media/Enigma6.PNG)
+| Descifrando | Mensaje Descifrado |
+|-------------|-------------------|
+| ![Descifrando](docs/media/Enigma7.PNG) | ![Resultado](docs/media/Enigma8.PNG) |
 
-![Screenshot](readme-media/Enigma7.PNG)
+## Requisitos
 
-![Screenshot](readme-media/Enigma8.PNG)
+- **Sistema operativo:** Windows (usa API de Windows: `windows.h`, `conio.h`)
+- **Compilador:** GCC (MinGW/MSYS2) o Microsoft Visual C++ (cl.exe)
+
+## Compilación
+
+### Con GCC (recomendado)
+
+```bash
+make
+```
+
+O directamente:
+
+```bash
+gcc -Iinclude -O2 main.c src/utils/console.c src/ui/screens.c src/ui/icons.c src/ui/animations.c src/algorithms/simple.c src/algorithms/run_length.c src/algorithms/xor.c src/algorithms/vigenere.c -o EnigmaProject
+```
+
+### Con Microsoft Visual C++
+
+```batch
+cl main.c src/utils/console.c src/ui/screens.c src/ui/icons.c src/ui/animations.c src/algorithms/simple.c src/algorithms/run_length.c src/algorithms/xor.c src/algorithms/vigenere.c /Fe:EnigmaProject.exe /Iinclude
+```
+
+### Limpiar archivos compilados
+
+```bash
+make clean
+```
+
+## Uso
+
+1. Ejecutar `EnigmaProject.exe`
+2. Ingresar el usuario: **FMAT**
+3. Navegar con las teclas de dirección (↑ ↓ ← →)
+4. Seleccionar opción con **Enter**
+5. Para regresar a un menú anterior, presionar **Esc**
+
+## Estructura del Proyecto
+
+```
+Proyecto-Enigma/
+├── main.c                          # Punto de entrada del programa
+├── Makefile                        # Archivo de compilación
+├── include/
+│   └── enigma.h                    # Header principal (enums, constantes, prototipos)
+├── src/
+│   ├── utils/
+│   │   └── console.c               # Funciones de utilidad de consola
+│   ├── ui/
+│   │   ├── screens.c               # Pantallas de interfaz de usuario
+│   │   ├── icons.c                 # Iconos ASCII art
+│   │   └── animations.c           # Animaciones de carga y transición
+│   └── algorithms/
+│       ├── simple.c                # Cifrado simple (César) + entrada de texto
+│       ├── xor.c                   # Cifrado XOR
+│       ├── vigenere.c              # Cifrado Vigenère
+│       └── run_length.c           # Run-Length Encoding (compresión)
+├── docs/
+│   ├── media/                      # Capturas de pantalla
+│   │   ├── Enigma1.PNG
+│   │   └── ...
+│   ├── ARCHITECTURE.md             # Arquitectura del código
+│   ├── ALGORITHMS.md               # Descripción de algoritmos
+│   ├── INSTALLATION.md             # Guía de instalación
+│   └── USER_GUIDE.md               # Manual de usuario
+└── EnigmaProject-ver_1.0.c         # Código fuente original (backup)
+```
+
+Para más detalles, consulte la documentación en la carpeta [`docs/`](docs/).
+
+## Algoritmos Implementados
+
+| Algoritmo | Tipo | Descripción |
+|-----------|------|-------------|
+| Simple (César) | Sustitución | Desplaza cada carácter 3 posiciones en ASCII |
+| XOR | Bitwise | Opera cada bit con una clave binaria de 8 bits |
+| Vigenère | Polialfabético | Sustitución con clave repetitiva de hasta 4 letras |
+| Run-Length | Compresión | Reemplaza secuencias repetidas con `#caracternum` |
+
+Consulte [`docs/ALGORITHMS.md`](docs/ALGORITHMS.md) para una explicación detallada de cada algoritmo.
+
+## Desarrolladores
+
+- **Arias Morales Marvin**
+- **Canul Flota Ricardo**
+- **Cordova Villamil Jorge**
+- **Pool Alvarado Marco**
+
+Universidad Autónoma de Yucatán - 2026
+
+## Licencia
+
+Proyecto académico. El código se distribuye con fines educativos.

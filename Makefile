@@ -3,9 +3,12 @@
 # Compila la aplicación EnigmaProject
 
 # Detecta automáticamente el compilador disponible
-# Si tienes gcc instalado, usará gcc. Si no, usarás cl.exe (Visual C++)
 CXX = gcc
 INCLUDE_PATH = -Iinclude
+
+# Directorio de salida
+BUILD_DIR = build
+
 SOURCE_FILES = \
     main.c \
     src/utils/console.c \
@@ -17,54 +20,60 @@ SOURCE_FILES = \
     src/algorithms/xor.c \
     src/algorithms/vigenere.c
 
-TARGET = EnigmaProject
+# Archivos objeto en build/
+OBJECT_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(SOURCE_FILES))
+
+TARGET = $(BUILD_DIR)/EnigmaProject.exe
 
 # Regla por defecto: compila todo
 all: $(TARGET)
 
-# Regla para compilar el ejecutable principal (gcc/g++)
-$(TARGET): $(SOURCE_FILES)
+# Crear directorio build antes de compilar
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+# Regla para compilar el ejecutable principal
+$(TARGET): $(OBJECT_FILES) | $(BUILD_DIR)
 	$(CXX) $(INCLUDE_PATH) -O2 $^ -o $@
 
 # Reglas individuales para cada archivo fuente
-src/utils/console.o: src/utils/console.c include/enigma.h
+$(BUILD_DIR)/main.o: main.c include/enigma.h | $(BUILD_DIR)
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
-src/ui/screens.o: src/ui/screens.c include/enigma.h
+$(BUILD_DIR)/src/utils/console.o: src/utils/console.c include/enigma.h | $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/src/utils
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
-src/ui/icons.o: src/ui/icons.c include/enigma.h
+$(BUILD_DIR)/src/ui/screens.o: src/ui/screens.c include/enigma.h | $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/src/ui
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
-src/ui/animations.o: src/ui/animations.c include/enigma.h
+$(BUILD_DIR)/src/ui/icons.o: src/ui/icons.c include/enigma.h | $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/src/ui
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
-src/algorithms/simple.o: src/algorithms/simple.c include/enigma.h
+$(BUILD_DIR)/src/ui/animations.o: src/ui/animations.c include/enigma.h | $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/src/ui
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
-src/algorithms/run_length.o: src/algorithms/run_length.c include/enigma.h
+$(BUILD_DIR)/src/algorithms/simple.o: src/algorithms/simple.c include/enigma.h | $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/src/algorithms
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
-src/algorithms/xor.o: src/algorithms/xor.c include/enigma.h
+$(BUILD_DIR)/src/algorithms/run_length.o: src/algorithms/run_length.c include/enigma.h | $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/src/algorithms
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
-src/algorithms/vigenere.o: src/algorithms/vigenere.c include/enigma.h
+$(BUILD_DIR)/src/algorithms/xor.o: src/algorithms/xor.c include/enigma.h | $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/src/algorithms
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
-main.o: main.c include/enigma.h
+$(BUILD_DIR)/src/algorithms/vigenere.o: src/algorithms/vigenere.c include/enigma.h | $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/src/algorithms
 	$(CXX) $(INCLUDE_PATH) -c $< -o $@
 
-# Limpia todos los archivos objeto y el ejecutable (para gcc)
+# Limpia el directorio build
 clean:
-	rm -f $(TARGET) *.o *.obj *.dll.a .libs
+	rm -rf $(BUILD_DIR)
 
-# Limpia completo  
-distclean: clean
-	rm -rf src/*.o include/*.o *.o
-
-# Dependencias de cabecera
-include/enigma.h:
-	mkdir include
-	touch include/enigma.h
-
-.PHONY: all clean distclean
+.PHONY: all clean

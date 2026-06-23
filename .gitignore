@@ -1,4 +1,6 @@
+build/
 *.exe
+*.o
+*.obj
 mensaje.txt
 .vscode/settings.json
-*/**.exe
