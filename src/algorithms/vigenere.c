@@ -13,8 +13,8 @@ int vigenere_encryption(void)
 	int i = 0, input_length;
 
 	/**Vigenere algorithm variables*/
-	char clave[4];
-	int c = 0, iclave;
+	char password[4];
+	int c = 0, password_length;
 
 	/** Read text*/
 	char *input_str = input_text();
@@ -27,18 +27,18 @@ int vigenere_encryption(void)
 	/***** Vigenere Encryption Algorithm */
 
 	printf("\n Encryption Key (MAX: 4 letters): ");
-	scanf("%s", clave);
-	iclave = strlen(clave);
+	scanf("%s", password);
+	password_length = strlen(password);
 
 	string_to_uppercase(input_str);
-	string_to_uppercase(clave);
+	string_to_uppercase(password);
 	for (i = 0; i < input_length; i++)
 	{
 		if (input_str[i] >= 'A' && input_str[i] <= 'Z')
 		{
-			if (c == iclave)
+			if (c == password_length)
 				c = 0;
-			cipher_str[i] = (((input_str[i] - 65) + (clave[c] - 65)) % 26) + 65;
+			cipher_str[i] = (((input_str[i] - 65) + (password[c] - 65)) % 26) + 65;
 			c++;
 		}
 		else
@@ -68,8 +68,8 @@ int vigerene_decryption(void)
 	int input_length, i;
 
 	/*** Vigenere Decryption Variables */
-	char clave[4];
-	int c, iclave;
+	char password[4];
+	int c, password_length;
 
 	/******************OPEN TXT FILE ************************************************/
 	doc = fopen("mensaje.txt", "r");
@@ -94,12 +94,12 @@ int vigerene_decryption(void)
 	i = 0;
 	do
 	{
-		clave[i] = getch();
-		if (clave[i] == KEY_ESC)
+		password[i] = getch();
+		if (password[i] == KEY_ESC)
 		{
 			return 1;
 		}
-		printf("%c", clave[i]);
+		printf("%c", password[i]);
 		i++;
 	} while (i != 4);
 	printf("\n\nReady! Press Enter to continue");
@@ -109,10 +109,10 @@ int vigerene_decryption(void)
 	decryption_animation();
 	clean_screen();
 
-	iclave = strlen(clave);
+	password_length = strlen(password);
 
 	string_to_uppercase(input_str);
-	string_to_uppercase(clave);
+	string_to_uppercase(password);
 	c = 0;
 	printf("\n\n   Decrypted Message:\n\n");
 	printf(" ");
@@ -120,11 +120,11 @@ int vigerene_decryption(void)
 	{
 		if (input_str[i] >= 'A' && input_str[i] <= 'Z')
 		{
-			if (c == iclave - 1)
+			if (c == password_length)
 			{
 				c = 0;
 			}
-			cipher_str[i] = (((input_str[i] - 65) - (clave[c] - 65)) + 26) % 26 + 'A';
+			cipher_str[i] = (((input_str[i] - 65) - (password[c] - 65)) + 26) % 26 + 'A';
 			c++;
 		}
 		else
