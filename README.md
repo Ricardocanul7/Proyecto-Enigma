@@ -11,7 +11,7 @@ EnigmaProject es un programa de consola que permite a los usuarios cifrar y desc
 - **4 algoritmos de cifrado:** Simple (César), XOR, Vigenère y Run-Length Encoding
 - **Interfaz visual:** Menús navegables con teclado, iconos ASCII art y animaciones
 - **Sistema de autenticación:** Acceso restringido con usuario
-- **Guardado automático:** Los mensajes cifrado se almacenan en `mensaje.txt`
+- **Guardado automático:** Los mensajes cifrados se almacenan en `mensaje.txt`
 
 ## Capturas de Pantalla
 
@@ -44,16 +44,12 @@ EnigmaProject es un programa de consola que permite a los usuarios cifrar y desc
 make
 ```
 
-O directamente:
-
-```bash
-gcc -Iinclude -O2 main.c src/utils/console.c src/ui/screens.c src/ui/icons.c src/ui/animations.c src/algorithms/simple.c src/algorithms/run_length.c src/algorithms/xor.c src/algorithms/vigenere.c -o EnigmaProject
-```
+El ejecutable se genera en `build/EnigmaProject.exe`.
 
 ### Con Microsoft Visual C++
 
 ```batch
-cl main.c src/utils/console.c src/ui/screens.c src/ui/icons.c src/ui/animations.c src/algorithms/simple.c src/algorithms/run_length.c src/algorithms/xor.c src/algorithms/vigenere.c /Fe:EnigmaProject.exe /Iinclude
+cl main.c src\utils\console.c src\ui\screens.c src\ui\icons.c src\ui\animations.c src\algorithms\simple.c src\algorithms\run_length.c src\algorithms\xor.c src\algorithms\vigenere.c /Fe:build\EnigmaProject.exe /Iinclude
 ```
 
 ### Limpiar archivos compilados
@@ -62,9 +58,11 @@ cl main.c src/utils/console.c src/ui/screens.c src/ui/icons.c src/ui/animations.
 make clean
 ```
 
+Esto elimina la carpeta `build/` completamente.
+
 ## Uso
 
-1. Ejecutar `EnigmaProject.exe`
+1. Ejecutar `build/EnigmaProject.exe`
 2. Ingresar el usuario: **FMAT**
 3. Navegar con las teclas de dirección (↑ ↓ ← →)
 4. Seleccionar opción con **Enter**
@@ -90,15 +88,18 @@ Proyecto-Enigma/
 │       ├── xor.c                   # Cifrado XOR
 │       ├── vigenere.c              # Cifrado Vigenère
 │       └── run_length.c           # Run-Length Encoding (compresión)
+├── build/                          # Archivos de compilación (excluido del repositorio)
+│   ├── EnigmaProject.exe
+│   └── ...
+├── archive/
+│   └── EnigmaProject-ver_1.0.c     # Código fuente original (backup)
 ├── docs/
 │   ├── media/                      # Capturas de pantalla
-│   │   ├── Enigma1.PNG
-│   │   └── ...
 │   ├── ARCHITECTURE.md             # Arquitectura del código
 │   ├── ALGORITHMS.md               # Descripción de algoritmos
 │   ├── INSTALLATION.md             # Guía de instalación
 │   └── USER_GUIDE.md               # Manual de usuario
-└── EnigmaProject-ver_1.0.c         # Código fuente original (backup)
+└── .gitignore
 ```
 
 Para más detalles, consulte la documentación en la carpeta [`docs/`](docs/).
@@ -113,6 +114,15 @@ Para más detalles, consulte la documentación en la carpeta [`docs/`](docs/).
 | Run-Length | Compresión | Reemplaza secuencias repetidas con `#caracternum` |
 
 Consulte [`docs/ALGORITHMS.md`](docs/ALGORITHMS.md) para una explicación detallada de cada algoritmo.
+
+## Documentación
+
+| Documento | Descripción |
+|-----------|-------------|
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Arquitectura y diseño del código |
+| [`docs/ALGORITHMS.md`](docs/ALGORITHMS.md) | Explicación detallada de cada algoritmo |
+| [`docs/INSTALLATION.md`](docs/INSTALLATION.md) | Guía de instalación y compilación |
+| [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) | Manual de usuario |
 
 ## Desarrolladores
 
